@@ -262,7 +262,7 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-background/60 backdrop-blur-2xl flex flex-col md:hidden"
+            className="fixed inset-0 z-[100] bg-background/90 backdrop-blur-xl flex flex-col md:hidden"
           >
             {/* Mobile Overlay Header - Mirrors the Main Header */}
             <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between w-full border-b border-border/10">
