@@ -4,10 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useState, useRef, useEffect } from "react";
-import { User, Settings, Timer, ListTodo, LayoutDashboard, BarChart3, LogOut, CreditCard, Sparkles, Menu, X } from "lucide-react";
+import { User, Settings, LogOut, CreditCard, Sparkles, Menu, X, Bell } from "lucide-react";
 import { useSettings } from "@/context/settings-context";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+
+// Mobile menu only shows these 3 links
+const mobileMenuLinks = [
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Planner", href: "/planner" },
+  { name: "Analytics", href: "/analytics" },
+];
 
 const appLinksUnified = [
   { name: "Dashboard", href: "/dashboard" },
@@ -83,14 +90,9 @@ export function Navbar() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsLoggedIn(!!session);
       if (session) {
-        // We don't necessarily need to show loading here on every auth change loop, 
-        // but for initial load it's handled by checkSession.
-        // For re-auth, we might want to update plan without full flicker usually, 
-        // but let's keep it simple.
         fetchPlan(session.user.id, session.user.user_metadata?.plan);
       } else {
         setUserPlan(null);
-        // Ensure loading is false if we logged out
         setIsLoading(false);
       }
     });
@@ -110,7 +112,6 @@ export function Navbar() {
   };
 
   const getPlanBadge = () => {
-    // Determine plan
     let plan = 'FREE';
     if (userPlan) {
       if (userPlan.toLowerCase().includes('plus')) plan = 'PLUS';
@@ -143,53 +144,56 @@ export function Navbar() {
   };
 
   return (
-    <header className="bg-background/50 backdrop-blur-md sticky top-0 z-50">
-      <div className={`max-w-7xl mx-auto px-6 h-16 flex items-center justify-between transition-opacity ${isMobileMenuOpen ? 'md:flex opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto' : ''}`}>
-        <div className="flex items-center gap-12">
-          <Link href="/" className="text-xl font-serif italic tracking-tight">
-            Orbit
-          </Link>
-          <nav className="hidden md:block">
-            <ul className="flex items-center gap-8">
-              {/* Show navigation items regardless of loading state for layout stability, 
-                  but conditional links depend on loggedIn. 
-                  Maybe just keep existing logic, as nav links aren't the main data fetch issue. */}
-              {isLoggedIn && (
-                (settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className={`text-sm font-sans font-medium transition-all relative py-5 block ${pathname === link.href
-                        ? "text-accent"
-                        : "opacity-60 hover:opacity-100"
-                        }`}
-                    >
-                      {link.name}
-                      {pathname === link.href && (
-                        <motion.div
-                          layoutId="nav-underline"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                        />
-                      )}
-                    </Link>
-                  </li>
-                ))
-              )}
-            </ul>
-          </nav>
-        </div>
+    <header className="fixed top-0 left-0 right-0 bg-background/50 backdrop-blur-md z-50">
+      {/* Main header bar */}
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Left: Brand name */}
+        <Link href="/" className="text-xl font-serif italic tracking-tight">
+          Orbit
+        </Link>
 
-        <div className="flex items-center gap-4">
+        {/* Desktop Navigation - hidden on mobile */}
+        <nav className="hidden md:block absolute left-1/2 -translate-x-1/2">
+          <ul className="flex items-center gap-8">
+            {isLoggedIn && (
+              (settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className={`text-sm font-sans font-medium transition-all relative py-5 block ${pathname === link.href
+                      ? "text-accent"
+                      : "opacity-60 hover:opacity-100"
+                      }`}
+                  >
+                    {link.name}
+                    {pathname === link.href && (
+                      <motion.div
+                        layoutId="nav-underline"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
+                      />
+                    )}
+                  </Link>
+                </li>
+              ))
+            )}
+          </ul>
+        </nav>
+
+        {/* Right: Actions container - Badge, Theme Toggle, Account Avatar, Hamburger (mobile) */}
+        <div className="flex items-center gap-3">
+          {/* Notification Badge / Plan Badge */}
           {isLoading ? (
             <div className="h-6 w-16 bg-foreground/5 rounded-full animate-pulse" />
           ) : isLoggedIn && (
-            <div>
+            <div className="flex items-center">
               {getPlanBadge()}
             </div>
           )}
 
+          {/* Dark/Light Mode Toggle */}
           <ThemeToggle />
 
+          {/* Account Avatar Button */}
           {isLoading ? (
             <div className="h-9 w-9 bg-foreground/5 rounded-full animate-pulse" />
           ) : isLoggedIn ? (
@@ -246,10 +250,11 @@ export function Navbar() {
             </Link>
           )}
 
-          {/* Mobile Menu Button - shows only when menu is closed, but here it's part of the main header */}
+          {/* Hamburger Menu Button - visible only on mobile */}
           <button
-            className="md:hidden p-1 opacity-70 hover:opacity-100"
+            className="md:hidden p-2 opacity-70 hover:opacity-100 transition-opacity"
             onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Open menu"
           >
             <Menu className="w-6 h-6" />
           </button>
@@ -260,43 +265,48 @@ export function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Blur backdrop overlay - Safari compatible */}
+            {/* Semi-transparent backdrop with heavy blur - Safari/Chrome/Firefox compatible */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[99] bg-background/70 backdrop-blur-3xl md:hidden"
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="fixed inset-0 z-50 bg-background/80 md:hidden"
               style={{
-                WebkitBackdropFilter: 'blur(64px)',
-                backdropFilter: 'blur(64px)',
-                transform: 'translateZ(0)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
               }}
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            {/* Mobile menu content */}
+
+            {/* Mobile menu content - centered */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="fixed inset-0 z-[100] flex flex-col items-center justify-center md:hidden"
+              className="fixed inset-0 z-50 flex flex-col items-center justify-center md:hidden"
             >
               {/* Close button - top right */}
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="absolute top-5 right-6 p-2 opacity-70 hover:opacity-100 transition-opacity"
+                aria-label="Close menu"
               >
                 <X className="w-7 h-7" />
               </button>
 
-              {/* Navigation Links - centered */}
-              <nav className="flex flex-col gap-8 items-center">
-                {(settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
+              {/* Navigation Links - perfectly centered vertically and horizontally */}
+              <nav className="flex flex-col gap-8 items-center justify-center">
+                {mobileMenuLinks.map((link) => (
                   <Link
                     key={link.name}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-4xl font-serif italic tracking-tight transition-all duration-200 ${pathname === link.href ? "text-accent" : "opacity-50 hover:opacity-100"}`}
+                    className={`text-4xl font-serif italic tracking-tight transition-all duration-300 hover:scale-105 ${pathname === link.href
+                        ? "text-accent"
+                        : "opacity-60 hover:opacity-100"
+                      }`}
                   >
                     {link.name}
                   </Link>
