@@ -50,8 +50,6 @@ export default function AnalyticsPage() {
       const allSessions = sessions || [];
       // Duration is in seconds, convert to minutes for display
       const totalFocusMinutes = Math.round(allSessions.reduce((acc, s) => acc + (s.duration || 0), 0) / 60);
-      const completedTasks = todos?.filter(t => t.completed).length || 0; // Keeping tasks as is
-      const totalSessions = sessions?.length || 0;
       const completedSessionsCount = allSessions.filter(s => s.status === 'completed').length;
 
       const avgSessionLength = totalSessions > 0 ? Math.round(totalFocusMinutes / totalSessions) : 0;
