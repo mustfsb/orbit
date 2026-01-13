@@ -264,84 +264,38 @@ export function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[99] bg-background/80 backdrop-blur-2xl md:hidden"
+              className="fixed inset-0 z-[99] bg-background/60 backdrop-blur-3xl md:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
             {/* Mobile menu content */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="fixed inset-0 z-[100] flex flex-col md:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="fixed inset-0 z-[100] flex flex-col items-center justify-center md:hidden"
             >
-              {/* Mobile Overlay Header - Mirrors the Main Header */}
-              <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between w-full border-b border-border/10">
-                <div className="flex items-center gap-12">
-                  <span className="text-xl font-serif italic tracking-tight">Orbit</span>
-                </div>
+              {/* Close button - top right */}
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="absolute top-5 right-6 p-2 opacity-70 hover:opacity-100 transition-opacity"
+              >
+                <X className="w-7 h-7" />
+              </button>
 
-                <div className="flex items-center gap-4">
-                  {isLoggedIn && getPlanBadge()}
-                  <ThemeToggle />
-                  {isLoggedIn && (
-                    <div className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-foreground/5">
-                      <User className="w-4 h-4 opacity-70" />
-                    </div>
-                  )}
-                  <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-1 opacity-70 hover:opacity-100"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </div>
-              </div>
-
-              <nav className="flex-grow flex flex-col gap-6 justify-center items-center p-6">
-                {isLoggedIn ? (
-                  <>
-                    {(settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
-                      <Link
-                        key={link.name}
-                        href={link.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`text-3xl font-serif italic tracking-tight transition-colors ${pathname === link.href ? "text-accent" : "opacity-60 hover:opacity-100"}`}
-                      >
-                        {link.name}
-                      </Link>
-                    ))}
-                    {/* Additional Mobile Links */}
-                    <Link
-                      href="/settings"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-lg font-sans opacity-40 hover:opacity-100 mt-4"
-                    >
-                      Settings
-                    </Link>
-                  </>
-                ) : (
+              {/* Navigation Links - centered */}
+              <nav className="flex flex-col gap-8 items-center">
+                {(settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
                   <Link
-                    href="/signup"
+                    key={link.name}
+                    href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-3xl font-serif italic tracking-tight hover:text-accent transition-colors"
+                    className={`text-4xl font-serif italic tracking-tight transition-all duration-200 ${pathname === link.href ? "text-accent" : "opacity-50 hover:opacity-100"}`}
                   >
-                    Get Started
+                    {link.name}
                   </Link>
-                )}
+                ))}
               </nav>
-
-              <div className="p-8">
-                {isLoggedIn && (
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center justify-center gap-2 p-4 text-red-500 text-sm font-medium hover:bg-red-500/5 rounded-xl transition-all"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Sign Out
-                  </button>
-                )}
-              </div>
             </motion.div>
           </>
         )}
