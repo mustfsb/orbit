@@ -254,11 +254,11 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-[10px] -webkit-backdrop-blur-[10px] flex flex-col justify-center items-center"
+            className="fixed inset-0 z-50 bg-background/95 flex flex-col justify-center items-center"
           >
             <nav>
               <ul className="flex flex-col items-center gap-8">
-                {appLinksUnified.map((link) => (
+                {(settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
                   <li key={link.name}>
                     <Link
                       href={link.href}
