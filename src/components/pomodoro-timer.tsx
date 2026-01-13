@@ -28,29 +28,38 @@ export function PomodoroTimer() {
     if (isMuted) return
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext
+      if (!AudioContextClass) return
+
+      const audioCtx = new AudioContextClass()
       const oscillator = audioCtx.createOscillator()
       const gainNode = audioCtx.createGain()
+
+      const endTime = audioCtx.currentTime + (type === "bell" ? 0.5 : 0.05)
 
       if (type === "bell") {
         oscillator.type = "sine"
         oscillator.frequency.setValueAtTime(440, audioCtx.currentTime)
-        oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.5)
+        oscillator.frequency.exponentialRampToValueAtTime(880, endTime)
         gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime)
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5)
-        oscillator.start()
-        oscillator.stop(audioCtx.currentTime + 0.5)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, endTime)
       } else {
         oscillator.type = "sine"
         oscillator.frequency.setValueAtTime(150, audioCtx.currentTime)
         gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime)
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05)
-        oscillator.start()
-        oscillator.stop(audioCtx.currentTime + 0.05)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, endTime)
       }
 
       oscillator.connect(gainNode)
       gainNode.connect(audioCtx.destination)
+
+      oscillator.start()
+      oscillator.stop(endTime)
+
+      // Important: Close context to prevent leaks and Safari crashes
+      oscillator.onended = () => {
+        audioCtx.close().catch(e => console.error("Error closing audio context", e))
+      }
     } catch (e) {
       console.error("Audio failed", e)
     }
@@ -166,7 +175,7 @@ export function PomodoroTimer() {
   }, [mode])
 
   useEffect(() => {
-    if (typeof window !== "undefined" && Notification.permission === "default") {
+    if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "default") {
       Notification.requestPermission()
     }
   }, [])
