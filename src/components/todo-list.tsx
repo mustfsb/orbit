@@ -108,7 +108,7 @@ function TaskItem({ task }: { task: Task }) {
 }
 
 export function TodoList() {
-  const { tasks: allTasks, loading, addTask, reorderTasks, updateTaskType, deleteTask } = useTasks()
+  const { tasks: allTasks, loading, addTask, updateTaskPositions, updateTaskType, deleteTask, updateTask } = useTasks()
   const [view, setView] = useState<'focus' | 'distraction'>('focus')
   const [inputValue, setInputValue] = useState("")
 
@@ -125,16 +125,15 @@ export function TodoList() {
   }
 
   const handleReorder = (newOrder: Task[]) => {
-    const oldIndices = tasks.map(t => t.id)
-    const newIndices = newOrder.map(t => t.id)
+    // Calculate new positions for the reordered items
+    // We'll just use their index in the new array as the position
+    // This assumes specific view (focus) is the primary ordering mechanism
+    const reorderedWithPositions = newOrder.map((task, index) => ({
+      ...task,
+      position: index
+    }))
 
-    for (let i = 0; i < newOrder.length; i++) {
-      // Find basic reorder logic in the filtered list
-      // Note: Reordering logic usually needs the full list context, but for visual list reorder this suffices 
-      // to pass the index-based reorder call.
-      // Simplified for this context as reorderTasks expects global indices, which is tricky with filtered lists.
-      // For now, disabling drag-reorder on distraction list or accepting simple visual reorder.
-    }
+    updateTaskPositions(reorderedWithPositions)
   }
 
   const moveToFocus = async (id: string) => {

@@ -23,7 +23,7 @@ interface TaskContextType {
   deleteTask: (id: string) => Promise<void>
   updateTaskType: (id: string, type: TaskType) => Promise<void>
   updateTask: (id: string, text: string) => Promise<void>
-  reorderTasks: (fromIndex: number, toIndex: number) => void
+  updateTaskPositions: (tasks: Task[]) => Promise<void>
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined)
@@ -81,7 +81,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       text,
       type,
       completed: false,
-      position: 0,
+      position: tasks.length,
       user_id: userId
     }
 
@@ -97,7 +97,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (data) {
-      setTasks(prev => [data, ...prev])
+      setTasks(prev => [...prev, data])
     }
   }
 
@@ -174,30 +174,44 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const reorderTasks = (fromIndex: number, toIndex: number) => {
-    setTasks(prev => {
-      const result = [...prev]
-      const [removed] = result.splice(fromIndex, 1)
-      result.splice(toIndex, 0, removed)
+  const updateTaskPositions = async (reorderedTasks: Task[]) => {
+    // Optimistic update: Update the positions of the tasks in the local state
+    // We need to merge the reordered tasks with the existing tasks (which might include other types)
+    setTasks((prev: Task[]) => {
+      const tasksMap = new Map(prev.map((t: Task) => [t.id, t]));
+      reorderedTasks.forEach((t: Task) => tasksMap.set(t.id, t));
+      // We should return the tasks sorted by position to maintain consistency
+      return Array.from(tasksMap.values()).sort((a: Task, b: Task) => a.position - b.position);
+    });
 
-      // Update positions in background
-      const supabase = createClient()
-      result.forEach((task, index) => {
-        supabase
-          .from('todos')
-          .update({ position: index })
-          .eq('id', task.id)
-          .then(({ error }) => {
-            if (error) console.error('Error updating position:', error)
-          })
-      })
+    const supabase = createClient()
 
-      return result
-    })
+    // Update sequentially to ensure order or usage of upsert if supported for batch
+    // Supabase JS doesn't support bulk update with different values easily without upsert or multiple calls.
+    // For drag and drop, multiple calls is often acceptable if number of items is small.
+    // Or we can use upsert.
+
+    // Create simplified objects for upsert
+    const updates = reorderedTasks.map(t => ({
+      id: t.id,
+      position: t.position,
+      text: t.text, // Required for upsert if not partial? No, update can be partial, but upsert needs row content or primary key
+      user_id: userId, // RLS might need this
+      updated_at: new Date().toISOString()
+    }));
+
+    // Actually, simple loop is safer for now to avoid accidental overwrites if schema is strict
+    // But upsert is better for batch. Let's try to just loop promises.
+
+    const promises = reorderedTasks.map(t =>
+      supabase.from('todos').update({ position: t.position }).eq('id', t.id)
+    );
+
+    await Promise.all(promises);
   }
 
   return (
-    <TaskContext.Provider value={{ tasks, loading, addTask, toggleTask, deleteTask, updateTaskType, updateTask, reorderTasks }}>
+    <TaskContext.Provider value={{ tasks, loading, addTask, toggleTask, deleteTask, updateTaskType, updateTask, updateTaskPositions }}>
       {children}
     </TaskContext.Provider>
   )
