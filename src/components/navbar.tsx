@@ -258,54 +258,48 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <>
-            {/* Blur backdrop overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[99] bg-[#1a1a1a]/80 backdrop-blur-2xl md:hidden"
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-[#1a1a1a]/95 backdrop-blur-2xl flex flex-col items-center justify-center md:hidden"
+          >
+            {/* Close button */}
+            <button
               onClick={() => setIsMobileMenuOpen(false)}
-            />
-            {/* Mobile menu content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="fixed inset-0 z-[100] flex flex-col items-center justify-center md:hidden"
+              className="absolute top-5 right-6 p-2 text-white/70 hover:text-white transition-colors"
             >
-              {/* Close button - top right */}
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="absolute top-5 right-6 p-2 text-white/70 hover:text-white transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="w-8 h-8" />
-              </button>
+              <X className="w-8 h-8" />
+            </button>
 
-              {/* Navigation Links - centered */}
-              <nav className="flex flex-col gap-10 items-center">
-                {[
-                  { name: "Dashboard", href: "/dashboard" },
-                  { name: "Planner", href: "/planner" },
-                  { name: "Analytics", href: "/analytics" },
-                ].map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === link.href
-                        ? "text-[#e57c5e]"
-                        : "text-white/60 hover:text-white hover:scale-105"
-                      }`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-              </nav>
-            </motion.div>
-          </>
+            {/* Navigation Links */}
+            <nav className="flex flex-col gap-12 items-center">
+              <Link
+                href="/dashboard"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/dashboard" ? "text-[#e57c5e]" : "text-white/60 hover:text-white"
+                  }`}
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/planner"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/planner" ? "text-[#e57c5e]" : "text-white/60 hover:text-white"
+                  }`}
+              >
+                Planner
+              </Link>
+              <Link
+                href="/analytics"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/analytics" ? "text-[#e57c5e]" : "text-white/60 hover:text-white"
+                  }`}
+              >
+                Analytics
+              </Link>
+            </nav>
+          </motion.div>
         )}
       </AnimatePresence>
     </header>
