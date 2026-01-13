@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useState, useRef, useEffect } from "react";
-import { User, Settings, Timer, ListTodo, LayoutDashboard, BarChart3, LogOut, CreditCard, Sparkles } from "lucide-react";
+import { User, Settings, Timer, ListTodo, LayoutDashboard, BarChart3, LogOut, CreditCard, Sparkles, Menu, X } from "lucide-react";
 import { useSettings } from "@/context/settings-context";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -30,6 +30,7 @@ export function Navbar() {
   const router = useRouter();
   const { settings } = useSettings();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userPlan, setUserPlan] = useState<string | null>(null);
@@ -179,9 +180,11 @@ export function Navbar() {
 
         <div className="flex items-center gap-4">
           {isLoading ? (
-            <div className="h-6 w-16 bg-foreground/5 rounded-full animate-pulse" />
+            <div className="h-6 w-16 bg-foreground/5 rounded-full animate-pulse hidden md:block" />
           ) : isLoggedIn && (
-            getPlanBadge()
+            <div className="hidden md:block">
+              {getPlanBadge()}
+            </div>
           )}
 
           <ThemeToggle />
@@ -236,13 +239,90 @@ export function Navbar() {
           ) : (
             <Link
               href="/signup"
-              className="px-6 py-2 rounded-full bg-accent text-accent-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+              className="px-6 py-2 rounded-full bg-accent text-accent-foreground text-sm font-medium hover:opacity-90 transition-opacity hidden md:block"
             >
               Get Started
             </Link>
           )}
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-1 opacity-70 hover:opacity-100"
+            onClick={() => setIsMobileMenuOpen(true)}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-[100] bg-background border-b border-border flex flex-col p-6 md:hidden"
+          >
+            <div className="flex items-center justify-between mb-8">
+              <span className="text-xl font-serif italic tracking-tight">Orbit</span>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 bg-foreground/5 rounded-full"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <nav className="flex-grow flex flex-col gap-6">
+              {isLoggedIn && (
+                (settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`text-2xl font-serif italic tracking-tight ${pathname === link.href ? "text-accent" : "opacity-60"}`}
+                  >
+                    {link.name}
+                  </Link>
+                ))
+              )}
+              {!isLoggedIn && (
+                <Link
+                  href="/signup"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-2xl font-serif italic tracking-tight"
+                >
+                  Get Started
+                </Link>
+              )}
+            </nav>
+
+            <div className="mt-auto space-y-4">
+              {isLoggedIn && (
+                <div className="p-4 rounded-xl bg-foreground/[0.03] border border-border flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+                      <User className="w-4 h-4" />
+                    </div>
+                    <span className="text-sm font-sans opacity-70">Account</span>
+                  </div>
+                  {getPlanBadge()}
+                </div>
+              )}
+              {isLoggedIn && (
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-2 p-4 rounded-xl bg-red-500/5 text-red-500 text-sm font-medium"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

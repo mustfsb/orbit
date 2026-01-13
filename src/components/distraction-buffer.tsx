@@ -6,8 +6,12 @@ import { Brain, X, CornerDownLeft, Sparkles } from "lucide-react"
 import { useTasks } from "@/context/task-context"
 import { useTimer } from "@/context/timer-context"
 
-export function DistractionBuffer() {
-    const [isOpen, setIsOpen] = useState(false)
+export interface DistractionBufferProps {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+}
+
+export function DistractionBuffer({ isOpen, setIsOpen }: DistractionBufferProps) {
     const [text, setText] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)
     const { addTask } = useTasks()
@@ -17,7 +21,7 @@ export function DistractionBuffer() {
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "k") {
                 e.preventDefault()
-                setIsOpen(prev => !prev)
+                setIsOpen(!isOpen)
             }
             if (e.key === "Escape") {
                 setIsOpen(false)
@@ -26,7 +30,7 @@ export function DistractionBuffer() {
 
         window.addEventListener("keydown", handleKeyDown)
         return () => window.removeEventListener("keydown", handleKeyDown)
-    }, [])
+    }, [isOpen, setIsOpen])
 
     useEffect(() => {
         if (isOpen) {
