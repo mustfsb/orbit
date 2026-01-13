@@ -185,7 +185,7 @@ export default function PlannerPage() {
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
                   placeholder="What would you like to cultivate this week?"
-                  className="w-full h-48 p-10 rounded-[3rem] border-none bg-foreground/[0.02] focus:ring-2 focus:ring-accent/5 transition-all font-serif italic text-xl resize-none placeholder:opacity-20 leading-relaxed shadow-sm"
+                  className="w-full h-48 p-10 rounded-[3rem] border border-border bg-background focus:ring-2 focus:ring-accent/5 transition-all font-serif italic text-xl resize-none placeholder:opacity-20 leading-relaxed shadow-sm text-foreground"
                 />
                 <div className="absolute bottom-8 right-10 opacity-10 group-focus-within:opacity-30 transition-opacity">
                   <FileText className="w-6 h-6" />

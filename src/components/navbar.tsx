@@ -180,9 +180,9 @@ export function Navbar() {
 
         <div className="flex items-center gap-4">
           {isLoading ? (
-            <div className="h-6 w-16 bg-foreground/5 rounded-full animate-pulse hidden md:block" />
+            <div className="h-6 w-16 bg-foreground/5 rounded-full animate-pulse" />
           ) : isLoggedIn && (
-            <div className="hidden md:block">
+            <div>
               {getPlanBadge()}
             </div>
           )}
@@ -245,7 +245,7 @@ export function Navbar() {
             </Link>
           )}
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - shows only when menu is closed, but here it's part of the main header */}
           <button
             className="md:hidden p-1 opacity-70 hover:opacity-100"
             onClick={() => setIsMobileMenuOpen(true)}
@@ -259,35 +259,57 @@ export function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex flex-col p-6 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-background/60 backdrop-blur-2xl flex flex-col md:hidden"
           >
-            <div className="flex items-center justify-between mb-8">
-              <span className="text-xl font-serif italic tracking-tight">Orbit</span>
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 bg-foreground/5 rounded-full"
-              >
-                <X className="w-5 h-5" />
-              </button>
+            {/* Mobile Overlay Header - Mirrors the Main Header */}
+            <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between w-full border-b border-border/10">
+              <div className="flex items-center gap-12">
+                <span className="text-xl font-serif italic tracking-tight">Orbit</span>
+              </div>
+
+              <div className="flex items-center gap-4">
+                {isLoggedIn && getPlanBadge()}
+                <ThemeToggle />
+                {isLoggedIn && (
+                  <div className="w-9 h-9 rounded-full border border-border flex items-center justify-center bg-foreground/5">
+                    <User className="w-4 h-4 opacity-70" />
+                  </div>
+                )}
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-1 opacity-70 hover:opacity-100"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
             </div>
 
-            <nav className="flex-grow flex flex-col gap-6 justify-center items-center">
-              {isLoggedIn && (
-                (settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
+            <nav className="flex-grow flex flex-col gap-6 justify-center items-center p-6">
+              {isLoggedIn ? (
+                <>
+                  {(settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`text-3xl font-serif italic tracking-tight transition-colors ${pathname === link.href ? "text-accent" : "opacity-60 hover:opacity-100"}`}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                  {/* Additional Mobile Links */}
                   <Link
-                    key={link.name}
-                    href={link.href}
+                    href="/settings"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-3xl font-serif italic tracking-tight transition-colors ${pathname === link.href ? "text-accent" : "opacity-60 hover:opacity-100"}`}
+                    className="text-lg font-sans opacity-40 hover:opacity-100 mt-4"
                   >
-                    {link.name}
+                    Settings
                   </Link>
-                ))
-              )}
-              {!isLoggedIn && (
+                </>
+              ) : (
                 <Link
                   href="/signup"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -298,7 +320,7 @@ export function Navbar() {
               )}
             </nav>
 
-            <div className="mt-auto">
+            <div className="p-8">
               {isLoggedIn && (
                 <button
                   onClick={handleLogout}
