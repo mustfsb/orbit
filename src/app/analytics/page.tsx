@@ -189,20 +189,23 @@ export default function AnalyticsPage() {
                     <h3 className="text-xl font-serif italic">Weekly Activity</h3>
                     <p className="text-xs opacity-40 font-sans">Last 7 days</p>
                   </div>
-                  <div className="flex items-end justify-between h-64 px-4 gap-2 md:gap-4">
+                  <div className="flex items-end justify-between h-64 px-4 gap-2 md:gap-4 relative">
+                    {/* Background grid lines could go here if wanted, but clean is better */}
                     {data.weeklyData.map((d) => (
-                      <div key={d.day} className="flex flex-col items-center justify-end gap-4 flex-1 h-full">
-                        <div
-                          className="w-full bg-accent/20 border-x border-t border-accent/30 rounded-t-sm transition-all duration-700 hover:bg-accent/40 relative group"
-                          style={{ height: `${d.minutes > 0 ? Math.max((d.minutes / maxMinutes) * 100, 2) : 1}%` }}
-                        >
-                          {/* Tooltip for exact validation */}
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-background border border-border rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                            {d.minutes}m
+                      <div key={d.day} className="flex flex-col items-center justify-end gap-4 flex-1 h-full group">
+                        <div className="w-full relative flex-grow flex items-end">
+                          <div
+                            className="w-full bg-gradient-to-t from-accent/20 to-accent/40 rounded-md transition-all duration-700 hover:from-accent/30 hover:to-accent/50 relative"
+                            style={{ height: `${d.minutes > 0 ? Math.max((d.minutes / maxMinutes) * 100, 2) : 1}%` }}
+                          >
+                            {/* Tooltip for exact validation */}
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-background/90 backdrop-blur border border-border/50 rounded-lg shadow-xl text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap z-10 -translate-y-1 group-hover:translate-y-0">
+                              {formatHours(d.minutes)}
+                            </div>
                           </div>
                         </div>
                         <div className="text-center">
-                          <span className="text-xs font-sans opacity-40 uppercase tracking-widest font-medium block">{d.day}</span>
+                          <span className="text-xs font-sans opacity-30 group-hover:opacity-100 transition-opacity uppercase tracking-widest font-medium block">{d.day}</span>
                         </div>
                       </div>
                     ))}
@@ -212,7 +215,7 @@ export default function AnalyticsPage() {
                 <div className="grid md:grid-cols-2 gap-8">
                   <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] space-y-4 h-full">
                     <h3 className="text-lg font-serif italic opacity-60">Average Session</h3>
-                    <p className="text-3xl font-serif italic">{data.avgSessionLength}m</p>
+                    <p className="text-3xl font-serif italic">{formatHours(data.avgSessionLength)}</p>
                     <p className="text-sm font-sans opacity-50 leading-relaxed">
                       Your average focus session length based on completed pomodoros.
                     </p>
