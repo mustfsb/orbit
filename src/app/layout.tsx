@@ -21,8 +21,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Orbit Research",
-  description: "A modern, paper-like landing page inspired by Anthropic's design language.",
+  title: "Orbit - Cultivate your focus",
+  description: "Master your workflow with Orbit. A modern productivity tool designed for deep focus.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
