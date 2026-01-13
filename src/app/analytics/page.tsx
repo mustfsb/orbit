@@ -195,7 +195,7 @@ export default function AnalyticsPage() {
                       <div key={d.day} className="flex flex-col items-center justify-end gap-4 flex-1 h-full group">
                         <div className="w-full relative flex-grow flex items-end">
                           <div
-                            className="w-full bg-gradient-to-t from-accent/20 to-accent/40 rounded-md transition-all duration-700 hover:from-accent/30 hover:to-accent/50 relative"
+                            className="w-full bg-accent opacity-30 rounded-md transition-all duration-700 hover:opacity-60 relative"
                             style={{ height: `${d.minutes > 0 ? Math.max((d.minutes / maxMinutes) * 100, 2) : 1}%` }}
                           >
                             {/* Tooltip for exact validation */}
