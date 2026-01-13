@@ -12,6 +12,7 @@ const newsreader = Newsreader({
   variable: "--font-serif",
   weight: ["400"],
   style: ["italic"],
+  adjustFontFallback: false,
 });
 
 const inter = Inter({

@@ -1,8 +1,19 @@
 import { updateSession } from '@/lib/supabase/middleware'
-import { type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-    return await updateSession(request)
+    try {
+        return await updateSession(request)
+    } catch (e) {
+        console.error("Middleware error:", e)
+        // If middleware fails, we should still allow the request to proceed
+        // to avoid blocking the entire site with a 500 error.
+        return NextResponse.next({
+            request: {
+                headers: request.headers,
+            },
+        })
+    }
 }
 
 export const config = {
