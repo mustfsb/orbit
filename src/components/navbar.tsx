@@ -262,39 +262,37 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-[#1a1a1a]/95 backdrop-blur-2xl flex flex-col items-center justify-center md:hidden"
+            style={{ backgroundColor: 'rgba(26, 26, 26, 0.95)' }}
+            className="fixed inset-0 top-0 left-0 w-screen h-screen z-[100] backdrop-blur-2xl flex flex-col items-center justify-center md:hidden overscroll-none touch-none"
           >
             {/* Close button */}
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute top-5 right-6 p-2 text-white/70 hover:text-white transition-colors"
+              className="absolute top-6 right-6 p-2 text-white/70 hover:text-white transition-colors"
             >
               <X className="w-8 h-8" />
             </button>
 
             {/* Navigation Links */}
-            <nav className="flex flex-col gap-12 items-center">
+            <nav className="flex flex-col gap-12 items-center justify-center w-full">
               <Link
                 href="/dashboard"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/dashboard" ? "text-[#e57c5e]" : "text-white/60 hover:text-white"
-                  }`}
+                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/dashboard" ? "text-[#e57c5e]" : "text-white/60 hover:text-white hover:scale-105"}`}
               >
                 Dashboard
               </Link>
               <Link
                 href="/planner"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/planner" ? "text-[#e57c5e]" : "text-white/60 hover:text-white"
-                  }`}
+                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/planner" ? "text-[#e57c5e]" : "text-white/60 hover:text-white hover:scale-105"}`}
               >
                 Planner
               </Link>
               <Link
                 href="/analytics"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/analytics" ? "text-[#e57c5e]" : "text-white/60 hover:text-white"
-                  }`}
+                className={`text-5xl font-serif italic tracking-tight transition-all duration-300 ${pathname === "/analytics" ? "text-[#e57c5e]" : "text-white/60 hover:text-white hover:scale-105"}`}
               >
                 Analytics
               </Link>
