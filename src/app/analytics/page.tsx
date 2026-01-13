@@ -46,10 +46,14 @@ export default function AnalyticsPage() {
       const totalSessions = sessions?.length || 0;
 
       // Include all sessions (completed + interrupted) for focus time
+      // Include all sessions (completed + interrupted) for focus time
       const allSessions = sessions || [];
-      // Duration is in seconds, convert to minutes
-      const totalFocusMinutes = Math.floor(allSessions.reduce((acc, s) => acc + (s.duration || 0), 0) / 60);
+      // Duration is in seconds, convert to minutes for display
+      const totalFocusMinutes = Math.round(allSessions.reduce((acc, s) => acc + (s.duration || 0), 0) / 60);
+      const completedTasks = todos?.filter(t => t.completed).length || 0; // Keeping tasks as is
+      const totalSessions = sessions?.length || 0;
       const completedSessionsCount = allSessions.filter(s => s.status === 'completed').length;
+
       const avgSessionLength = totalSessions > 0 ? Math.round(totalFocusMinutes / totalSessions) : 0;
 
       // Calculate weekly data (last 7 days)
@@ -62,12 +66,8 @@ export default function AnalyticsPage() {
         date.setDate(date.getDate() - i);
         const dayName = days[date.getDay()];
 
-        // Normalize to local day boundaries
-        const dayStart = new Date(date);
-        dayStart.setHours(0, 0, 0, 0);
-
-        const dayEnd = new Date(date);
-        dayEnd.setHours(23, 59, 59, 999);
+        const dayStart = new Date(date.setHours(0, 0, 0, 0));
+        const dayEnd = new Date(date.setHours(23, 59, 59, 999));
 
         const daySeconds = allSessions
           .filter(s => {
@@ -76,7 +76,8 @@ export default function AnalyticsPage() {
           })
           .reduce((acc, s) => acc + (s.duration || 0), 0);
 
-        weeklyData.push({ day: dayName, minutes: Math.floor(daySeconds / 60) });
+        // Convert to minutes
+        weeklyData.push({ day: dayName, minutes: Math.round(daySeconds / 60) });
       }
 
       // Calculate Bio-Rhythm (Peak Hour)
@@ -192,16 +193,18 @@ export default function AnalyticsPage() {
                   </div>
                   <div className="flex items-end justify-between h-64 px-4 gap-2 md:gap-4">
                     {data.weeklyData.map((d) => (
-                      <div key={d.day} className="flex flex-col items-center gap-4 flex-1">
+                      <div key={d.day} className="flex flex-col items-center justify-end gap-4 flex-1 h-full">
                         <div
-                          className="w-full bg-accent/20 border-x border-t border-accent/30 rounded-t-sm transition-all duration-700 hover:bg-accent/40"
-                          style={{ height: `${d.minutes > 0 ? Math.max((d.minutes / maxMinutes) * 100, 5) : 2}%` }}
-                        />
+                          className="w-full bg-accent/20 border-x border-t border-accent/30 rounded-t-sm transition-all duration-700 hover:bg-accent/40 relative group"
+                          style={{ height: `${d.minutes > 0 ? Math.max((d.minutes / maxMinutes) * 100, 2) : 1}%` }}
+                        >
+                          {/* Tooltip for exact validation */}
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-background border border-border rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                            {d.minutes}m
+                          </div>
+                        </div>
                         <div className="text-center">
-                          <span className="text-xs font-sans opacity-40 uppercase tracking-widest font-medium">{d.day}</span>
-                          {d.minutes > 0 && (
-                            <p className="text-[10px] opacity-30 mt-1">{d.minutes}m</p>
-                          )}
+                          <span className="text-xs font-sans opacity-40 uppercase tracking-widest font-medium block">{d.day}</span>
                         </div>
                       </div>
                     ))}
