@@ -16,6 +16,7 @@ const appLinksUnified = [
 ];
 
 const appLinksFocused = [
+  { name: "Dashboard", href: "/dashboard" },
   { name: "Timer", href: "/timer" },
   { name: "Todos", href: "/todos" },
   { name: "Planner", href: "/planner" },
@@ -259,12 +260,17 @@ export function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Blur backdrop overlay */}
+            {/* Blur backdrop overlay - Safari compatible */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[99] bg-background/60 backdrop-blur-3xl md:hidden"
+              className="fixed inset-0 z-[99] bg-background/70 backdrop-blur-3xl md:hidden"
+              style={{
+                WebkitBackdropFilter: 'blur(64px)',
+                backdropFilter: 'blur(64px)',
+                transform: 'translateZ(0)',
+              }}
               onClick={() => setIsMobileMenuOpen(false)}
             />
             {/* Mobile menu content */}
