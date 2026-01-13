@@ -47,7 +47,8 @@ export default function AnalyticsPage() {
 
       // Include all sessions (completed + interrupted) for focus time
       const allSessions = sessions || [];
-      const totalFocusMinutes = allSessions.reduce((acc, s) => acc + (s.duration || 0), 0);
+      // Duration is in seconds, convert to minutes
+      const totalFocusMinutes = Math.floor(allSessions.reduce((acc, s) => acc + (s.duration || 0), 0) / 60);
       const completedSessionsCount = allSessions.filter(s => s.status === 'completed').length;
       const avgSessionLength = totalSessions > 0 ? Math.round(totalFocusMinutes / totalSessions) : 0;
 
@@ -61,17 +62,21 @@ export default function AnalyticsPage() {
         date.setDate(date.getDate() - i);
         const dayName = days[date.getDay()];
 
-        const dayStart = new Date(date.setHours(0, 0, 0, 0));
-        const dayEnd = new Date(date.setHours(23, 59, 59, 999));
+        // Normalize to local day boundaries
+        const dayStart = new Date(date);
+        dayStart.setHours(0, 0, 0, 0);
 
-        const dayMinutes = allSessions
+        const dayEnd = new Date(date);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        const daySeconds = allSessions
           .filter(s => {
             const sessionDate = new Date(s.started_at);
             return sessionDate >= dayStart && sessionDate <= dayEnd;
           })
           .reduce((acc, s) => acc + (s.duration || 0), 0);
 
-        weeklyData.push({ day: dayName, minutes: dayMinutes });
+        weeklyData.push({ day: dayName, minutes: Math.floor(daySeconds / 60) });
       }
 
       // Calculate Bio-Rhythm (Peak Hour)
