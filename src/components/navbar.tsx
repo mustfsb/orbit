@@ -4,17 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useState, useRef, useEffect } from "react";
-import { User, Settings, LogOut, CreditCard, Sparkles, Menu, X, Bell } from "lucide-react";
+import { User, Settings, LogOut, CreditCard, Sparkles, Bell, Menu, X } from "lucide-react";
 import { useSettings } from "@/context/settings-context";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
-
-// Mobile menu only shows these 3 links
-const mobileMenuLinks = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Planner", href: "/planner" },
-  { name: "Analytics", href: "/analytics" },
-];
+import { createClient } from "@/lib/supabase/client";
+import { logout } from "@/app/auth/actions";
 
 const appLinksUnified = [
   { name: "Dashboard", href: "/dashboard" },
@@ -30,12 +24,8 @@ const appLinksFocused = [
   { name: "Analytics", href: "/analytics" },
 ];
 
-import { createClient } from "@/lib/supabase/client";
-import { logout } from "@/app/auth/actions";
-
 export function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
   const { settings } = useSettings();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -69,7 +59,6 @@ export function Navbar() {
       setIsLoading(false);
     };
 
-    // Check current session
     const checkSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -86,7 +75,6 @@ export function Navbar() {
 
     checkSession();
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsLoggedIn(!!session);
       if (session) {
@@ -107,7 +95,7 @@ export function Navbar() {
       setIsLoggedIn(false);
       setUserPlan(null);
     } catch (error) {
-      // redirect usually throws an error in Next.js, so correct/expected
+      // redirect usually throws an error in Next.js
     }
   };
 
@@ -135,7 +123,6 @@ export function Navbar() {
       )
     }
 
-    // Default FREE badge
     return (
       <div className="flex items-center justify-center text-[10px] font-bold tracking-widest px-3 py-1 rounded-full bg-foreground/5 text-accent cursor-default">
         FREE
@@ -145,14 +132,17 @@ export function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-background/50 backdrop-blur-md z-50">
-      {/* Main header bar */}
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Left: Brand name */}
-        <Link href="/" className="text-xl font-serif italic tracking-tight">
+        {/* Brand Name */}
+        <Link
+          href="/"
+          className="text-xl font-serif italic tracking-tight z-[60]"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
           Orbit
         </Link>
 
-        {/* Desktop Navigation - hidden on mobile */}
+        {/* Desktop Navigation */}
         <nav className="hidden md:block absolute left-1/2 -translate-x-1/2">
           <ul className="flex items-center gap-8">
             {isLoggedIn && (
@@ -179,21 +169,18 @@ export function Navbar() {
           </ul>
         </nav>
 
-        {/* Right: Actions container - Badge, Theme Toggle, Account Avatar, Hamburger (mobile) */}
-        <div className="flex items-center gap-3">
-          {/* Notification Badge / Plan Badge */}
-          {isLoading ? (
-            <div className="h-6 w-16 bg-foreground/5 rounded-full animate-pulse" />
-          ) : isLoggedIn && (
-            <div className="flex items-center">
-              {getPlanBadge()}
-            </div>
-          )}
+        {/* Right side container: Notification, Toggle, Account, Hamburger */}
+        <div className="flex items-center gap-3 z-[60]">
+          {/* Notification Badge */}
+          <button className="p-2 rounded-full hover:bg-foreground/5 transition-colors relative">
+            <Bell className="w-5 h-5 opacity-70" />
+            <span className="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full border-2 border-background" />
+          </button>
 
-          {/* Dark/Light Mode Toggle */}
+          {/* Theme Toggle */}
           <ThemeToggle />
 
-          {/* Account Avatar Button */}
+          {/* Account/User Menu */}
           {isLoading ? (
             <div className="h-9 w-9 bg-foreground/5 rounded-full animate-pulse" />
           ) : isLoggedIn ? (
@@ -250,13 +237,12 @@ export function Navbar() {
             </Link>
           )}
 
-          {/* Hamburger Menu Button - visible only on mobile */}
+          {/* Hamburger Menu Button (Mobile Only) */}
           <button
-            className="md:hidden p-2 opacity-70 hover:opacity-100 transition-opacity"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open menu"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 md:hidden rounded-full hover:bg-foreground/5 transition-colors"
           >
-            <Menu className="w-6 h-6" />
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -264,56 +250,42 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <>
-            {/* Semi-transparent backdrop with heavy blur - Safari/Chrome/Firefox compatible */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="fixed inset-0 z-50 bg-background/80 md:hidden"
-              style={{
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-              }}
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
-
-            {/* Mobile menu content - centered */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="fixed inset-0 z-50 flex flex-col items-center justify-center md:hidden"
-            >
-              {/* Close button - top right */}
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="absolute top-5 right-6 p-2 opacity-70 hover:opacity-100 transition-opacity"
-                aria-label="Close menu"
-              >
-                <X className="w-7 h-7" />
-              </button>
-
-              {/* Navigation Links - perfectly centered vertically and horizontally */}
-              <nav className="flex flex-col gap-8 items-center justify-center">
-                {mobileMenuLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-4xl font-serif italic tracking-tight transition-all duration-300 hover:scale-105 ${pathname === link.href
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-[10px] -webkit-backdrop-blur-[10px] flex flex-col justify-center items-center"
+          >
+            <nav>
+              <ul className="flex flex-col items-center gap-8">
+                {appLinksUnified.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`text-4xl font-serif italic tracking-tight transition-all ${pathname === link.href
                         ? "text-accent"
                         : "opacity-60 hover:opacity-100"
-                      }`}
-                  >
-                    {link.name}
-                  </Link>
+                        }`}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
                 ))}
-              </nav>
-            </motion.div>
-          </>
+                {!isLoggedIn && (
+                  <li>
+                    <Link
+                      href="/signup"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="px-10 py-4 rounded-full bg-accent text-accent-foreground text-lg font-medium hover:opacity-90 transition-opacity mt-4 block"
+                    >
+                      Get Started
+                    </Link>
+                  </li>
+                )}
+              </ul>
+            </nav>
+          </motion.div>
         )}
       </AnimatePresence>
     </header>
