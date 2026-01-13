@@ -262,7 +262,7 @@ export function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[100] bg-background border-b border-border flex flex-col p-6 md:hidden"
+            className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex flex-col p-6 md:hidden"
           >
             <div className="flex items-center justify-between mb-8">
               <span className="text-xl font-serif italic tracking-tight">Orbit</span>
@@ -274,14 +274,14 @@ export function Navbar() {
               </button>
             </div>
 
-            <nav className="flex-grow flex flex-col gap-6">
+            <nav className="flex-grow flex flex-col gap-6 justify-center items-center">
               {isLoggedIn && (
                 (settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
                   <Link
                     key={link.name}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-2xl font-serif italic tracking-tight ${pathname === link.href ? "text-accent" : "opacity-60"}`}
+                    className={`text-3xl font-serif italic tracking-tight transition-colors ${pathname === link.href ? "text-accent" : "opacity-60 hover:opacity-100"}`}
                   >
                     {link.name}
                   </Link>
@@ -291,29 +291,18 @@ export function Navbar() {
                 <Link
                   href="/signup"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-2xl font-serif italic tracking-tight"
+                  className="text-3xl font-serif italic tracking-tight hover:text-accent transition-colors"
                 >
                   Get Started
                 </Link>
               )}
             </nav>
 
-            <div className="mt-auto space-y-4">
-              {isLoggedIn && (
-                <div className="p-4 rounded-xl bg-foreground/[0.03] border border-border flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-accent">
-                      <User className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm font-sans opacity-70">Account</span>
-                  </div>
-                  {getPlanBadge()}
-                </div>
-              )}
+            <div className="mt-auto">
               {isLoggedIn && (
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-center gap-2 p-4 rounded-xl bg-red-500/5 text-red-500 text-sm font-medium"
+                  className="w-full flex items-center justify-center gap-2 p-4 text-red-500 text-sm font-medium hover:bg-red-500/5 rounded-xl transition-all"
                 >
                   <LogOut className="w-4 h-4" />
                   Sign Out
