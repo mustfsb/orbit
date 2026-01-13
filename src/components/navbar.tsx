@@ -4,11 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useState, useRef, useEffect } from "react";
-import { User, Settings, LogOut, CreditCard, Sparkles, Bell, Menu, X } from "lucide-react";
+import { User, Settings, Timer, ListTodo, LayoutDashboard, BarChart3, LogOut, CreditCard, Sparkles, Menu, X } from "lucide-react";
 import { useSettings } from "@/context/settings-context";
 import { motion, AnimatePresence } from "framer-motion";
-import { createClient } from "@/lib/supabase/client";
-import { logout } from "@/app/auth/actions";
+import { useRouter } from "next/navigation";
 
 const appLinksUnified = [
   { name: "Dashboard", href: "/dashboard" },
@@ -17,15 +16,18 @@ const appLinksUnified = [
 ];
 
 const appLinksFocused = [
-  { name: "Dashboard", href: "/dashboard" },
   { name: "Timer", href: "/timer" },
   { name: "Todos", href: "/todos" },
   { name: "Planner", href: "/planner" },
   { name: "Analytics", href: "/analytics" },
 ];
 
+import { createClient } from "@/lib/supabase/client";
+import { logout } from "@/app/auth/actions";
+
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { settings } = useSettings();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -59,6 +61,7 @@ export function Navbar() {
       setIsLoading(false);
     };
 
+    // Check current session
     const checkSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -75,12 +78,18 @@ export function Navbar() {
 
     checkSession();
 
+    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsLoggedIn(!!session);
       if (session) {
+        // We don't necessarily need to show loading here on every auth change loop, 
+        // but for initial load it's handled by checkSession.
+        // For re-auth, we might want to update plan without full flicker usually, 
+        // but let's keep it simple.
         fetchPlan(session.user.id, session.user.user_metadata?.plan);
       } else {
         setUserPlan(null);
+        // Ensure loading is false if we logged out
         setIsLoading(false);
       }
     });
@@ -95,11 +104,12 @@ export function Navbar() {
       setIsLoggedIn(false);
       setUserPlan(null);
     } catch (error) {
-      // redirect usually throws an error in Next.js
+      // redirect usually throws an error in Next.js, so correct/expected
     }
   };
 
   const getPlanBadge = () => {
+    // Determine plan
     let plan = 'FREE';
     if (userPlan) {
       if (userPlan.toLowerCase().includes('plus')) plan = 'PLUS';
@@ -123,6 +133,7 @@ export function Navbar() {
       )
     }
 
+    // Default FREE badge
     return (
       <div className="flex items-center justify-center text-[10px] font-bold tracking-widest px-3 py-1 rounded-full bg-foreground/5 text-accent cursor-default">
         FREE
@@ -131,56 +142,53 @@ export function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-background/50 backdrop-blur-md z-50">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Brand Name */}
-        <Link
-          href="/"
-          className="text-xl font-serif italic tracking-tight z-[60]"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          Orbit
-        </Link>
+    <header className="bg-background/50 backdrop-blur-md sticky top-0 z-50">
+      <div className={`max-w-7xl mx-auto px-6 h-16 flex items-center justify-between transition-opacity ${isMobileMenuOpen ? 'md:flex opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto' : ''}`}>
+        <div className="flex items-center gap-12">
+          <Link href="/" className="text-xl font-serif italic tracking-tight">
+            Orbit
+          </Link>
+          <nav className="hidden md:block">
+            <ul className="flex items-center gap-8">
+              {/* Show navigation items regardless of loading state for layout stability, 
+                  but conditional links depend on loggedIn. 
+                  Maybe just keep existing logic, as nav links aren't the main data fetch issue. */}
+              {isLoggedIn && (
+                (settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className={`text-sm font-sans font-medium transition-all relative py-5 block ${pathname === link.href
+                        ? "text-accent"
+                        : "opacity-60 hover:opacity-100"
+                        }`}
+                    >
+                      {link.name}
+                      {pathname === link.href && (
+                        <motion.div
+                          layoutId="nav-underline"
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
+                        />
+                      )}
+                    </Link>
+                  </li>
+                ))
+              )}
+            </ul>
+          </nav>
+        </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:block absolute left-1/2 -translate-x-1/2">
-          <ul className="flex items-center gap-8">
-            {isLoggedIn && (
-              (settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className={`text-sm font-sans font-medium transition-all relative py-5 block ${pathname === link.href
-                      ? "text-accent"
-                      : "opacity-60 hover:opacity-100"
-                      }`}
-                  >
-                    {link.name}
-                    {pathname === link.href && (
-                      <motion.div
-                        layoutId="nav-underline"
-                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-                      />
-                    )}
-                  </Link>
-                </li>
-              ))
-            )}
-          </ul>
-        </nav>
+        <div className="flex items-center gap-4">
+          {isLoading ? (
+            <div className="h-6 w-16 bg-foreground/5 rounded-full animate-pulse" />
+          ) : isLoggedIn && (
+            <div>
+              {getPlanBadge()}
+            </div>
+          )}
 
-        {/* Right side container: Notification, Toggle, Account, Hamburger */}
-        <div className="flex items-center gap-3 z-[60]">
-          {/* Notification Badge */}
-          <button className="p-2 rounded-full hover:bg-foreground/5 transition-colors relative">
-            <Bell className="w-5 h-5 opacity-70" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full border-2 border-background" />
-          </button>
-
-          {/* Theme Toggle */}
           <ThemeToggle />
 
-          {/* Account/User Menu */}
           {isLoading ? (
             <div className="h-9 w-9 bg-foreground/5 rounded-full animate-pulse" />
           ) : isLoggedIn ? (
@@ -237,12 +245,12 @@ export function Navbar() {
             </Link>
           )}
 
-          {/* Hamburger Menu Button (Mobile Only) */}
+          {/* Mobile Menu Button - shows only when menu is closed, but here it's part of the main header */}
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 md:hidden rounded-full hover:bg-foreground/5 transition-colors"
+            className="md:hidden p-1 opacity-70 hover:opacity-100"
+            onClick={() => setIsMobileMenuOpen(true)}
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <Menu className="w-6 h-6" />
           </button>
         </div>
       </div>
@@ -250,42 +258,46 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-background/95 flex flex-col justify-center items-center"
-          >
-            <nav>
-              <ul className="flex flex-col items-center gap-8">
+          <>
+            {/* Blur backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[99] bg-background/60 backdrop-blur-3xl md:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            {/* Mobile menu content */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="fixed inset-0 z-[100] flex flex-col items-center justify-center md:hidden"
+            >
+              {/* Close button - top right */}
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="absolute top-5 right-6 p-2 opacity-70 hover:opacity-100 transition-opacity"
+              >
+                <X className="w-7 h-7" />
+              </button>
+
+              {/* Navigation Links - centered */}
+              <nav className="flex flex-col gap-8 items-center">
                 {(settings.viewMode === "focused" ? appLinksFocused : appLinksUnified).map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`text-4xl font-serif italic tracking-tight transition-all ${pathname === link.href
-                        ? "text-accent"
-                        : "opacity-60 hover:opacity-100"
-                        }`}
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`text-4xl font-serif italic tracking-tight transition-all duration-200 ${pathname === link.href ? "text-accent" : "opacity-50 hover:opacity-100"}`}
+                  >
+                    {link.name}
+                  </Link>
                 ))}
-                {!isLoggedIn && (
-                  <li>
-                    <Link
-                      href="/signup"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="px-10 py-4 rounded-full bg-accent text-accent-foreground text-lg font-medium hover:opacity-90 transition-opacity mt-4 block"
-                    >
-                      Get Started
-                    </Link>
-                  </li>
-                )}
-              </ul>
-            </nav>
-          </motion.div>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>
