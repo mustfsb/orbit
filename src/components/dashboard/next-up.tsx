@@ -47,7 +47,7 @@ export function NextUp() {
       </div>
 
       <div className="space-y-1">
-        <h3 className="text-xl font-serif italic tracking-tight">{nextTask.name}</h3>
+        <h3 className="text-xl font-sans tracking-tight">{nextTask.name}</h3>
         <p className="text-xs opacity-50 font-sans italic">
           Based on your synthesized weekly path.
         </p>

@@ -6,7 +6,17 @@ import { Reorder, useDragControls } from "framer-motion"
 import { useTasks, Task } from "@/context/task-context"
 import { useTimer } from "@/context/timer-context"
 
-function EditableTaskText({ text, isCompleted, onSave }: { text: string, isCompleted: boolean, onSave: (s: string) => void }) {
+function EditableTaskText({
+  text,
+  isCompleted,
+  onSave,
+  borderless = false,
+}: {
+  text: string,
+  isCompleted: boolean,
+  onSave: (s: string) => void,
+  borderless?: boolean,
+}) {
   const [isEditing, setIsEditing] = useState(false)
   const [value, setValue] = useState(text)
 
@@ -25,7 +35,7 @@ function EditableTaskText({ text, isCompleted, onSave }: { text: string, isCompl
         onChange={(e) => setValue(e.target.value)}
         onBlur={handleSave}
         onKeyDown={(e) => e.key === "Enter" && handleSave()}
-        className="bg-transparent border-b border-accent focus:outline-none w-full font-sans text-lg"
+        className={`bg-transparent focus:outline-none w-full font-sans text-lg ${borderless ? "" : "border-b border-accent"}`}
       />
     )
   }
@@ -48,7 +58,7 @@ function EditableTaskText({ text, isCompleted, onSave }: { text: string, isCompl
   )
 }
 
-function TaskItem({ task }: { task: Task }) {
+function TaskItem({ task, borderless = false }: { task: Task; borderless?: boolean }) {
   const { toggleTask, deleteTask, updateTask } = useTasks()
   const { startFocus, activeTaskId, isActive } = useTimer()
   const dragControls = useDragControls()
@@ -81,6 +91,7 @@ function TaskItem({ task }: { task: Task }) {
           text={task.text}
           isCompleted={task.completed}
           onSave={(newText) => updateTask(task.id, newText)}
+          borderless={borderless}
         />
       </div>
       <div className="flex items-center gap-1">
@@ -107,7 +118,7 @@ function TaskItem({ task }: { task: Task }) {
   )
 }
 
-export function TodoList() {
+export function TodoList({ borderless = false }: { borderless?: boolean }) {
   const { tasks: allTasks, loading, addTask, updateTaskPositions, updateTaskType, deleteTask, updateTask } = useTasks()
   const [view, setView] = useState<'focus' | 'distraction'>('focus')
   const [inputValue, setInputValue] = useState("")
@@ -141,10 +152,14 @@ export function TodoList() {
   }
 
   return (
-    <div className="bg-[#fdfcf8] dark:bg-[#1a1a1a] rounded-xl border border-border shadow-sm overflow-hidden flex flex-col min-h-[600px] relative">
-      <div className="p-8 border-b border-border relative flex items-center justify-between">
+    <div
+      className={`bg-[#fdfcf8] dark:bg-[#1a1a1a] rounded-xl shadow-sm overflow-hidden flex flex-col min-h-[600px] relative ${
+        borderless ? "" : "border border-border"
+      }`}
+    >
+      <div className={`p-8 relative flex items-center justify-between ${borderless ? "" : "border-b border-border"}`}>
         <div>
-          <h2 className="text-3xl tracking-tight italic mb-2 font-serif">
+          <h2 className="text-3xl tracking-tight italic mb-2 font-sans">
             {view === 'focus' ? "Today's Mastery" : "Distraction Buffer"}
           </h2>
           <p className="text-sm opacity-60 font-sans italic">Monday, January 12th</p>
@@ -194,18 +209,25 @@ export function TodoList() {
         ) : view === 'focus' ? (
           <Reorder.Group axis="y" values={tasks} onReorder={handleReorder} className="space-y-2">
             {tasks.map((task) => (
-              <TaskItem key={task.id} task={task} />
+              <TaskItem key={task.id} task={task} borderless={borderless} />
             ))}
           </Reorder.Group>
         ) : (
           <div className="space-y-2">
             {tasks.map((task) => (
-              <div key={task.id} className="flex items-center justify-between group py-3 px-3 rounded-lg hover:bg-foreground/[0.02] transition-colors border border-transparent hover:border-border/50">
+              <div
+                key={task.id}
+                className={`flex items-center justify-between group py-3 px-3 rounded-lg hover:bg-foreground/[0.02] transition-colors ${
+                  borderless ? "" : "border border-transparent hover:border-border/50"
+                }`}
+              >
                 <span className="text-lg font-sans opacity-80">{task.text}</span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => moveToFocus(task.id)}
-                    className="text-xs px-3 py-1 rounded-full border border-border opacity-0 group-hover:opacity-100 transition-opacity hover:bg-accent hover:text-white hover:border-accent"
+                    className={`text-xs px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-accent hover:text-accent-foreground ${
+                      borderless ? "bg-foreground/[0.06]" : "border border-border hover:border-accent"
+                    }`}
                   >
                     Move to Task
                   </button>
@@ -222,7 +244,7 @@ export function TodoList() {
         )}
       </div>
 
-      <div className="p-8 border-t border-border bg-foreground/[0.01]">
+      <div className={`p-8 bg-foreground/[0.01] ${borderless ? "" : "border-t border-border"}`}>
         <div className="flex justify-between items-center text-xs opacity-40 font-sans tracking-widest uppercase font-medium">
           <span>{tasks.filter(t => !t.completed).length} Items</span>
           {view === 'focus' && <span>{tasks.filter(t => t.completed).length} Completed</span>}
@@ -231,4 +253,3 @@ export function TodoList() {
     </div>
   )
 }
-

@@ -16,7 +16,7 @@ export default function AuthCodeErrorPage() {
                     <XCircle className="w-10 h-10 text-red-500" />
                 </div>
 
-                <h1 className="text-3xl font-serif italic tracking-tight mb-4">
+                <h1 className="text-3xl font-sans tracking-tight mb-4">
                     Verification Failed
                 </h1>
 
@@ -28,7 +28,7 @@ export default function AuthCodeErrorPage() {
                 <div className="space-y-4">
                     <Link
                         href="/signup"
-                        className="inline-block w-full px-8 py-3 rounded-full bg-accent text-accent-foreground font-medium text-sm font-sans hover:opacity-90 transition-opacity"
+                        className="inline-block w-full rounded-full bg-accent px-8 py-3 text-sm font-medium font-sans text-accent-foreground transition-opacity hover:opacity-90"
                     >
                         Try Again
                     </Link>

@@ -12,7 +12,7 @@ export default function TasksPage() {
         <PageWrapper>
           <div className="max-w-4xl mx-auto space-y-12">
             <div className="space-y-4">
-              <h1 className="text-4xl font-serif italic tracking-tight text-center">The Task Ledger</h1>
+              <h1 className="text-4xl font-sans tracking-tight text-center">The Task Ledger</h1>
               <p className="opacity-60 font-sans italic text-center max-w-md mx-auto">
                 Organize your thoughts and intentions. What shall we cultivate today?
               </p>

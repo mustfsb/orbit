@@ -46,7 +46,7 @@ export default function EmailConfirmedPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                 >
-                    <h1 className="text-3xl font-serif italic tracking-tight mb-4">
+                    <h1 className="text-3xl font-sans tracking-tight mb-4">
                         Email Verified!
                     </h1>
 
@@ -69,7 +69,7 @@ export default function EmailConfirmedPage() {
                 >
                     <button
                         onClick={() => router.push("/dashboard")}
-                        className="px-8 py-3 rounded-full bg-accent text-accent-foreground font-medium text-sm font-sans hover:opacity-90 transition-opacity"
+                        className="rounded-full bg-accent px-8 py-3 text-sm font-medium font-sans text-accent-foreground transition-opacity hover:opacity-90"
                     >
                         Go to Dashboard Now
                     </button>

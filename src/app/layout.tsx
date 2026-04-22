@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { Newsreader, Inter } from "next/font/google";
+import localFont from "next/font/local";
+import { Newsreader, Onest, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/context/auth-context";
+import { GoalsProvider } from "@/context/goals-context";
 import { SettingsProvider } from "@/context/settings-context";
 import { TaskProvider } from "@/context/task-context";
 import { TimerProvider } from "@/context/timer-context";
@@ -15,9 +18,23 @@ const newsreader = Newsreader({
   adjustFontFallback: false,
 });
 
-const inter = Inter({
+const onest = Onest({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mono",
+  weight: ["400", "500", "700"],
+});
+
+const overusedGrotesk = localFont({
+  src: "./fonts/overused-grotesk.woff2",
+  display: "swap",
+  variable: "--font-overused-grotesk",
+  weight: "300 900",
 });
 
 export const metadata: Metadata = {
@@ -35,20 +52,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${newsreader.variable} ${inter.variable} antialiased font-sans`}>
+      <body className={`${newsreader.variable} ${onest.variable} ${jetbrainsMono.variable} ${overusedGrotesk.variable} antialiased font-sans`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <SettingsProvider>
-            <TaskProvider>
-              <TimerProvider>
-                {children}
-              </TimerProvider>
-            </TaskProvider>
-          </SettingsProvider>
+          <AuthProvider>
+            <SettingsProvider>
+              <GoalsProvider>
+                <TaskProvider>
+                  <TimerProvider>
+                    {children}
+                  </TimerProvider>
+                </TaskProvider>
+              </GoalsProvider>
+            </SettingsProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

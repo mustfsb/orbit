@@ -23,7 +23,7 @@ export default function SettingsPage() {
         <PageWrapper>
           <div className="space-y-12">
             <div className="space-y-2">
-              <h1 className="text-4xl font-serif italic tracking-tight">System Settings</h1>
+              <h1 className="text-4xl font-sans tracking-tight">System Settings</h1>
               <p className="opacity-60 font-sans italic">Configure your environment for optimal cultivation.</p>
             </div>
 
@@ -42,7 +42,7 @@ export default function SettingsPage() {
                     }`}
                 >
                   <Layout className={`w-6 h-6 mb-4 ${settings.viewMode === "unified" ? "text-accent" : "opacity-40"}`} />
-                  <h3 className="text-lg font-serif italic mb-1">Unified Dashboard</h3>
+                  <h3 className="text-lg font-sans mb-1">Unified Dashboard</h3>
                   <p className="text-xs opacity-50 font-sans leading-relaxed">Timer and Tasks on a single expansive page.</p>
                 </button>
                 <button
@@ -53,9 +53,30 @@ export default function SettingsPage() {
                     }`}
                 >
                   <Monitor className={`w-6 h-6 mb-4 ${settings.viewMode === "focused" ? "text-accent" : "opacity-40"}`} />
-                  <h3 className="text-lg font-serif italic mb-1">Focused Mode</h3>
+                  <h3 className="text-lg font-sans mb-1">Focused Mode</h3>
                   <p className="text-xs opacity-50 font-sans leading-relaxed">Separate pages for deep work and organization.</p>
                 </button>
+              </div>
+            </section>
+
+            {/* Daily Focus Goal */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-2 opacity-40">
+                <Clock className="w-4 h-4" />
+                <h2 className="text-xs font-sans font-medium uppercase tracking-widest">Daily Focus Goal</h2>
+              </div>
+              <div className="space-y-3">
+                <label className="text-sm font-sans opacity-60">Daily Goal (Minutes)</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={settings.dailyFocusGoal}
+                  onChange={(e) => updateSettings({ dailyFocusGoal: Number(e.target.value) })}
+                  className="w-full bg-transparent border-b border-border py-2 focus:outline-none focus:border-accent font-sans text-2xl"
+                />
+                <p className="text-[10px] opacity-30 font-sans leading-relaxed">
+                  Your target total focus time per day. Tracked on the Analytics page.
+                </p>
               </div>
             </section>
 
@@ -72,7 +93,7 @@ export default function SettingsPage() {
                     type="number"
                     value={settings.focusDuration}
                     onChange={(e) => updateSettings({ focusDuration: Number(e.target.value) })}
-                    className="w-full bg-transparent border-b border-border py-2 focus:outline-none focus:border-accent font-serif italic text-2xl"
+                    className="w-full bg-transparent border-b border-border py-2 focus:outline-none focus:border-accent font-sans text-2xl"
                   />
                 </div>
                 <div className="space-y-3">
@@ -81,7 +102,7 @@ export default function SettingsPage() {
                     type="number"
                     value={settings.breakDuration}
                     onChange={(e) => updateSettings({ breakDuration: Number(e.target.value) })}
-                    className="w-full bg-transparent border-b border-border py-2 focus:outline-none focus:border-accent font-serif italic text-2xl"
+                    className="w-full bg-transparent border-b border-border py-2 focus:outline-none focus:border-accent font-sans text-2xl"
                   />
                 </div>
               </div>
@@ -89,7 +110,7 @@ export default function SettingsPage() {
               <div className="space-y-3 pt-4">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-sans opacity-60">Long Break Interval</label>
-                  <span className="text-sm font-serif italic opacity-40">Every {settings.longBreakInterval} sessions</span>
+                  <span className="text-sm font-sans opacity-40">Every {settings.longBreakInterval} sessions</span>
                 </div>
                 <input
                   type="range"
@@ -192,7 +213,7 @@ export default function SettingsPage() {
 
             {/* Footer Quote */}
             <div className="pt-12 text-center opacity-40">
-              <p className="text-sm font-serif italic">&quot;{quotes[Math.floor(Math.random() * quotes.length)]}&quot;</p>
+              <p className="text-sm font-sans">&quot;{quotes[Math.floor(Math.random() * quotes.length)]}&quot;</p>
             </div>
           </div>
         </PageWrapper>

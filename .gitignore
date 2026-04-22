@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+dist/
+build/
+
+# Environment variables (contains secrets)
+.env.local
+.env*.local
+
+# System files
+.DS_Store
+**/.DS_Store
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Editor
+.vscode/
+.idea/
+
+# Superpowers
+.superpowers/
+
+# Logs
+*.log
+npm-debug.log*

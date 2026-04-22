@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useAuth } from "@/context/auth-context"
 
 export type TaskType = "focus" | "creative" | "rest" | "admin" | "review" | "distraction";
 
@@ -29,27 +30,16 @@ interface TaskContextType {
 const TaskContext = createContext<TaskContextType | undefined>(undefined)
 
 export function TaskProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
-  const [userId, setUserId] = useState<string | null>(null)
 
-  // Load tasks from Supabase
-  const fetchTasks = useCallback(async () => {
+  const fetchTasks = useCallback(async (userId: string) => {
     const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      setLoading(false)
-      setTasks([])
-      return
-    }
-
-    setUserId(user.id)
-
     const { data, error } = await supabase
       .from('todos')
       .select('*')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .order('position', { ascending: true })
       .order('created_at', { ascending: false })
 
@@ -62,19 +52,17 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    fetchTasks()
-
-    // Listen for auth changes
-    const supabase = createClient()
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      fetchTasks()
-    })
-
-    return () => subscription.unsubscribe()
-  }, [fetchTasks])
+    if (!user) {
+      setTasks([])
+      setLoading(false)
+      return
+    }
+    setLoading(true)
+    fetchTasks(user.id)
+  }, [user, fetchTasks])
 
   const addTask = async (text: string, type: TaskType = "focus") => {
-    if (!userId) return
+    if (!user) return
 
     const supabase = createClient()
     const newTask = {
@@ -82,7 +70,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       type,
       completed: false,
       position: tasks.length,
-      user_id: userId
+      user_id: user.id
     }
 
     const { data, error } = await supabase
@@ -107,7 +95,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
     const newCompleted = !task.completed
 
-    // Optimistic update
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: newCompleted } : t))
 
     const supabase = createClient()
@@ -118,7 +105,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
     if (error) {
       console.error('Error toggling task:', error)
-      // Revert on error
       setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !newCompleted } : t))
     }
   }
@@ -126,7 +112,6 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   const deleteTask = async (id: string) => {
     const taskToDelete = tasks.find(t => t.id === id)
 
-    // Optimistic update
     setTasks(prev => prev.filter(t => t.id !== id))
 
     const supabase = createClient()
@@ -137,15 +122,14 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
     if (error) {
       console.error('Error deleting task:', error)
-      // Revert on error
       if (taskToDelete) {
-        setTasks(prev => [...prev, taskToDelete])
+        setTasks(prev => [...prev, taskToDelete].sort((a, b) => a.position - b.position))
       }
     }
   }
 
   const updateTaskType = async (id: string, type: TaskType) => {
-    // Optimistic update
+    const original = tasks.find(t => t.id === id)
     setTasks(prev => prev.map(t => t.id === id ? { ...t, type } : t))
 
     const supabase = createClient()
@@ -156,11 +140,14 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
     if (error) {
       console.error('Error updating task type:', error)
+      if (original) {
+        setTasks(prev => prev.map(t => t.id === id ? original : t))
+      }
     }
   }
 
   const updateTask = async (id: string, text: string) => {
-    // Optimistic update
+    const original = tasks.find(t => t.id === id)
     setTasks(prev => prev.map(t => t.id === id ? { ...t, text } : t))
 
     const supabase = createClient()
@@ -171,43 +158,34 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
     if (error) {
       console.error('Error updating task:', error)
+      if (original) {
+        setTasks(prev => prev.map(t => t.id === id ? original : t))
+      }
     }
   }
 
   const updateTaskPositions = async (reorderedTasks: Task[]) => {
-    // Optimistic update: Update the positions of the tasks in the local state
-    // We need to merge the reordered tasks with the existing tasks (which might include other types)
     setTasks((prev: Task[]) => {
       const tasksMap = new Map(prev.map((t: Task) => [t.id, t]));
       reorderedTasks.forEach((t: Task) => tasksMap.set(t.id, t));
-      // We should return the tasks sorted by position to maintain consistency
       return Array.from(tasksMap.values()).sort((a: Task, b: Task) => a.position - b.position);
     });
 
     const supabase = createClient()
+    const { error } = await supabase.from('todos').upsert(
+      reorderedTasks.map(t => ({
+        id: t.id,
+        position: t.position,
+        text: t.text,
+        type: t.type,
+        completed: t.completed,
+        user_id: user?.id,
+      }))
+    )
 
-    // Update sequentially to ensure order or usage of upsert if supported for batch
-    // Supabase JS doesn't support bulk update with different values easily without upsert or multiple calls.
-    // For drag and drop, multiple calls is often acceptable if number of items is small.
-    // Or we can use upsert.
-
-    // Create simplified objects for upsert
-    const updates = reorderedTasks.map(t => ({
-      id: t.id,
-      position: t.position,
-      text: t.text, // Required for upsert if not partial? No, update can be partial, but upsert needs row content or primary key
-      user_id: userId, // RLS might need this
-      updated_at: new Date().toISOString()
-    }));
-
-    // Actually, simple loop is safer for now to avoid accidental overwrites if schema is strict
-    // But upsert is better for batch. Let's try to just loop promises.
-
-    const promises = reorderedTasks.map(t =>
-      supabase.from('todos').update({ position: t.position }).eq('id', t.id)
-    );
-
-    await Promise.all(promises);
+    if (error) {
+      console.error('Error updating task positions:', error)
+    }
   }
 
   return (

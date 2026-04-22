@@ -1,142 +1,29 @@
 "use client"
 
-import { useEffect, useState } from "react";
 import { PageWrapper } from "@/components/page-wrapper";
 import { Navbar } from "@/components/navbar";
-import { createClient } from "@/lib/supabase/client";
 import { Loader2 } from "lucide-react";
-
-interface AnalyticsData {
-  totalFocusMinutes: number;
-  completedTasks: number;
-  totalSessions: number;
-  avgSessionLength: number;
-  weeklyData: { day: string; minutes: number }[];
-  peakHour: string;
-  peakHourDesc: string;
-}
+import { ActivityHeatmap } from "@/components/analytics/activity-heatmap";
+import { useSettings } from "@/context/settings-context";
+import { useGoals } from "@/context/goals-context";
+import { useTasks } from "@/context/task-context";
+import { formatMinutes } from "@/lib/focus-insights";
 
 export default function AnalyticsPage() {
-  const [data, setData] = useState<AnalyticsData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { settings } = useSettings();
+  const { focusInsights, loading: goalsLoading } = useGoals();
+  const { tasks, loading: tasksLoading } = useTasks();
 
-  useEffect(() => {
-    async function fetchAnalytics() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+  const loading = goalsLoading || tasksLoading;
+  const completedTasks = tasks.filter(t => t.completed).length;
 
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+  const maxMinutes = Math.max(...focusInsights.weeklyData.map(d => d.minutes), 1);
 
-      // Fetch completed todos
-      const { data: todos } = await supabase
-        .from('todos')
-        .select('*')
-        .eq('user_id', user.id);
-
-      // Fetch pomodoro sessions
-      const { data: sessions } = await supabase
-        .from('pomodoro_sessions')
-        .select('*')
-        .eq('user_id', user.id);
-
-      const completedTasks = todos?.filter(t => t.completed).length || 0;
-      const totalSessions = sessions?.length || 0;
-
-      // Include all sessions (completed + interrupted) for focus time
-      // Include all sessions (completed + interrupted) for focus time
-      const allSessions = sessions || [];
-      // Duration is in seconds, convert to minutes for display
-      const totalFocusMinutes = Math.round(allSessions.reduce((acc, s) => acc + (s.duration || 0), 0) / 60);
-      const completedSessionsCount = allSessions.filter(s => s.status === 'completed').length;
-
-      const avgSessionLength = totalSessions > 0 ? Math.round(totalFocusMinutes / totalSessions) : 0;
-
-      // Calculate weekly data (last 7 days)
-      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      const today = new Date();
-      const weeklyData = [];
-
-      for (let i = 6; i >= 0; i--) {
-        const date = new Date(today);
-        date.setDate(date.getDate() - i);
-        const dayName = days[date.getDay()];
-
-        const dayStart = new Date(date.setHours(0, 0, 0, 0));
-        const dayEnd = new Date(date.setHours(23, 59, 59, 999));
-
-        const daySeconds = allSessions
-          .filter(s => {
-            const sessionDate = new Date(s.started_at);
-            return sessionDate >= dayStart && sessionDate <= dayEnd;
-          })
-          .reduce((acc, s) => acc + (s.duration || 0), 0);
-
-        // Convert to minutes
-        weeklyData.push({ day: dayName, minutes: Math.round(daySeconds / 60) });
-      }
-
-      // Calculate Bio-Rhythm (Peak Hour)
-      const hourCounts = new Array(24).fill(0);
-      allSessions.forEach(s => {
-        if (s.started_at) {
-          const date = new Date(s.started_at);
-          const hour = date.getHours();
-          hourCounts[hour] += (s.duration || 0);
-        }
-      });
-
-      let maxMinutes = -1;
-      let peakHourIdx = 9; // Default 9 AM if no data
-
-      hourCounts.forEach((count, idx) => {
-        if (count > maxMinutes) {
-          maxMinutes = count;
-          peakHourIdx = idx;
-        }
-      });
-
-      // If no data (maxMinutes 0 or -1), handle gracefully
-      if (maxMinutes <= 0) {
-        peakHourIdx = 9; // Default
-      }
-
-      const ampm = peakHourIdx >= 12 ? 'PM' : 'AM';
-      const displayHour = peakHourIdx % 12 || 12;
-      const peakHour = `${displayHour} ${ampm}`;
-
-      // Determine description based on time of day
-      let type = "Morning Lark";
-      if (peakHourIdx >= 12 && peakHourIdx < 17) type = "Afternoon Flow";
-      if (peakHourIdx >= 17 && peakHourIdx < 22) type = "Evening Deep Work";
-      if (peakHourIdx >= 22 || peakHourIdx < 5) type = "Night Owl";
-
-      const peakHourDesc = totalSessions > 0 ? type : "Not enough data yet";
-
-      setData({
-        totalFocusMinutes,
-        completedTasks,
-        totalSessions,
-        avgSessionLength,
-        weeklyData,
-        peakHour,
-        peakHourDesc
-      });
-      setLoading(false);
-    }
-
-    fetchAnalytics();
-  }, []);
-
-  const formatHours = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
-  };
-
-  const maxMinutes = data?.weeklyData ? Math.max(...data.weeklyData.map(d => d.minutes), 1) : 1;
+  const todayMinutes = focusInsights.todayMinutes;
+  const goalPercent = Math.min((todayMinutes / settings.dailyFocusGoal) * 100, 100);
+  const r = 36;
+  const circumference = 2 * Math.PI * r;
+  const strokeDashoffset = circumference - (goalPercent / 100) * circumference;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -145,7 +32,7 @@ export default function AnalyticsPage() {
         <PageWrapper>
           <div className="space-y-12">
             <div className="space-y-2">
-              <h1 className="text-4xl font-serif italic tracking-tight">Intelligence <span className="text-accent">Analytics</span></h1>
+              <h1 className="text-4xl font-sans tracking-tight">Intelligence <span className="text-accent">Analytics</span></h1>
               <p className="opacity-60 font-sans italic">A quantified view of your cultivation efforts.</p>
             </div>
 
@@ -153,54 +40,115 @@ export default function AnalyticsPage() {
               <div className="flex items-center justify-center py-24">
                 <Loader2 className="w-8 h-8 animate-spin opacity-40" />
               </div>
-            ) : !data ? (
-              <div className="text-center py-24 opacity-60">
-                <p className="font-sans">Sign in to view your analytics.</p>
-              </div>
             ) : (
               <>
                 <div className="grid md:grid-cols-4 gap-8 items-stretch">
-                  {/* Peak Hour Card (New) */}
-                  <div className="p-8 rounded-2xl border border-accent/20 bg-accent/[0.03] flex flex-col justify-between h-full relative overflow-hidden group">
-                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-accent/10 rounded-full blur-2xl group-hover:bg-accent/20 transition-colors" />
+                  {/* Peak Hour Card */}
+                  <div className="p-8 rounded-2xl border border-border bg-background flex flex-col justify-between h-full relative overflow-hidden">
                     <div>
                       <p className="text-xs font-sans uppercase tracking-widest text-accent mb-2 font-bold">Peak Bio-Rhythm</p>
-                      <h2 className="text-4xl lg:text-5xl font-serif italic tracking-tighter">{data.peakHour}</h2>
+                      <h2 className="text-4xl lg:text-5xl font-sans tracking-tighter">{focusInsights.peakHour}</h2>
                     </div>
-                    <p className="text-xs opacity-50 mt-4 font-sans tracking-wide uppercase">{data.peakHourDesc}</p>
+                    <p className="text-xs opacity-50 mt-4 font-sans tracking-wide uppercase">{focusInsights.peakHourDesc}</p>
                   </div>
 
                   <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] flex flex-col justify-between h-full">
                     <p className="text-xs font-sans uppercase tracking-widest opacity-40 mb-2 font-medium">Total Focus Time</p>
-                    <h2 className="text-4xl lg:text-5xl font-serif italic tracking-tighter">{formatHours(data.totalFocusMinutes)}</h2>
+                    <h2 className="text-4xl lg:text-5xl font-sans tracking-tighter">{formatMinutes(focusInsights.totalFocusMinutes)}</h2>
                   </div>
                   <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] flex flex-col justify-between h-full">
                     <p className="text-xs font-sans uppercase tracking-widest opacity-40 mb-2 font-medium">Tasks Completed</p>
-                    <h2 className="text-4xl lg:text-5xl font-serif italic tracking-tighter">{data.completedTasks}</h2>
+                    <h2 className="text-4xl lg:text-5xl font-sans tracking-tighter">{completedTasks}</h2>
                   </div>
                   <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] flex flex-col justify-between h-full">
                     <p className="text-xs font-sans uppercase tracking-widest opacity-40 mb-2 font-medium">Focus Sessions</p>
-                    <h2 className="text-4xl lg:text-5xl font-serif italic tracking-tighter">{data.totalSessions}</h2>
+                    <h2 className="text-4xl lg:text-5xl font-sans tracking-tighter">{focusInsights.totalSessions}</h2>
                   </div>
                 </div>
 
+                {/* Streak + Goal Ring Row */}
+                <div className="grid md:grid-cols-3 gap-8">
+                  <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] flex flex-col justify-between">
+                    <p className="text-xs font-sans uppercase tracking-widest opacity-40 mb-2 font-medium">Current Streak</p>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl font-sans tracking-tighter">{focusInsights.currentStreak}</span>
+                      <span className="text-sm opacity-40 font-sans">days</span>
+                    </div>
+                    <p className="text-xs opacity-30 font-sans mt-2">Longest: {focusInsights.longestStreak} days</p>
+                  </div>
+
+                  <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] flex flex-col items-center justify-center gap-4">
+                    <p className="text-xs font-sans uppercase tracking-widest opacity-40 font-medium self-start">Today&apos;s Goal</p>
+                    <div className="relative flex items-center justify-center">
+                      <svg width="96" height="96" viewBox="0 0 96 96">
+                        <circle
+                          cx="48"
+                          cy="48"
+                          r={r}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="8"
+                          className="opacity-10"
+                        />
+                        <circle
+                          cx="48"
+                          cy="48"
+                          r={r}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          className="text-accent"
+                          style={{
+                            strokeDasharray: circumference,
+                            strokeDashoffset,
+                            transform: "rotate(-90deg)",
+                            transformOrigin: "50% 50%",
+                            transition: "stroke-dashoffset 0.6s ease",
+                          }}
+                        />
+                      </svg>
+                      <div className="absolute text-center">
+                        <span className="text-lg font-sans tracking-tight">{Math.round(goalPercent)}%</span>
+                      </div>
+                    </div>
+                    <p className="text-xs opacity-40 font-sans">{todayMinutes} / {settings.dailyFocusGoal} min</p>
+                  </div>
+
+                  <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] flex flex-col justify-between">
+                    <p className="text-xs font-sans uppercase tracking-widest opacity-40 mb-2 font-medium">Average Session</p>
+                    <p className="text-4xl font-sans tracking-tighter">{formatMinutes(focusInsights.avgSessionLength)}</p>
+                    <p className="text-xs opacity-30 font-sans mt-2 leading-relaxed">
+                      Based on all focus sessions.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Activity Heatmap */}
+                <div className="p-10 rounded-2xl border border-border bg-foreground/[0.01] space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-sans">Activity Heatmap</h3>
+                    <p className="text-xs opacity-40 font-sans">Last 16 weeks</p>
+                  </div>
+                  <ActivityHeatmap data={focusInsights.heatmapData} />
+                </div>
+
+                {/* Weekly Bar Chart */}
                 <div className="p-10 rounded-2xl border border-border bg-foreground/[0.01] space-y-8">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-serif italic">Weekly Activity</h3>
+                    <h3 className="text-xl font-sans">Weekly Activity</h3>
                     <p className="text-xs opacity-40 font-sans">Last 7 days</p>
                   </div>
                   <div className="flex items-end justify-between h-64 px-4 gap-2 md:gap-4 relative">
-                    {/* Background grid lines could go here if wanted, but clean is better */}
-                    {data.weeklyData.map((d) => (
+                    {focusInsights.weeklyData.map((d) => (
                       <div key={d.day} className="flex flex-col items-center justify-end gap-4 flex-1 h-full group">
                         <div className="w-full relative flex-grow flex items-end">
                           <div
                             className="w-full bg-accent opacity-30 rounded-md transition-all duration-700 hover:opacity-60 relative"
                             style={{ height: `${d.minutes > 0 ? Math.max((d.minutes / maxMinutes) * 100, 2) : 1}%` }}
                           >
-                            {/* Tooltip for exact validation */}
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-background/90 backdrop-blur border border-border/50 rounded-lg shadow-xl text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap z-10 -translate-y-1 group-hover:translate-y-0">
-                              {formatHours(d.minutes)}
+                              {formatMinutes(d.minutes)}
                             </div>
                           </div>
                         </div>
@@ -214,19 +162,19 @@ export default function AnalyticsPage() {
 
                 <div className="grid md:grid-cols-2 gap-8">
                   <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] space-y-4 h-full">
-                    <h3 className="text-lg font-serif italic opacity-60">Average Session</h3>
-                    <p className="text-3xl font-serif italic">{formatHours(data.avgSessionLength)}</p>
-                    <p className="text-sm font-sans opacity-50 leading-relaxed">
-                      Your average focus session length based on completed pomodoros.
-                    </p>
-                  </div>
-                  <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] space-y-4 h-full">
-                    <h3 className="text-lg font-serif italic opacity-60">Completion Rate</h3>
-                    <p className="text-3xl font-serif italic">
-                      {data.totalSessions > 0 ? Math.round((data.completedTasks / data.totalSessions) * 100) : 0}%
+                    <h3 className="text-lg font-sans opacity-60">Completion Rate</h3>
+                    <p className="text-3xl font-sans">
+                      {focusInsights.totalSessions > 0 ? Math.round((completedTasks / focusInsights.totalSessions) * 100) : 0}%
                     </p>
                     <p className="text-sm font-sans opacity-50 leading-relaxed">
                       Ratio of tasks completed to focus sessions started.
+                    </p>
+                  </div>
+                  <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] space-y-4 h-full">
+                    <h3 className="text-lg font-sans opacity-60">Longest Streak</h3>
+                    <p className="text-3xl font-sans">{focusInsights.longestStreak} <span className="text-lg opacity-40">days</span></p>
+                    <p className="text-sm font-sans opacity-50 leading-relaxed">
+                      Your personal best consecutive focus days.
                     </p>
                   </div>
                 </div>

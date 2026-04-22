@@ -12,14 +12,14 @@ export default function TimerPage() {
         <PageWrapper>
           <div className="max-w-3xl mx-auto space-y-12">
             <div className="text-center space-y-4">
-              <h1 className="text-4xl font-serif italic tracking-tight">Focus Chamber</h1>
+              <h1 className="text-4xl font-sans tracking-tight">Focus Chamber</h1>
               <p className="opacity-60 font-sans italic max-w-md mx-auto">
                 Step away from the noise. This space is dedicated to your deepest work.
               </p>
             </div>
             <PomodoroTimer />
             <div className="pt-12 text-center opacity-40">
-              <p className="text-sm font-serif italic max-w-sm mx-auto">
+              <p className="text-sm font-sans max-w-sm mx-auto">
                 &quot;Work is a prayer, and focus is the sanctuary where we offer it.&quot;
               </p>
             </div>

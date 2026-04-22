@@ -1,13 +1,26 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
+interface PlannerRequestPayload {
+    goal?: string;
+    pdfData?: { inlineData: { data: string; mimeType: string } } | null;
+    apiKey?: string;
+    type: "initial" | "chat";
+    history?: { role: "user" | "model"; content: string }[];
+    message?: string;
+    currentPlan?: unknown;
+}
+
+type GeminiPart = { text: string } | { inlineData: { data: string; mimeType: string } };
+
 
 
 export async function POST(req: Request) {
     try {
-        const { goal, pdfText, pdfData, apiKey, type, history, message, currentPlan } = await req.json();
+        const { goal, pdfData, apiKey, type, history, message, currentPlan } =
+            (await req.json()) as PlannerRequestPayload;
 
-        const usedApiKey = apiKey || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+        const usedApiKey = apiKey || process.env.GEMINI_API_KEY;
         if (!usedApiKey) {
             return NextResponse.json({ error: "API Key not found. Please set it in .env.local or settings." }, { status: 500 });
         }
@@ -39,12 +52,7 @@ If the user asks for revisions, update the plan accordingly and return the FULL 
 Always provide a brief, encouraging summary of the changes in the text part of your response.`;
 
         if (type === "initial") {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const parts: any[] = [{ text: `User Goal: ${goal}\n\n${SYSTEM_INSTRUCTION}` }];
-
-            if (pdfText) { // Fallback for legacy text
-                parts.push({ text: `Context from PDF: ${pdfText}` });
-            }
+            const parts: GeminiPart[] = [{ text: `User Goal: ${goal}\n\n${SYSTEM_INSTRUCTION}` }];
 
             if (pdfData && pdfData.inlineData) {
                 parts.push({ inlineData: pdfData.inlineData });
@@ -63,17 +71,15 @@ Always provide a brief, encouraging summary of the changes in the text part of y
                 return NextResponse.json({ error: "AI returned invalid JSON. Please try again." }, { status: 500 });
             }
         } else {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const historyWithPdf = (history || []).map((h: any, index: number) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const parts: any[] = [{ text: h.content }];
+            const historyWithPdf = (history || []).map((historyItem, index: number) => {
+                const parts: GeminiPart[] = [{ text: historyItem.content }];
                 // Ensure the first user message includes the PDF data if available
-                if (index === 0 && h.role === 'user' && pdfData && pdfData.inlineData) {
+                if (index === 0 && historyItem.role === 'user' && pdfData && pdfData.inlineData) {
                     parts.push({ inlineData: pdfData.inlineData });
                 }
                 return {
-                    role: h.role,
-                    parts: parts
+                    role: historyItem.role,
+                    parts,
                 };
             });
 

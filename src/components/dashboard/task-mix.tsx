@@ -36,10 +36,10 @@ export function TaskMix() {
   }, {} as Record<string, number>);
 
   return (
-    <div className="p-8 rounded-2xl border border-border bg-foreground/[0.01] space-y-6">
+    <div className="p-8 rounded-2xl border border-border bg-foreground/[0.02] space-y-6">
       <div className="space-y-1">
         <h3 className="text-sm font-sans font-bold uppercase tracking-[0.2em] opacity-40">Task Mix</h3>
-        <p className="text-xs font-serif italic opacity-60">Visualizing your cognitive load.</p>
+        <p className="text-xs font-sans opacity-60">Visualizing your cognitive load.</p>
       </div>
 
       <div className="h-2 w-full flex rounded-full overflow-hidden bg-foreground/5">

@@ -13,6 +13,8 @@ interface Settings {
   autoStartBreaks: boolean
   longBreakInterval: number
   geminiApiKey: string
+  dailyFocusGoal: number
+  ambientSound: "off" | "rain" | "white" | "brown"
 }
 
 interface SettingsContextType {
@@ -33,6 +35,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     autoStartBreaks: false,
     longBreakInterval: 4,
     geminiApiKey: "",
+    dailyFocusGoal: 120,
+    ambientSound: "off",
   })
 
   const [isMounted, setIsMounted] = useState(false)

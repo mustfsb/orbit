@@ -13,11 +13,11 @@ export default function SignupConfirmPage() {
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className="w-full max-w-md text-center"
             >
-                <div className="w-20 h-20 mx-auto mb-8 rounded-full bg-accent/10 flex items-center justify-center">
-                    <Mail className="w-10 h-10 text-accent" />
+                <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-accent bg-accent">
+                    <Mail className="w-10 h-10 text-accent-foreground" />
                 </div>
 
-                <h1 className="text-3xl font-serif italic tracking-tight mb-4">
+                <h1 className="text-3xl font-sans tracking-tight mb-4">
                     Check Your Email
                 </h1>
 

@@ -18,7 +18,9 @@ import {
   WeeklyPlan,
   ChatMessage,
   generateInitialPlan,
-  chatWithAI
+  chatWithAI,
+  normalizeWeeklyPlan,
+  PlanTask,
 } from "@/lib/gemini";
 import { useSettings } from "@/context/settings-context";
 
@@ -33,15 +35,47 @@ export default function PlannerPage() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [completions, setCompletions] = useState<Record<string, boolean>>({});
   const { settings } = useSettings();
 
   // Persistence: Hydration
   useEffect(() => {
     const savedPlan = localStorage.getItem("orbit-current-plan");
     const savedHistory = localStorage.getItem("orbit-chat-history");
+    const savedCompletions = localStorage.getItem("orbit-plan-completions");
 
-    if (savedPlan) setCurrentPlan(JSON.parse(savedPlan));
+    let normalizedPlan: WeeklyPlan | null = null;
+
+    if (savedPlan) {
+      normalizedPlan = normalizeWeeklyPlan(JSON.parse(savedPlan) as WeeklyPlan);
+      setCurrentPlan(normalizedPlan);
+    }
     if (savedHistory) setChatHistory(JSON.parse(savedHistory));
+
+    if (savedCompletions) {
+      try {
+        const parsedCompletions = JSON.parse(savedCompletions) as Record<string, boolean>;
+        if (normalizedPlan) {
+          const migratedCompletions = { ...parsedCompletions };
+
+          normalizedPlan.forEach((dayPlan) => {
+            dayPlan.tasks.forEach((task, index) => {
+              const legacyKey = `${dayPlan.day}-${index}`;
+              if (parsedCompletions[legacyKey] && task.id) {
+                migratedCompletions[task.id] = true;
+              }
+            });
+          });
+
+          setCompletions(migratedCompletions);
+          localStorage.setItem("orbit-plan-completions", JSON.stringify(migratedCompletions));
+        } else {
+          setCompletions(parsedCompletions);
+        }
+      } catch {
+        // ignore
+      }
+    }
 
     setIsHydrated(true);
   }, []);
@@ -125,7 +159,13 @@ export default function PlannerPage() {
     setIsLoading(true);
 
     try {
-      const { text, updatedPlan } = await chatWithAI(message, chatHistory, currentPlan, settings.geminiApiKey, pdfData);
+      const { text, updatedPlan } = await chatWithAI(
+        message,
+        [...chatHistory, newUserMessage],
+        currentPlan,
+        settings.geminiApiKey,
+        pdfData
+      );
 
       const assistantMessage: ChatMessage = { role: "model", content: text };
       setChatHistory(prev => [...prev, assistantMessage]);
@@ -141,6 +181,24 @@ export default function PlannerPage() {
     }
   };
 
+  const toggleCompletion = (key: string) => {
+    const updated = { ...completions, [key]: !completions[key] };
+    setCompletions(updated);
+    localStorage.setItem("orbit-plan-completions", JSON.stringify(updated));
+  };
+
+  const handleReorderDay = (dayIndex: number, reorderedTasks: PlanTask[]) => {
+    setCurrentPlan((previousPlan) => {
+      if (!previousPlan) {
+        return previousPlan;
+      }
+
+      return previousPlan.map((dayPlan, index) =>
+        index === dayIndex ? { ...dayPlan, tasks: reorderedTasks } : dayPlan
+      );
+    });
+  };
+
   const resetPlanner = () => {
     if (confirm("Reset the current plan and history?")) {
       setCurrentPlan(null);
@@ -148,8 +206,10 @@ export default function PlannerPage() {
       setGoal("");
       setPdfFileName(null);
       setPdfData(null);
+      setCompletions({});
       localStorage.removeItem("orbit-current-plan");
       localStorage.removeItem("orbit-chat-history");
+      localStorage.removeItem("orbit-plan-completions");
     }
   };
 
@@ -166,15 +226,15 @@ export default function PlannerPage() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-foreground/[0.02] text-[10px] uppercase tracking-widest font-medium opacity-60"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 text-[10px] font-medium uppercase tracking-widest text-accent-foreground"
               >
-                <Sparkles className="w-3 h-3 text-accent" />
+                <Sparkles className="w-3 h-3" />
                 Real-Time Architect Integration
               </motion.div>
-              <h1 className="text-5xl md:text-6xl font-serif italic tracking-tight leading-tight">
+              <h1 className="text-5xl md:text-6xl font-sans tracking-tight leading-tight">
                 Architect your intentions.
               </h1>
-              <p className="opacity-40 font-serif italic max-w-lg mx-auto leading-relaxed">
+              <p className="opacity-40 font-sans max-w-lg mx-auto leading-relaxed">
                 Provide your goals and documents. Orbit will synthesize a structured path for your spiritual and intellectual growth.
               </p>
             </div>
@@ -185,7 +245,7 @@ export default function PlannerPage() {
                   value={goal}
                   onChange={(e) => setGoal(e.target.value)}
                   placeholder="What would you like to cultivate this week?"
-                  className="w-full h-48 p-10 rounded-[3rem] border border-border bg-background focus:ring-2 focus:ring-accent/5 transition-all font-serif italic text-xl resize-none placeholder:opacity-20 leading-relaxed shadow-sm text-foreground"
+                  className="w-full h-48 rounded-[3rem] border border-border bg-background p-10 text-xl leading-relaxed text-foreground shadow-sm transition-colors placeholder:opacity-20 focus:border-border focus:outline-none resize-none font-sans"
                 />
                 <div className="absolute bottom-8 right-10 opacity-10 group-focus-within:opacity-30 transition-opacity">
                   <FileText className="w-6 h-6" />
@@ -203,7 +263,7 @@ export default function PlannerPage() {
                   />
                   <label
                     htmlFor="pdf-upload"
-                    className={`flex items-center gap-3 px-8 py-4 rounded-full border border-border text-sm font-sans italic transition-all hover:bg-foreground/[0.03] cursor-pointer ${pdfFileName ? 'border-accent/40 bg-accent/[0.02]' : ''}`}
+                    className={`flex cursor-pointer items-center gap-3 rounded-full border border-border px-8 py-4 text-sm font-sans italic transition-colors hover:bg-foreground/[0.03] ${pdfFileName ? "bg-accent text-accent-foreground" : "bg-foreground/[0.04]"}`}
                   >
                     {isProcessingPdf ? (
                       <span className="animate-pulse">Preparing PDF...</span>
@@ -228,7 +288,7 @@ export default function PlannerPage() {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleGenerateInitial}
                   disabled={isLoading || !goal.trim()}
-                  className="h-16 px-8 min-w-[200px] rounded-full bg-accent text-accent-foreground font-medium text-sm flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-accent/20 disabled:opacity-30"
+                  className="flex h-16 min-w-[200px] items-center justify-center gap-3 rounded-full bg-accent px-8 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-30"
                 >
                   {isLoading ? <ThinkingLoader /> : (
                     <>
@@ -241,15 +301,20 @@ export default function PlannerPage() {
             </div>
           </section>
         ) : (
-          <div className="flex-grow flex flex-col lg:flex-row h-[calc(100vh-4rem)]">
+          <div className="flex-grow flex flex-col gap-6 lg:flex-row lg:h-[calc(100vh-4rem)]">
             {/* Left: Schedule Grid */}
-            <div className="flex-grow overflow-y-auto p-6 md:p-12 lg:w-2/3 scrollbar-none">
+            <div className="flex-grow overflow-y-auto p-6 md:p-10 lg:w-[68%] scrollbar-none">
               <PageWrapper>
                 <div className="max-w-6xl mx-auto space-y-12">
-                  <div className="flex items-center justify-between border-b border-border pb-8">
-                    <div className="flex items-center gap-4">
-                      <History className="w-5 h-5 opacity-20" />
-                      <h2 className="text-3xl font-serif italic tracking-tight">Weekly Architecture</h2>
+                  <div className="flex flex-col gap-4 pb-8 md:flex-row md:items-center md:justify-between">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-4">
+                        <History className="w-5 h-5 opacity-20" />
+                        <h2 className="text-3xl font-sans tracking-tight">Weekly Architecture</h2>
+                      </div>
+                      <p className="text-sm font-sans leading-relaxed opacity-45">
+                        Rearrange each day with drag handles. Completion state stays attached to the task itself.
+                      </p>
                     </div>
                     <button
                       onClick={resetPlanner}
@@ -260,7 +325,12 @@ export default function PlannerPage() {
                     </button>
                   </div>
 
-                  <PlannerGrid plan={currentPlan} />
+                  <PlannerGrid
+                    plan={currentPlan}
+                    completions={completions}
+                    onToggleCompletion={toggleCompletion}
+                    onReorderDay={handleReorderDay}
+                  />
 
                   {/* Subtle Footer for Grid */}
                   <div className="pt-12 opacity-20 text-[10px] uppercase tracking-[0.2em] font-sans text-center">
@@ -271,14 +341,14 @@ export default function PlannerPage() {
             </div>
 
             {/* Right: Chat Revisions */}
-            <div className="w-full lg:w-1/3 flex flex-col h-[50vh] lg:h-full">
-              <div className="p-6 flex items-center justify-between opacity-40">
+            <div className="w-full lg:w-[32%] flex flex-col h-[52vh] rounded-[2rem] border border-border bg-foreground/[0.015] lg:h-full">
+              <div className="border-b border-border/70 p-6 opacity-50">
                 <span className="text-[10px] uppercase tracking-widest font-sans font-bold">Architectural Margin</span>
-                <div className="flex gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-current opacity-50" />
-                </div>
+                <p className="mt-3 text-sm font-sans leading-relaxed opacity-70">
+                  Ask Orbit to tighten a day, rebalance the week, or rewrite the plan around new constraints.
+                </p>
               </div>
-              <div className="flex-grow overflow-hidden p-4 pt-0">
+              <div className="flex-grow overflow-hidden p-4 pt-2">
                 <PlannerChat
                   history={chatHistory}
                   onSendMessage={handleChat}

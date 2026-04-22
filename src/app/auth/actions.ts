@@ -15,7 +15,7 @@ export async function login(formData: FormData) {
     const { error } = await supabase.auth.signInWithPassword(data)
 
     if (error) {
-        redirect('/login?error=' + encodeURIComponent(error.message))
+        redirect('/login?error=' + encodeURIComponent('Invalid email or password.'))
     }
 
     revalidatePath('/', 'layout')
@@ -40,7 +40,10 @@ export async function signup(formData: FormData) {
     })
 
     if (error) {
-        redirect('/signup?error=' + encodeURIComponent(error.message))
+        const message = error.message.toLowerCase().includes('already registered')
+            ? 'An account with this email already exists.'
+            : 'Could not create account. Please try again.'
+        redirect('/signup?error=' + encodeURIComponent(message))
     }
 
     redirect('/signup/confirm')

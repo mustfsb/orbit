@@ -72,9 +72,9 @@ export function PlannerChat({ history, onSendMessage, isLoading }: PlannerChatPr
             animate={{ opacity: 1, y: 0 }}
             className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}
           >
-            <div className={`max-w-[90%] p-4 rounded-2xl text-sm leading-relaxed border ${msg.role === "user"
-              ? "bg-foreground/[0.02] border-black/5 dark:border-white/10 text-foreground rounded-tr-sm"
-              : "bg-background border-black/5 dark:border-white/10 text-foreground/80 shadow-sm rounded-tl-sm"
+            <div className={`max-w-[90%] p-4 rounded-2xl border text-sm leading-relaxed ${msg.role === "user"
+              ? "border-border bg-foreground/[0.04] text-foreground rounded-tr-sm"
+              : "border-border bg-background text-foreground/80 shadow-sm rounded-tl-sm"
               }`}>
               {msg.content}
             </div>
@@ -85,7 +85,7 @@ export function PlannerChat({ history, onSendMessage, isLoading }: PlannerChatPr
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-background border border-black/5 dark:border-white/10 p-4 rounded-2xl rounded-tl-sm shadow-sm">
+            <div className="border border-border bg-background p-4 rounded-2xl rounded-tl-sm shadow-sm">
               <ThinkingLoader />
             </div>
           </div>
@@ -100,12 +100,12 @@ export function PlannerChat({ history, onSendMessage, isLoading }: PlannerChatPr
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
             placeholder="Type your revision..."
-            className="w-full bg-foreground/[0.03] hover:bg-foreground/[0.05] focus:bg-background border border-transparent focus:border-black/5 dark:focus:border-white/10 rounded-full py-4 pl-6 pr-12 text-sm transition-all outline-none"
+            className="w-full border border-border bg-foreground/[0.03] hover:bg-foreground/[0.05] focus:bg-background rounded-full py-4 pl-6 pr-12 text-sm transition-all outline-none"
           />
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="absolute right-2 top-2 bottom-2 aspect-square flex items-center justify-center rounded-full bg-accent text-accent-foreground opacity-0 group-focus-within:opacity-100 has-[:disabled]:opacity-0 transition-all scale-90 group-focus-within:scale-100"
+            className="absolute right-2 top-2 bottom-2 aspect-square flex items-center justify-center rounded-full bg-accent text-accent-foreground opacity-0 transition-all scale-90 group-focus-within:opacity-100 group-focus-within:scale-100 has-[:disabled]:opacity-0"
           >
             <Send className="w-4 h-4" />
           </button>

@@ -1,7 +1,6 @@
 "use client"
 
 import React, { createContext, useContext, useState, useCallback } from "react"
-import { useSettings } from "./settings-context"
 
 interface TimerContextType {
   isActive: boolean
@@ -17,7 +16,6 @@ interface TimerContextType {
 const TimerContext = createContext<TimerContextType | undefined>(undefined)
 
 export function TimerProvider({ children }: { children: React.ReactNode }) {
-  const { settings } = useSettings()
   const [isActive, setIsActive] = useState(false)
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
   const [activeTaskText, setActiveTaskText] = useState<string | null>(null)

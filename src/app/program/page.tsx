@@ -16,7 +16,7 @@ export default function ProgramPage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="space-y-6"
                     >
-                        <h1 className="text-4xl font-serif italic tracking-tight">Program</h1>
+                        <h1 className="text-4xl font-sans tracking-tight">Program</h1>
                         <p className="opacity-60 font-sans max-w-md mx-auto">
                             Download the program details to get started with your focused journey.
                         </p>
@@ -24,7 +24,7 @@ export default function ProgramPage() {
                         <a
                             href="/program.pdf"
                             download="program.pdf"
-                            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-accent-foreground font-medium font-sans hover:opacity-90 transition-opacity"
+                            className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 font-medium font-sans text-accent-foreground transition-opacity hover:opacity-90"
                         >
                             <Download className="w-4 h-4" />
                             Download PDF

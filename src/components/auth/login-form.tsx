@@ -35,7 +35,7 @@ export function LoginForm() {
           className="w-full max-w-md p-10 rounded-2xl border border-border bg-foreground/[0.02] space-y-8"
         >
           <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-serif italic tracking-tight text-foreground">Welcome Back</h1>
+            <h1 className="text-3xl font-sans tracking-tight text-foreground">Welcome Back</h1>
             <p className="text-sm opacity-60 font-sans">Enter your credentials to access your workspace.</p>
           </div>
 
@@ -84,7 +84,7 @@ export function LoginForm() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 rounded-full bg-accent text-accent-foreground font-medium text-sm font-sans hover:opacity-90 transition-opacity shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-accent py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-50 font-sans"
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

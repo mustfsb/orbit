@@ -1,4 +1,5 @@
 export interface PlanTask {
+  id?: string;
   name: string;
   type: "focus" | "rest" | "review" | "admin" | "creative";
   description?: string;
@@ -15,6 +16,24 @@ export interface ChatMessage {
   role: "user" | "model";
   content: string;
   plan?: WeeklyPlan; // Store the plan associated with this response if updated
+}
+
+function createTaskId(day: string, index: number): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `${day}-${index}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+export function normalizeWeeklyPlan(plan: WeeklyPlan): WeeklyPlan {
+  return plan.map((dayPlan) => ({
+    ...dayPlan,
+    tasks: dayPlan.tasks.map((task, index) => ({
+      ...task,
+      id: task.id ?? createTaskId(dayPlan.day, index),
+    })),
+  }));
 }
 
 export async function generateInitialPlan(
@@ -36,7 +55,7 @@ export async function generateInitialPlan(
 
     return {
       text: data.text,
-      plan: data.plan,
+      plan: normalizeWeeklyPlan(data.plan),
     };
   } catch (error: unknown) {
     console.error("Gemini Error:", error);
@@ -77,7 +96,7 @@ export async function chatWithAI(
     if (jsonMatch) {
       try {
         const parsed = JSON.parse(jsonMatch[1] || jsonMatch[0]);
-        updatedPlan = parsed.plan;
+        updatedPlan = normalizeWeeklyPlan(parsed.plan);
       } catch (e) {
         console.warn("Failed to parse updated plan from AI response", e);
       }
