@@ -29,6 +29,145 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.landing-page {
+  --landing-bg: hsl(0, 20%, 99%);
+  --landing-bg-weak: hsl(0, 8%, 97%);
+  --landing-bg-weak-hover: hsl(0, 8%, 94%);
+  --landing-bg-strong: hsl(0, 5%, 12%);
+  --landing-bg-strong-hover: hsl(0, 5%, 18%);
+  --landing-bg-interactive: hsl(62, 84%, 88%);
+  --landing-bg-interactive-weaker: hsl(64, 74%, 95%);
+  --landing-text: hsl(0, 1%, 39%);
+  --landing-text-weak: hsl(0, 1%, 60%);
+  --landing-text-weaker: hsl(30, 2%, 81%);
+  --landing-text-strong: hsl(0, 5%, 12%);
+  --landing-text-inverted: hsl(0, 20%, 99%);
+  --landing-border: hsl(30, 2%, 81%);
+  --landing-border-weak: hsla(0, 100%, 3%, 0.12);
+  --landing-icon: hsl(0, 1%, 55%);
+  --landing-padding: 5rem;
+  --landing-vpadding: 4rem;
+  --landing-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  background: var(--landing-bg);
+  color: var(--landing-text);
+  font-family: var(--landing-font-mono);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-page[data-theme="dark"] {
+  --landing-bg: hsl(0, 9%, 7%);
+  --landing-bg-weak: hsl(0, 6%, 10%);
+  --landing-bg-weak-hover: hsl(0, 6%, 15%);
+  --landing-bg-strong: hsl(0, 15%, 94%);
+  --landing-bg-strong-hover: hsl(0, 15%, 97%);
+  --landing-bg-interactive: hsl(62, 100%, 90%);
+  --landing-bg-interactive-weaker: hsl(60, 20%, 8%);
+  --landing-text: hsl(0, 4%, 71%);
+  --landing-text-weak: hsl(0, 2%, 49%);
+  --landing-text-weaker: hsl(0, 3%, 28%);
+  --landing-text-strong: hsl(0, 15%, 94%);
+  --landing-text-inverted: hsl(0, 9%, 7%);
+  --landing-border: hsl(0, 3%, 28%);
+  --landing-border-weak: hsl(0, 4%, 23%);
+  --landing-icon: hsl(10, 3%, 43%);
+}
+
+.landing-page ::selection {
+  background: var(--landing-bg-interactive);
+  color: var(--landing-text-strong);
+}
+
+.landing-page[data-theme="dark"] ::selection {
+  background: var(--landing-bg-interactive);
+  color: var(--landing-text-inverted);
+}
+
+.landing-page .landing-container {
+  max-width: 67.5rem;
+  margin: 0 auto;
+  border: 1px solid var(--landing-border-weak);
+  border-top: none;
+  width: 100%;
+}
+
+@media (max-width: 65rem) {
+  .landing-page .landing-container {
+    border: none;
+  }
+}
+
+@media (max-width: 60rem) {
+  .landing-page {
+    --landing-padding: 1.5rem;
+    --landing-vpadding: 3rem;
+  }
+}
+
+.landing-page .landing-section {
+  border-top: 1px solid var(--landing-border-weak);
+  padding: var(--landing-vpadding) var(--landing-padding);
+}
+
+.landing-page h1,
+.landing-page h2,
+.landing-page h3 {
+  color: var(--landing-text-strong);
+  font-family: var(--landing-font-mono);
+}
+
+.landing-page .logo-apple-calendar,
+.landing-page .logo-openai {
+  transition: filter 0.2s ease;
+}
+
+.landing-page[data-theme="dark"] .logo-apple-calendar {
+  filter: invert(1);
+}
+
+.landing-page[data-theme="dark"] .logo-openai {
+  filter: brightness(1.4) contrast(1.1);
+}
+
+.landing-page .integrations-grid img {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 32px;
+  max-height: 32px;
+  object-fit: contain;
+}
+
+.landing-page .integrations-grid .logo-google-calendar {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+}
+
+.landing-page .integrations-grid .logo-apple-calendar {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  max-width: 22px;
+  max-height: 22px;
+}
+
+.landing-page .integrations-grid .logo-outlook {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  max-width: 38px;
+  max-height: 38px;
+}
+
 @layer base {
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-sans);

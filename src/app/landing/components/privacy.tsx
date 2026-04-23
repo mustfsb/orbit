@@ -3,6 +3,7 @@
 export default function Privacy() {
   return (
     <section
+      id="privacy"
       className="landing-section"
       style={{
         borderTop: "1px solid var(--landing-border-weak)",
@@ -49,13 +50,13 @@ export default function Privacy() {
             Orbit does not store any of your personal journal entries or focus
             data without explicit permission. Your thoughts remain yours.{" "}
             <a
-              href="/privacy"
+              href="#faq"
               style={{
                 color: "var(--landing-text-strong)",
                 textDecoration: "underline",
               }}
             >
-              Learn more about privacy
+              Learn more in the FAQ
             </a>
             .
           </p>

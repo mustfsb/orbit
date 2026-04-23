@@ -30,7 +30,7 @@ export default function AnnouncementBanner() {
         <span className="show-on-mobile-sm">.</span>
       </span>
       <Link
-        href="/download"
+        href="#newsletter"
         className="hidden-mobile-xs"
         style={{
           color: "var(--landing-text-weak)",
@@ -46,10 +46,10 @@ export default function AnnouncementBanner() {
           (e.currentTarget as HTMLElement).style.textDecoration = "none";
         }}
       >
-        Download now
+        Get launch updates
       </Link>
       <Link
-        href="/download"
+        href="#newsletter"
         className="show-mobile-xs"
         style={{
           color: "var(--landing-text-weak)",
@@ -66,7 +66,7 @@ export default function AnnouncementBanner() {
           (e.currentTarget as HTMLElement).style.textDecoration = "none";
         }}
       >
-        Download the desktop beta now
+        Join the waitlist
       </Link>
       <style jsx>{`
         @media (max-width: 49.125rem) {

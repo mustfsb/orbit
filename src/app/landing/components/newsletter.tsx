@@ -15,6 +15,7 @@ export default function Newsletter() {
 
   return (
     <section
+      id="newsletter"
       style={{
         borderTop: "1px solid var(--landing-border-weak)",
         padding: "var(--landing-vpadding) var(--landing-padding)",

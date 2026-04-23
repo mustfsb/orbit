@@ -97,6 +97,7 @@ export default function FAQ() {
 
   return (
     <section
+      id="faq"
       style={{
         borderTop: "1px solid var(--landing-border-weak)",
         padding: "var(--landing-vpadding) var(--landing-padding)",

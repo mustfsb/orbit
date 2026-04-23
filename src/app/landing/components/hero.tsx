@@ -221,7 +221,7 @@ export default function Hero() {
 
       {/* CTA Button */}
       <Link
-        href="/landing/signup"
+        href="/signup"
         style={{
           background: "var(--landing-bg-strong)",
           color: "var(--landing-text-inverted)",

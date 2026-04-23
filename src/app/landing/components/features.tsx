@@ -68,6 +68,7 @@ export default function Features() {
 
   return (
     <section
+      id="features"
       className="landing-section"
       style={{
         borderTop: "1px solid var(--landing-border-weak)",
@@ -198,7 +199,7 @@ export default function Features() {
       </div>
 
       <a
-        href="/docs"
+        href="#faq"
         className="group"
         style={{
           background: "var(--landing-bg-strong)",
@@ -222,7 +223,7 @@ export default function Features() {
           e.currentTarget.style.background = "var(--landing-bg-strong)";
         }}
       >
-        Read docs
+        Read FAQ
         <span style={{ display: "inline-flex", alignItems: "center" }}>
           <svg
             width="16"

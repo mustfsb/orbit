@@ -54,6 +54,7 @@ export default function Pricing() {
 
   return (
     <section
+      id="pricing"
       className="landing-section"
       style={{
         borderTop: "1px solid var(--landing-border-weak)",

@@ -131,7 +131,7 @@ export default function ZenCTA() {
         ))}
       </div>
       <a
-        href="/zen"
+        href="#pricing"
         style={{
           background: "var(--landing-bg)",
           color: "var(--landing-text-strong)",
@@ -154,7 +154,7 @@ export default function ZenCTA() {
           e.currentTarget.style.background = "var(--landing-bg)";
         }}
       >
-        Learn about Zen
+        View plans
         <span style={{ display: "inline-flex", alignItems: "center" }}>
           <svg
             width="16"

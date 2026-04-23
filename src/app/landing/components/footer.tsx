@@ -2,9 +2,9 @@
 
 const links = [
   { label: "GitHub", count: null, href: "https://github.com/orbit/orbit" },
-  { label: "Docs", count: null, href: "/docs" },
-  { label: "Changelog", count: null, href: "/changelog" },
-  { label: "Discord", count: null, href: "/discord" },
+  { label: "Docs", count: null, href: "#features" },
+  { label: "Changelog", count: null, href: "#pricing" },
+  { label: "Discord", count: null, href: "#newsletter" },
   { label: "X", count: null, href: "https://x.com/orbit" },
 ];
 
@@ -69,7 +69,7 @@ export default function Footer() {
         <span>&copy;2026 Orbit</span>
         <div style={{ display: "flex", gap: "16px" }}>
           <a
-            href="/brand"
+            href="#landing-root"
             style={{
               color: "var(--landing-text-weak)",
               textDecoration: "none",
@@ -84,7 +84,7 @@ export default function Footer() {
             Brand
           </a>
           <a
-            href="/privacy"
+            href="#privacy"
             style={{
               color: "var(--landing-text-weak)",
               textDecoration: "none",
@@ -99,7 +99,7 @@ export default function Footer() {
             Privacy
           </a>
           <a
-            href="/terms"
+            href="#faq"
             style={{
               color: "var(--landing-text-weak)",
               textDecoration: "none",

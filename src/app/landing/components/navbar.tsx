@@ -122,7 +122,7 @@ function ThemeToggle() {
 }
 
 const navLinks = [
-  { label: "Docs", href: "/docs" },
+  { label: "Docs", href: "#features" },
 ];
 
 export default function Navbar() {
@@ -144,7 +144,7 @@ export default function Navbar() {
       }}
     >
       <Link
-        href="/landing"
+        href="/"
         style={{
           textDecoration: "none",
           display: "flex",
@@ -177,7 +177,7 @@ export default function Navbar() {
           </Link>
         ))}
         <Link
-          href="/landing/login"
+          href="/login"
           style={{
             textDecoration: "none",
             color: "var(--landing-text-strong)",
@@ -188,7 +188,7 @@ export default function Navbar() {
           Log in
         </Link>
         <Link
-          href="/landing/signup"
+          href="/signup"
           style={{
             background: "var(--landing-bg-strong)",
             color: "var(--landing-text-inverted)",
@@ -292,7 +292,7 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            href="/landing/login"
+            href="/login"
             className="landing-nav-mobile-cell"
             style={{
               textDecoration: "none",
@@ -315,7 +315,7 @@ export default function Navbar() {
             Log in
           </Link>
           <Link
-            href="/landing/signup"
+            href="/signup"
             className="landing-nav-mobile-cell landing-nav-mobile-signup"
             style={{
               background: "var(--landing-bg-strong)",

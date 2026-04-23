@@ -38,12 +38,38 @@ const overusedGrotesk = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Orbit - Cultivate your focus",
-  description: "Master your workflow with Orbit. A modern productivity tool designed for deep focus.",
+  title: "Orbit",
+  description: "Orbit is a productivity app for planning, focus, and daily work.",
   icons: {
     icon: "/icon.svg",
   },
 };
+
+const landingThemeScript = `
+  (function() {
+    try {
+      if (window.location.pathname !== '/') return;
+
+      var saved = localStorage.getItem('landing-theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var applyTheme = function() {
+        var root = document.getElementById('landing-root');
+        if (!root) return false;
+        root.setAttribute('data-theme', theme);
+        return true;
+      };
+
+      if (applyTheme()) return;
+
+      var observer = new MutationObserver(function() {
+        if (!applyTheme()) return;
+        observer.disconnect();
+      });
+
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+    } catch (e) {}
+  })();
+`;
 
 export default function RootLayout({
   children,
@@ -53,6 +79,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${newsreader.variable} ${onest.variable} ${jetbrainsMono.variable} ${overusedGrotesk.variable} antialiased font-sans`}>
+        <script dangerouslySetInnerHTML={{ __html: landingThemeScript }} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

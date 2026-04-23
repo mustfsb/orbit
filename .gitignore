@@ -23,6 +23,7 @@ tsconfig.tsbuildinfo
 
 # Superpowers
 .superpowers/
+.worktrees/
 
 # Logs
 *.log
