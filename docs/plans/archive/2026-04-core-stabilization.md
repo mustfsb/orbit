@@ -270,7 +270,7 @@ git commit -m "refactor: canonicalize the tasks route"
 **Files:**
 - Create: `docs/architecture/current-state.md`
 - Create: `tests/current-state-doc.test.mjs`
-- Review: `docs/ORBIT_VISION.md`
+- Review: `docs/vision/product-vision.md`
 - Review: `supabase/migrations/20240113000000_create_profiles.sql`
 - Review: `supabase/migrations/20260314000100_create_goals_and_journal_entries.sql`
 - Review: `supabase/migrations/20260423000100_create_todos_and_pomodoro_sessions.sql`

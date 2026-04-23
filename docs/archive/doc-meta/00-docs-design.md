@@ -2,7 +2,7 @@
 
 ## Summary
 
-This effort translates the high-level direction in `docs/ORBIT_VISION.md` and the current reality of the repository into three operational documents: a realistic product roadmap, a technical debt and architecture report for the existing codebase, and an immediately actionable `core stabilization` implementation plan.
+This effort translates the high-level direction in `docs/vision/product-vision.md` and the current reality of the repository into three operational documents: a realistic product roadmap, a technical debt and architecture report for the existing codebase, and an immediately actionable `core stabilization` implementation plan.
 
 ## Goals
 
@@ -14,13 +14,13 @@ This effort translates the high-level direction in `docs/ORBIT_VISION.md` and th
 
 - Modify product code in this iteration
 - Implement new integrations or new product modules
-- Rewrite `docs/ORBIT_VISION.md` from scratch
+- Rewrite `docs/vision/product-vision.md` from scratch
 
 ## Deliverables
 
-- `docs/orbit-planning/01-roadmap.md`
-- `docs/orbit-planning/02-tech-debt-and-architecture.md`
-- `docs/orbit-planning/03-core-stabilization-plan.md`
+- `docs/roadmap/roadmap.md`
+- `docs/roadmap/tech-debt.md`
+- `docs/plans/archive/2026-04-core-stabilization.md`
 
 ## Scope Decisions
 

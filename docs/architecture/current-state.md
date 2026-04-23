@@ -1,32 +1,41 @@
 # Orbit Current State
 
+## Product Surfaces In Use
+
+- `/` is the public landing page.
+- Auth-gated app routes exist and are implemented for `/dashboard`, `/todos`, `/timer`, `/planner`, `/goals`, `/journal`, `/analytics`, `/library`, `/settings`, and `/program`.
+- `/tasks` is redirect only and points to `/todos`.
+- The planner API already exists at `/api/planner` and uses Gemini for initial plan generation and chat-based revisions.
+
 ## Synced Domains
 
-- `profiles` stores the authenticated user's plan tier in Supabase and is read by the navbar.
-- `todos` is the canonical task store used by `/todos`, analytics task counts, and `/library`'s upcoming ledger.
-- `pomodoro_sessions` stores completed and interrupted focus sessions and powers analytics plus goal reward calculations.
-- `goals` stores user goals, progress, status, and completion timestamps for `/goals`.
-- `journal_entries` stores dated journal records for `/journal` and the recent notes surfaced in `/library`.
+- `profiles` stores the authenticated user's profile and plan tier.
+- `todos` is the canonical synced task store used by `/todos` and task-derived surfaces.
+- `pomodoro_sessions` stores completed and interrupted focus sessions and powers analytics plus goal reward logic.
+- `goals` stores long-term goals, progress, status, and completion state for `/goals`.
+- `journal_entries` stores dated journal entries for `/journal` and recent notes shown in `/library`.
 
 ## Local-Only Domains
 
-- `orbit-settings` in `localStorage` stores timer, sound, daily goal, API key, and view mode preferences.
 - Planner state remains local-only in `localStorage` via `orbit-current-plan`, `orbit-chat-history`, and `orbit-plan-completions`.
+- Settings remain local-only in `orbit-settings`, including timer preferences, daily goal, ambient sound, view mode, and the optional Gemini API key.
 - Library pins remain local-only in `orbit-library-pins`.
 - Goal reward acknowledgement state remains local-only in `orbit-seen-rewards-{userId}`.
-- Legacy journal drafts can still exist in `orbit-journal-*` keys until `/journal` migrates them into `journal_entries`.
+- Legacy journal migration remnants still exist through `orbit-journal-*` keys and per-user migration flags while old local entries are imported into `journal_entries`.
 
 ## Canonical Routes
 
-- `/todos` is the canonical task route; `/tasks` is a redirect only.
-- Focus sessions are recorded through the shared `PomodoroTimer` used on both `/dashboard` and `/timer`.
-- `/goals` is the canonical route for CRUD over `goals`.
-- `/journal` is the canonical route for editing and syncing `journal_entries`.
-- `/analytics` is a read-model surface over synced `todos`, `pomodoro_sessions`-derived data, and local settings.
-- `/library` already renders upcoming ledger content from `todos` plus planner snippets.
+- `/todos` is the canonical task route and source of truth for task CRUD.
+- The shared Pomodoro timer flow runs on both `/dashboard` and `/timer`.
+- `/goals`, `/journal`, `/analytics`, and `/library` are implemented product surfaces, not roadmap placeholders.
+- `/analytics` combines `todos`, `pomodoro_sessions`, and local settings-derived behavior.
+- `/library` mixes an upcoming ledger from `todos` with planner snippets and local-only pins.
+- `/landing` still exists in the repo, but `/` is the public entry point.
 
 ## Known Gaps
 
-- Planner data is still device-local, so plans, chat history, and completion state do not sync across devices.
-- Library pins are still device-local.
-- Journal still carries a one-time migration path from legacy `localStorage` entries instead of a fully retired local model.
+- Planner data does not sync across devices or accounts even though it is part of the core planning experience.
+- Library pins are device-local.
+- Settings include a credential-like Gemini API key in browser local storage.
+- Planner chat responses still depend on text parsing rather than a single structured contract.
+- Journal still carries one-time local migration behavior that has not been fully retired.

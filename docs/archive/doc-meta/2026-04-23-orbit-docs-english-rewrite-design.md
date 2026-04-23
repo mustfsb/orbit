@@ -2,7 +2,7 @@
 
 ## Summary
 
-This work rewrites the current planning document set under `docs/orbit-planning/` into professional, engineering-first English. The goal is to improve clarity, consistency, and long-term maintainability without changing the underlying strategic direction or implementation intent.
+This work rewrites the current planning document set now housed across the active docs structure into professional, engineering-first English. The goal is to improve clarity, consistency, and long-term maintainability without changing the underlying strategic direction or implementation intent.
 
 ## Goals
 
@@ -16,7 +16,7 @@ This work rewrites the current planning document set under `docs/orbit-planning/
 - Changing the selected roadmap sequence
 - Introducing new product decisions or expanding scope
 - Reworking the implementation plan into a different technical approach
-- Rewriting `docs/ORBIT_VISION.md`
+- Rewriting `docs/vision/product-vision.md`
 
 ## Audience
 
@@ -24,10 +24,10 @@ The primary audience is internal engineering: the project owner, future contribu
 
 ## Deliverables
 
-- Rewrite `docs/orbit-planning/00-docs-design.md`
-- Rewrite `docs/orbit-planning/01-roadmap.md`
-- Rewrite `docs/orbit-planning/02-tech-debt-and-architecture.md`
-- Rewrite `docs/orbit-planning/03-core-stabilization-plan.md`
+- Rewrite `docs/archive/doc-meta/00-docs-design.md`
+- Rewrite `docs/roadmap/roadmap.md`
+- Rewrite `docs/roadmap/tech-debt.md`
+- Rewrite `docs/plans/archive/2026-04-core-stabilization.md`
 
 ## Structure
 
@@ -74,7 +74,7 @@ The primary audience is internal engineering: the project owner, future contribu
 
 ## Verification
 
-- The current document set was reviewed directly under `docs/orbit-planning/`
+- The current document set was reviewed directly in its active and archive doc locations
 - Existing file paths and commands referenced in the plan were previously validated in the repo
 - This rewrite changes writing quality and structure, not implementation state
 
