@@ -22,11 +22,11 @@
 
 ## Active P1
 
-### Public route families are still partially duplicated
+### Public landing copy overstates implemented integrations
 
-- Areas: `src/app/page.tsx`, `src/app/landing/**`
-- Why it matters: `/` is the real public landing entry, but `/landing` still carries a parallel public surface.
-- Current impact: public information architecture can drift unless one path is treated as archival or redirected.
+- Areas: `src/app/page.tsx`, `src/app/landing/components/features.tsx`, `src/app/landing/components/faq.tsx`, `src/app/landing/components/hero.tsx`
+- Why it matters: the public page references calendar sync and multiple AI provider keys, but the app currently exposes only Gemini-backed planner behavior and no calendar integration.
+- Current impact: marketing promises can drift ahead of the implemented product surface.
 
 ### Library blends synced and local-only data in one surface
 
@@ -63,6 +63,12 @@
 - Why it matters: settings, planner state, reward acknowledgements, journal migration remnants, and other local keys have grown incrementally.
 - Current impact: future serverization and cleanup work stay harder than necessary.
 
+### Landing implementation still lives under a route-shaped path
+
+- Area: `src/app/landing/components/**`
+- Why it matters: `/landing` is no longer an active route, but the root landing page still imports components from a directory that reads like a route owner.
+- Current impact: future route cleanup work can be confusing unless this is documented or moved to a route-neutral home.
+
 ### Error handling is inconsistent across the app
 
 - Why it matters: `alert`, `confirm`, and `console.error` are still used directly in core flows.
@@ -78,11 +84,12 @@
 - Core migrations for `profiles`, `goals`, `journal_entries`, `todos`, and `pomodoro_sessions` are checked into `supabase/migrations/`.
 - `test`, `typecheck`, and `verify` scripts already exist in `package.json`.
 - `/tasks` is no longer a parallel task surface; it now redirects to `/todos`.
+- `/landing` is no longer an active route; `/` owns the public landing experience, although reusable landing components remain under `src/app/landing/components/`.
 - `docs/architecture/current-state.md` exists and should remain the factual source of truth.
 
 ## Recommended Order
 
 1. Make planner persistence and planner contracts reliable.
 2. Remove the highest-risk auth and storage hardening gaps.
-3. Clarify public-route duplication and Library ownership boundaries.
+3. Align public landing promises with implemented integrations and clarify Library ownership boundaries.
 4. Deepen test coverage and reduce ad hoc client-side state handling.

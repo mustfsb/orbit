@@ -22,12 +22,13 @@ The planner already exists and matters to the product. The next step is to make 
 - Improve how planner output relates to tasks, goals, and future scheduling context.
 - Make planner behavior easier to verify with tests.
 
-### 3. Tighten the app shell and route model
+### 3. Tighten the app shell and public promise
 
-The main app routes are implemented, but some structure is still transitional.
+The main app routes are implemented, but some structure and public messaging are still transitional.
 
 - Keep `/todos` as the canonical task route and treat `/tasks` as redirect-only.
-- Reduce ambiguity between `/` and the leftover `/landing` route family.
+- Keep `/` as the only public landing route while deciding whether the `src/app/landing/components/` path should remain as an implementation detail or move to a route-neutral home.
+- Bring public landing claims back in line with implemented capability, especially calendar sync and non-Gemini AI provider messaging.
 - Continue centralizing shared authenticated layout behavior where duplication still exists.
 
 ### 4. Improve trust, verification, and operational clarity
@@ -55,4 +56,4 @@ Once the single-user core is more durable, the next expansion should be a narrow
 
 ## What This Means Now
 
-The current roadmap is a reliability-and-integration roadmap, not a feature-existence roadmap. Tasks, goals, journal, analytics, library, and planner are already here; the work ahead is to unify persistence, harden contracts, and prepare the product for the first meaningful external integration.
+The current roadmap is a reliability-and-integration roadmap, not a feature-existence roadmap. Tasks, goals, journal, analytics, library, and planner are already here; the work ahead is to unify persistence, harden contracts, make public claims match shipped capability, and prepare the product for the first meaningful external integration.
