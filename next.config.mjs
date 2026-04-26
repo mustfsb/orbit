@@ -1,65 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["geist"],
   async rewrites() {
     return {
       beforeFiles: [
-        {
-          source: "/",
-          destination: "/cio-static/index.html",
-        },
-        {
-          source: "/about",
-          destination: "/cio-static/about/index.html",
-        },
-        {
-          source: "/about/:path*",
-          destination: "/cio-static/about/:path*/index.html",
-        },
-        {
-          source: "/news",
-          destination: "/cio-static/news/index.html",
-        },
-        {
-          source: "/news/:path*",
-          destination: "/cio-static/news/:path*/index.html",
-        },
-        {
-          source: "/policies-and-priorities",
-          destination: "/cio-static/policies-and-priorities/index.html",
-        },
-        {
-          source: "/policies-and-priorities/:path*",
-          destination: "/cio-static/policies-and-priorities/:path*/index.html",
-        },
-        {
-          source: "/privacy-statement",
-          destination: "/cio-static/privacy-statement/index.html",
-        },
-        {
-          source: "/accessibility-policy",
-          destination: "/cio-static/accessibility-policy/index.html",
-        },
-        {
-          source: "/resources",
-          destination: "/cio-static/resources/index.html",
-        },
-        {
-          source: "/resources/:path*",
-          destination: "/cio-static/resources/:path*/index.html",
-        },
-        {
-          source: "/handbook",
-          destination: "/cio-static/handbook/index.html",
-        },
-        {
-          source: "/handbook/:path*",
-          destination: "/cio-static/handbook/:path*/index.html",
-        },
-        {
-          source: "/government-technology-jobs",
-          destination: "/cio-static/government-technology-jobs/index.html",
-        },
+        { source: "/", destination: "/landing/index.html" },
+        { source: "/about", destination: "/landing/about/index.html" },
+        { source: "/about/:path*", destination: "/landing/about/:path*/index.html" },
+        { source: "/news", destination: "/landing/news/index.html" },
+        { source: "/news/:path*", destination: "/landing/news/:path*/index.html" },
+        { source: "/resources", destination: "/landing/resources/index.html" },
+        { source: "/resources/:path*", destination: "/landing/resources/:path*/index.html" },
+        { source: "/handbook", destination: "/landing/handbook/index.html" },
+        { source: "/handbook/:path*", destination: "/landing/handbook/:path*/index.html" },
+        { source: "/policies-and-priorities", destination: "/landing/policies-and-priorities/index.html" },
+        { source: "/policies-and-priorities/:path*", destination: "/landing/policies-and-priorities/:path*/index.html" },
+        { source: "/government-technology-jobs", destination: "/landing/government-technology-jobs/index.html" },
+        { source: "/privacy-statement", destination: "/landing/privacy-statement/index.html" },
+        { source: "/accessibility-policy", destination: "/landing/accessibility-policy/index.html" },
       ],
     };
   },

@@ -11,9 +11,10 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(5, 5, 5, 0.78);
+  border-bottom: 1px solid var(--jet-border);
+  background: var(--jet-nav-bg);
   backdrop-filter: blur(18px);
+  transition: background 250ms ease, border-color 250ms ease;
 }
 
 .navInner {
@@ -37,9 +38,9 @@
   align-items: center;
   gap: 4px;
   padding: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--jet-border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--jet-overlay-xs);
 }
 
 .navLink {
@@ -50,15 +51,15 @@
   min-height: 34px;
   padding: 0 13px;
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--jet-text-muted);
   font-size: 14px;
   font-weight: 500;
   transition: color 180ms ease, background 180ms ease;
 }
 
 .navLink:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--jet-text);
+  background: var(--jet-overlay-sm);
 }
 
 .badge {
@@ -100,8 +101,8 @@
 }
 
 .primaryButton {
-  background: #ffffff;
-  color: #050505;
+  background: var(--jet-text);
+  color: var(--jet-bg);
   box-shadow:
     0px 0.6021873017743928px 1.5656869846134214px -1.5px rgba(0, 0, 0, 0.17),
     0px 2.288533303243457px 5.950186588432988px -3px rgba(0, 0, 0, 0.14),
@@ -111,24 +112,44 @@
 .primaryButton:hover {
   transform: translateY(-1px);
   background: var(--jet-accent);
+  color: #050505;
 }
 
 .secondaryButton {
-  border-color: rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
+  border-color: var(--jet-border-strong);
+  background: var(--jet-overlay-xs);
+  color: var(--jet-text);
 }
 
 .secondaryButton:hover,
 .ghostButton:hover {
   transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--jet-border-strong);
+  background: var(--jet-overlay-sm);
 }
 
 .ghostButton {
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  border-color: var(--jet-border);
+  color: var(--jet-text);
+}
+
+.themeToggle {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--jet-border-strong);
+  border-radius: 999px;
+  background: var(--jet-overlay-xs);
+  color: var(--jet-text);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.themeToggle:hover {
+  background: var(--jet-overlay-sm);
 }
 
 .menuButton {
@@ -137,10 +158,10 @@
   height: 44px;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--jet-border-strong);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
+  background: var(--jet-overlay-xs);
+  color: var(--jet-text);
   cursor: pointer;
 }
 
@@ -214,9 +235,9 @@
   width: fit-content;
   margin: 0 auto;
   padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  border: 1px solid var(--jet-border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--jet-overlay-xs);
   color: var(--jet-accent);
   font-family: var(--font-jet-mono);
   font-size: 12px;
@@ -226,7 +247,7 @@
 
 .sectionTitle {
   margin: 0;
-  color: #ffffff;
+  color: var(--jet-text);
   font-size: clamp(36px, 5vw, 58px);
   font-weight: 620;
   line-height: 1;
@@ -242,7 +263,7 @@
 .heroTitle {
   max-width: 940px;
   margin: 0;
-  color: #ffffff;
+  color: var(--jet-text);
   font-size: clamp(48px, 8vw, 92px);
   font-weight: 640;
   line-height: 0.94;
@@ -278,8 +299,9 @@
 }
 
 .footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: #050505;
+  border-top: 1px solid var(--jet-border);
+  background: var(--jet-bg);
+  transition: background 250ms ease, border-color 250ms ease;
 }
 
 .footerInner {
@@ -319,7 +341,7 @@
 }
 
 .footerColumn strong {
-  color: #ffffff;
+  color: var(--jet-text);
   font-size: 13px;
 }
 
@@ -330,7 +352,7 @@
 }
 
 .footerColumn a:hover {
-  color: #ffffff;
+  color: var(--jet-text);
 }
 
 .pricingHero,
@@ -358,7 +380,7 @@
   padding: 24px;
   border: 1px solid var(--jet-border);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--jet-overlay-xs);
 }
 
 .planCard {
@@ -375,7 +397,7 @@
   border-color: rgba(0, 230, 197, 0.38);
   background:
     radial-gradient(circle at 50% 0%, rgba(0, 230, 197, 0.16), transparent 18rem),
-    rgba(255, 255, 255, 0.06);
+    var(--jet-overlay-sm);
 }
 
 .planBadge {
@@ -395,7 +417,7 @@
 .jobCard h3,
 .teamCard h3 {
   margin: 0;
-  color: #ffffff;
+  color: var(--jet-text);
   font-size: 22px;
   font-weight: 610;
   line-height: 1.16;
@@ -417,7 +439,7 @@
 }
 
 .price strong {
-  color: #ffffff;
+  color: var(--jet-text);
   font-size: 54px;
   line-height: 1;
 }
@@ -433,12 +455,12 @@
   gap: 12px;
   margin: 0;
   padding: 20px 0 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--jet-border);
   list-style: none;
 }
 
 .featureList li {
-  color: rgba(255, 255, 255, 0.76);
+  color: var(--jet-text-muted);
   font-size: 14px;
   line-height: 1.45;
 }
@@ -477,7 +499,7 @@
 
 .statCard strong {
   display: block;
-  color: #ffffff;
+  color: var(--jet-text);
   font-size: 44px;
   line-height: 1;
 }
@@ -497,7 +519,7 @@
   margin-bottom: 22px;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--jet-border-strong);
 }
 
 .teamAvatar img {
@@ -526,9 +548,9 @@
 
 .jobTags span {
   padding: 7px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--jet-border);
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--jet-text-soft);
   font-size: 12px;
 }
 

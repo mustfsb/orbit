@@ -1,0 +1,120 @@
+.cio-floating-nav {
+  --cio-nav-transition-duration: 420ms;
+  --cio-nav-transition-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --cio-nav-shell-width: 1250px;
+  width: 100%;
+  margin-inline: auto;
+  isolation: isolate;
+  overflow: visible;
+  background-color: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.cio-floating-nav::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  border: 0 solid transparent;
+  border-radius: 0;
+  background-color: color-mix(in oklab, var(--background) 90%, transparent);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  clip-path: inset(0 round inherit);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transition: background-color 250ms ease;
+}
+
+/* Neutralise scroll-state floating: keep full-width sticky */
+.cio-floating-nav[data-cio-scrolled="true"] {
+  top: 0 !important;
+}
+
+.cio-floating-nav[data-cio-scrolled="true"]::before {
+  left: 0 !important;
+  right: 0 !important;
+  border-width: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.cio-floating-nav[data-cio-scrolled="true"] > div {
+  padding-inline: revert !important;
+}
+
+/* ── Manual theme class overrides ── */
+html.dark {
+  color-scheme: dark;
+  --background: #1a1a1a;
+  --foreground: #e8e4df;
+  --card: #2a2a2a;
+  --card-foreground: #e8e4df;
+  --popover: #2a2a2a;
+  --popover-foreground: #e8e4df;
+  --primary: #e8e4df;
+  --primary-foreground: #1a1a1a;
+  --secondary: #222;
+  --secondary-foreground: #e8e4df;
+  --muted: #222;
+  --muted-foreground: #9a9590;
+  --accent: #333;
+  --accent-foreground: #e8e4df;
+  --destructive: oklch(70.4% .191 22.216);
+  --border: #ffffff0f;
+  --input: #ffffff14;
+  --ring: #706b66;
+  --sidebar: #222;
+  --sidebar-foreground: #e8e4df;
+  --sidebar-primary: #e8e4df;
+  --sidebar-primary-foreground: #1a1a1a;
+  --sidebar-accent: #333;
+  --sidebar-accent-foreground: #e8e4df;
+  --sidebar-border: #ffffff0f;
+  --sidebar-ring: #706b66;
+}
+
+html.light {
+  color-scheme: light;
+  --background: #f5f3f0;
+  --foreground: #1a1816;
+  --card: #fff;
+  --card-foreground: #1a1816;
+  --popover: #fff;
+  --popover-foreground: #1a1816;
+  --primary: #1a1816;
+  --primary-foreground: #f5f3f0;
+  --secondary: #eceae7;
+  --secondary-foreground: #1a1816;
+  --muted: #eceae7;
+  --muted-foreground: #6b6560;
+  --accent: #eceae7;
+  --accent-foreground: #1a1816;
+  --destructive: oklch(58% .22 27);
+  --border: #00000012;
+  --input: #00000012;
+  --ring: #9a948f;
+  --sidebar: #fff;
+  --sidebar-foreground: #1a1816;
+  --sidebar-primary: #1a1816;
+  --sidebar-primary-foreground: #f5f3f0;
+  --sidebar-accent: #eceae7;
+  --sidebar-accent-foreground: #1a1816;
+  --sidebar-border: #00000012;
+  --sidebar-ring: #9a948f;
+}
+
+/* smooth theme transition */
+*, *::before, *::after {
+  transition: background-color 250ms ease, border-color 250ms ease, color 250ms ease;
+}
+
+/* suppress transition on elements that shouldn't animate */
+img, svg, video {
+  transition: none !important;
+}
