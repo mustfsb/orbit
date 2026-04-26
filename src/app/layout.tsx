@@ -65,8 +65,8 @@ export default function RootLayout({
           </a>
           <header className="px-site sticky top-0 z-50 transition-all duration-300 translate-y-0 bg-background/90 text-foreground backdrop-blur-xl">
             <div className="py-5 lg:py-[22px] max-w-site mx-auto">
-              <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
-                <Link href="/" className="flex items-center">
+              <div className="flex items-center justify-between">
+                <Link href="/" className="flex items-center flex-shrink-0">
                   <Image
                     src="/images/logo.svg"
                     alt="Orbit"
@@ -76,43 +76,45 @@ export default function RootLayout({
                     className="h-6 w-auto dark:invert"
                   />
                 </Link>
-                <nav className="hidden lg:flex justify-center items-center">
-                  <ul className="flex list-none items-center gap-1">
-                    <li className="relative">
-                      <Link
-                        href="/about"
-                        className="hover:bg-muted focus:bg-muted rounded-md py-2 text-sm font-medium transition-all focus-visible:ring-[3px] focus-visible:outline-1 inline-flex h-9 w-max items-center justify-center bg-transparent px-3 tracking-wide"
-                      >
-                        About Us
-                      </Link>
-                    </li>
-                    <li className="relative">
-                      <Link
-                        href="/policies-and-priorities"
-                        className="hover:bg-muted focus:bg-muted rounded-md py-2 text-sm font-medium transition-all focus-visible:ring-[3px] focus-visible:outline-1 inline-flex h-9 w-max items-center justify-center bg-transparent px-3 tracking-wide"
-                      >
-                        Policies
-                      </Link>
-                    </li>
-                    <li className="relative">
-                      <Link
-                        href="/resources"
-                        className="hover:bg-muted focus:bg-muted rounded-md py-2 text-sm font-medium transition-all focus-visible:ring-[3px] focus-visible:outline-1 inline-flex h-9 w-max items-center justify-center bg-transparent px-3 tracking-wide"
-                      >
-                        Resources
-                      </Link>
-                    </li>
-                    <li className="relative">
-                      <Link
-                        href="/news"
-                        className="cursor-pointer border border-transparent bg-clip-padding font-medium focus-visible:ring-[3px] inline-flex items-center justify-center whitespace-nowrap transition-all outline-none select-none hover:bg-muted rounded-md h-9 gap-1 px-3 text-sm tracking-wide text-foreground/90 hover:text-foreground"
-                      >
-                        News
-                      </Link>
-                    </li>
-                  </ul>
-                </nav>
-                <NavActions />
+                <div className="flex items-center gap-2">
+                  <nav className="hidden lg:flex items-center mr-2">
+                    <ul className="flex list-none items-center gap-1">
+                      <li>
+                        <Link
+                          href="/about"
+                          className="hover:bg-muted focus:bg-muted rounded-md text-sm font-medium transition-all inline-flex h-9 items-center px-3 tracking-wide"
+                        >
+                          About Us
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/policies-and-priorities"
+                          className="hover:bg-muted focus:bg-muted rounded-md text-sm font-medium transition-all inline-flex h-9 items-center px-3 tracking-wide"
+                        >
+                          Policies
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/resources"
+                          className="hover:bg-muted focus:bg-muted rounded-md text-sm font-medium transition-all inline-flex h-9 items-center px-3 tracking-wide"
+                        >
+                          Resources
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/news"
+                          className="hover:bg-muted focus:bg-muted rounded-md text-sm font-medium transition-all inline-flex h-9 items-center px-3 tracking-wide text-foreground/90 hover:text-foreground"
+                        >
+                          News
+                        </Link>
+                      </li>
+                    </ul>
+                  </nav>
+                  <NavActions />
+                </div>
               </div>
             </div>
           </header>
