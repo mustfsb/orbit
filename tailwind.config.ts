@@ -19,9 +19,9 @@ const config: Config = {
         border: "var(--border)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        sans: ["var(--font-geist)"],
         serif: ["var(--font-serif)", "serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
+        mono: ["var(--font-geist-mono)"],
       },
     },
   },

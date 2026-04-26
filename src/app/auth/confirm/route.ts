@@ -1,11 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { validateRedirectPath, getSafeOrigin, buildSafeRedirectUrl } from '@/lib/auth/redirect'
 
 export async function GET(request: Request) {
-    const { searchParams, origin } = new URL(request.url)
+    const { searchParams } = new URL(request.url)
     const token_hash = searchParams.get('token_hash')
     const type = searchParams.get('type')
-    const next = searchParams.get('next') ?? '/auth/confirmed'
+    const next = validateRedirectPath(searchParams.get('next'), '/auth/confirmed')
+    const safeOrigin = getSafeOrigin(request)
 
     if (token_hash && type) {
         const supabase = await createClient()
@@ -15,10 +17,10 @@ export async function GET(request: Request) {
         })
 
         if (!error) {
-            return NextResponse.redirect(`${origin}${next}`)
+            return NextResponse.redirect(buildSafeRedirectUrl(safeOrigin, next))
         }
     }
 
     // Return error page
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+    return NextResponse.redirect(buildSafeRedirectUrl(safeOrigin, '/auth/auth-code-error'))
 }

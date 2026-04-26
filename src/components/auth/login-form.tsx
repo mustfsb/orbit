@@ -12,6 +12,7 @@ export function LoginForm() {
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const next = searchParams.get('next');
 
   useEffect(() => {
     const errorParam = searchParams.get('error');
@@ -23,6 +24,9 @@ export function LoginForm() {
   const handleSubmit = async (formData: FormData) => {
     setIsLoading(true);
     setError("");
+    if (next) {
+      formData.set('next', next);
+    }
     await login(formData);
     setIsLoading(false);
   };
@@ -97,7 +101,7 @@ export function LoginForm() {
           <div className="text-center pt-4">
             <p className="text-sm opacity-60 font-sans">
               New to Orbit?{" "}
-              <Link href="/signup" className="text-accent hover:underline">
+              <Link href={next ? `/signup?next=${encodeURIComponent(next)}` : "/signup"} className="text-accent hover:underline">
                 Create an account
               </Link>
             </p>

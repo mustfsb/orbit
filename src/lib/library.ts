@@ -60,21 +60,16 @@ export function writeLibraryPins(pins: LibraryPin[]): void {
   window.localStorage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify(pins));
 }
 
-export function readUpcomingPlanSnippets(limit = 5): LibraryPlanSnippet[] {
-  if (typeof window === "undefined") {
-    return [];
-  }
-
-  const rawPlan = window.localStorage.getItem("orbit-current-plan");
-  if (!rawPlan) {
+export function readUpcomingPlanSnippets(
+  plan: WeeklyPlan | null,
+  completions: Record<string, boolean>,
+  limit = 5
+): LibraryPlanSnippet[] {
+  if (!plan) {
     return [];
   }
 
   try {
-    const plan = JSON.parse(rawPlan) as WeeklyPlan;
-    const completions = JSON.parse(
-      window.localStorage.getItem("orbit-plan-completions") ?? "{}"
-    ) as Record<string, boolean>;
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const dayOffset = new Date().getDay();
     const orderedDays = [...days.slice(dayOffset), ...days.slice(0, dayOffset)];

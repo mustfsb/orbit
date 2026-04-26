@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { PageWrapper } from "@/components/page-wrapper";
 import { motion } from "framer-motion";
@@ -19,74 +19,30 @@ import {
   ChatMessage,
   generateInitialPlan,
   chatWithAI,
-  normalizeWeeklyPlan,
   PlanTask,
 } from "@/lib/gemini";
-import { useSettings } from "@/context/settings-context";
+import { usePlanner } from "@/context/planner-context";
 
 export default function PlannerPage() {
-  const [goal, setGoal] = useState("");
-  // Storing PDF as base64 string
-  const [pdfData, setPdfData] = useState<{ inlineData: { data: string; mimeType: string } } | null>(null);
-  const [pdfFileName, setPdfFileName] = useState<string | null>(null);
+  const {
+    currentPlan,
+    setCurrentPlan,
+    chatHistory,
+    setChatHistory,
+    completions,
+    toggleCompletion,
+    handleReorderDay,
+    resetPlanner,
+    goal,
+    setGoal,
+    pdfData,
+    setPdfData,
+    pdfFileName,
+    setPdfFileName,
+    isHydrated,
+  } = usePlanner();
   const [isProcessingPdf, setIsProcessingPdf] = useState(false);
-
-  const [currentPlan, setCurrentPlan] = useState<WeeklyPlan | null>(null);
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
-  const [completions, setCompletions] = useState<Record<string, boolean>>({});
-  const { settings } = useSettings();
-
-  // Persistence: Hydration
-  useEffect(() => {
-    const savedPlan = localStorage.getItem("orbit-current-plan");
-    const savedHistory = localStorage.getItem("orbit-chat-history");
-    const savedCompletions = localStorage.getItem("orbit-plan-completions");
-
-    let normalizedPlan: WeeklyPlan | null = null;
-
-    if (savedPlan) {
-      normalizedPlan = normalizeWeeklyPlan(JSON.parse(savedPlan) as WeeklyPlan);
-      setCurrentPlan(normalizedPlan);
-    }
-    if (savedHistory) setChatHistory(JSON.parse(savedHistory));
-
-    if (savedCompletions) {
-      try {
-        const parsedCompletions = JSON.parse(savedCompletions) as Record<string, boolean>;
-        if (normalizedPlan) {
-          const migratedCompletions = { ...parsedCompletions };
-
-          normalizedPlan.forEach((dayPlan) => {
-            dayPlan.tasks.forEach((task, index) => {
-              const legacyKey = `${dayPlan.day}-${index}`;
-              if (parsedCompletions[legacyKey] && task.id) {
-                migratedCompletions[task.id] = true;
-              }
-            });
-          });
-
-          setCompletions(migratedCompletions);
-          localStorage.setItem("orbit-plan-completions", JSON.stringify(migratedCompletions));
-        } else {
-          setCompletions(parsedCompletions);
-        }
-      } catch {
-        // ignore
-      }
-    }
-
-    setIsHydrated(true);
-  }, []);
-
-  // Persistence: Saving
-  useEffect(() => {
-    if (isHydrated) {
-      if (currentPlan) localStorage.setItem("orbit-current-plan", JSON.stringify(currentPlan));
-      localStorage.setItem("orbit-chat-history", JSON.stringify(chatHistory));
-    }
-  }, [currentPlan, chatHistory, isHydrated]);
 
   const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -96,11 +52,9 @@ export default function PlannerPage() {
     setIsProcessingPdf(true);
 
     try {
-      // Convert file to base64
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result as string;
-        // Remove data URL prefix (e.g., "data:application/pdf;base64,")
         const base64Data = base64String.split(",")[1];
 
         setPdfData({
@@ -136,12 +90,11 @@ export default function PlannerPage() {
 
     setIsLoading(true);
     try {
-      // Pass pdfData (if exists) instead of pdfText
-      const { text, plan } = await generateInitialPlan(goal, pdfData, settings.geminiApiKey);
+      const { text, plan } = await generateInitialPlan(goal, pdfData);
       setCurrentPlan(plan);
       setChatHistory([
         { role: "user", content: `Goal: ${goal}` },
-        { role: "model", content: text }
+        { role: "model", content: text, plan }
       ]);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "An error occurred";
@@ -163,11 +116,10 @@ export default function PlannerPage() {
         message,
         [...chatHistory, newUserMessage],
         currentPlan,
-        settings.geminiApiKey,
         pdfData
       );
 
-      const assistantMessage: ChatMessage = { role: "model", content: text };
+      const assistantMessage: ChatMessage = { role: "model", content: text, plan: updatedPlan };
       setChatHistory(prev => [...prev, assistantMessage]);
 
       if (updatedPlan) {
@@ -178,38 +130,6 @@ export default function PlannerPage() {
       alert(message);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const toggleCompletion = (key: string) => {
-    const updated = { ...completions, [key]: !completions[key] };
-    setCompletions(updated);
-    localStorage.setItem("orbit-plan-completions", JSON.stringify(updated));
-  };
-
-  const handleReorderDay = (dayIndex: number, reorderedTasks: PlanTask[]) => {
-    setCurrentPlan((previousPlan) => {
-      if (!previousPlan) {
-        return previousPlan;
-      }
-
-      return previousPlan.map((dayPlan, index) =>
-        index === dayIndex ? { ...dayPlan, tasks: reorderedTasks } : dayPlan
-      );
-    });
-  };
-
-  const resetPlanner = () => {
-    if (confirm("Reset the current plan and history?")) {
-      setCurrentPlan(null);
-      setChatHistory([]);
-      setGoal("");
-      setPdfFileName(null);
-      setPdfData(null);
-      setCompletions({});
-      localStorage.removeItem("orbit-current-plan");
-      localStorage.removeItem("orbit-chat-history");
-      localStorage.removeItem("orbit-plan-completions");
     }
   };
 

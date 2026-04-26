@@ -1,3 +1,10 @@
+export interface PdfData {
+  inlineData: {
+    data: string;
+    mimeType: string;
+  };
+}
+
 export interface PlanTask {
   id?: string;
   name: string;
@@ -27,25 +34,30 @@ function createTaskId(day: string, index: number): string {
 }
 
 export function normalizeWeeklyPlan(plan: WeeklyPlan): WeeklyPlan {
+  if (!Array.isArray(plan)) {
+    console.error("normalizeWeeklyPlan expected an array but received:", plan);
+    return [];
+  }
   return plan.map((dayPlan) => ({
     ...dayPlan,
-    tasks: dayPlan.tasks.map((task, index) => ({
-      ...task,
-      id: task.id ?? createTaskId(dayPlan.day, index),
-    })),
+    tasks: Array.isArray(dayPlan.tasks)
+      ? dayPlan.tasks.map((task, index) => ({
+          ...task,
+          id: task.id ?? createTaskId(dayPlan.day, index),
+        }))
+      : [],
   }));
 }
 
 export async function generateInitialPlan(
   goal: string,
-  pdfData?: { inlineData: { data: string; mimeType: string } } | null,
-  apiKey?: string
+  pdfData?: PdfData | null,
 ): Promise<{ text: string; plan: WeeklyPlan }> {
   try {
     const response = await fetch("/api/planner", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ goal, pdfData, apiKey, type: "initial" }),
+      body: JSON.stringify({ goal, pdfData, type: "initial" }),
     });
 
     const data = await response.json();
@@ -72,14 +84,13 @@ export async function chatWithAI(
   message: string,
   history: ChatMessage[],
   currentPlan: WeeklyPlan,
-  apiKey?: string,
-  pdfData?: { inlineData: { data: string; mimeType: string } } | null
+  pdfData?: PdfData | null
 ): Promise<{ text: string; updatedPlan?: WeeklyPlan }> {
   try {
     const response = await fetch("/api/planner", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, history, currentPlan, apiKey, pdfData, type: "chat" }),
+      body: JSON.stringify({ message, history, currentPlan, pdfData, type: "chat" }),
     });
 
     const data = await response.json();
@@ -87,24 +98,9 @@ export async function chatWithAI(
       throw new Error(data.error || "Failed to process revision.");
     }
 
-    const text = data.text;
-
-    // Attempt to extract JSON plan if present
-    const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/\{[\s\S]*"plan"[\s\S]*\}/);
-    let updatedPlan: WeeklyPlan | undefined;
-
-    if (jsonMatch) {
-      try {
-        const parsed = JSON.parse(jsonMatch[1] || jsonMatch[0]);
-        updatedPlan = normalizeWeeklyPlan(parsed.plan);
-      } catch (e) {
-        console.warn("Failed to parse updated plan from AI response", e);
-      }
-    }
-
     return {
-      text: text.replace(/```json\n([\s\S]*?)\n```/, "").trim(),
-      updatedPlan
+      text: data.text,
+      updatedPlan: data.plan ? normalizeWeeklyPlan(data.plan) : undefined,
     };
   } catch (error: unknown) {
     console.error("Gemini Chat Error:", error);

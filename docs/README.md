@@ -2,17 +2,25 @@
 
 ## Active Docs
 
-- `architecture/` holds factual current-state references for routes, persistence, and implemented product surfaces.
-- `vision/` holds the product north star and positioning, separated from implementation detail.
-- `roadmap/` holds forward-looking product strategy and the active tech debt register.
+| File | Purpose |
+|---|---|
+| `product-vision.md` | Product north star, promise, principles, and direction. |
+| `roadmap.md` | Forward-looking product strategy and priorities. |
+| `tech-debt.md` | Active technical debt register with risk and impact. |
+| `architecture.md` | Factual current-state reference for routes, persistence, and product surfaces. |
 
-## Archive Areas
+## Archive
 
-- `archive/doc-meta/` holds documentation rewrite and documentation-system meta work.
-- `archive/implementation/` holds completed or superseded implementation designs and plans.
-- `plans/archive/` holds older planning documents that are no longer the active plan set.
+| File | Purpose |
+|---|---|
+| `archive/2026-04-core-stabilization.md` | Completed: repo verification scripts, Supabase migrations, task route canonicalization, persistence docs. |
+| `archive/2026-04-22-landing-hero-vertical-cut-reveal.md` | Completed: design + implementation of the landing hero reveal component. |
+| `archive/2026-04-23-root-landing-migration.md` | Completed: moved landing from `/landing` to `/`, removed legacy route. |
+| `archive/00-docs-design.md` | Meta: how the original planning doc set was structured. |
+| `archive/2026-04-23-orbit-docs-english-rewrite-design.md` | Meta: design for the English rewrite of planning documents. |
 
 ## Notes
 
-- Treat `vision/`, `architecture/`, and `roadmap/` as the main active product docs.
-- Leave archive content unchanged unless a task explicitly targets it.
+- Treat the four active docs as the main working product references.
+- Archive content is read-only unless a task explicitly targets it.
+- If a doc name changes, update this index and any cross-references in active docs.

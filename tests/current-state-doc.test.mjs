@@ -7,7 +7,7 @@ function readSource(relativePath) {
 }
 
 test("current state architecture doc exists with required sections", () => {
-  const source = readSource("docs/architecture/current-state.md");
+  const source = readSource("docs/architecture.md");
 
   assert.match(source, /^# Orbit Current State$/m);
   assert.match(source, /^## Synced Domains$/m);

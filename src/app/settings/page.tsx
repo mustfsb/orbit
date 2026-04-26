@@ -188,29 +188,6 @@ export default function SettingsPage() {
               </div>
             </section>
 
-            {/* AI Configuration */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-2 opacity-40">
-                <Sparkles className="w-4 h-4" />
-                <h2 className="text-xs font-sans font-medium uppercase tracking-widest">AI & Integration</h2>
-              </div>
-              <div className="space-y-4">
-                <div className="space-y-3">
-                  <label className="text-sm font-sans opacity-60">Gemini API Key</label>
-                  <input
-                    type="password"
-                    value={settings.geminiApiKey}
-                    onChange={(e) => updateSettings({ geminiApiKey: e.target.value })}
-                    placeholder="AIza..."
-                    className="w-full bg-transparent border-b border-border py-2 focus:outline-none focus:border-accent font-sans text-sm tracking-widest"
-                  />
-                  <p className="text-[10px] opacity-30 font-sans leading-relaxed">
-                    Leave empty to use the default system key. Your key is stored locally in your browser.
-                  </p>
-                </div>
-              </div>
-            </section>
-
             {/* Footer Quote */}
             <div className="pt-12 text-center opacity-40">
               <p className="text-sm font-sans">&quot;{quotes[Math.floor(Math.random() * quotes.length)]}&quot;</p>

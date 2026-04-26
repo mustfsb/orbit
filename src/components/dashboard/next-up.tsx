@@ -2,33 +2,41 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { WeeklyPlan, PlanTask } from "@/lib/gemini";
-import { Sparkles, ArrowRight, Calendar } from "lucide-react";
+import { PlanTask } from "@/lib/gemini";
+import { usePlanner } from "@/context/planner-context";
+import { Sparkles, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export function NextUp() {
+  const { currentPlan } = usePlanner();
   const [nextTask, setNextTask] = useState<PlanTask | null>(null);
   const [dayName, setDayName] = useState("");
 
   useEffect(() => {
-    const savedPlan = localStorage.getItem("orbit-current-plan");
-    if (savedPlan) {
-      try {
-        const plan: WeeklyPlan = JSON.parse(savedPlan);
-        // Get current day of week
-        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const today = days[new Date().getDay()];
-
-        const todayPlan = plan.find(d => d.day === today);
-        if (todayPlan && todayPlan.tasks.length > 0) {
-          setNextTask(todayPlan.tasks[0]);
-          setDayName(today);
-        }
-      } catch (e) {
-        console.error("Failed to parse plan for NextUp", e);
-      }
+    if (!currentPlan) {
+      setNextTask(null);
+      setDayName("");
+      return;
     }
-  }, []);
+
+    try {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const today = days[new Date().getDay()];
+
+      const todayPlan = currentPlan.find(d => d.day === today);
+      if (todayPlan && todayPlan.tasks.length > 0) {
+        setNextTask(todayPlan.tasks[0]);
+        setDayName(today);
+      } else {
+        setNextTask(null);
+        setDayName("");
+      }
+    } catch (e) {
+      console.error("Failed to parse plan for NextUp", e);
+      setNextTask(null);
+      setDayName("");
+    }
+  }, [currentPlan]);
 
   if (!nextTask) return null;
 

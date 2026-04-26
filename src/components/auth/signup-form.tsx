@@ -12,6 +12,7 @@ export function SignupForm() {
     const searchParams = useSearchParams();
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const next = searchParams.get('next');
 
     useEffect(() => {
         const errorParam = searchParams.get('error');
@@ -23,6 +24,9 @@ export function SignupForm() {
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true);
         setError("");
+        if (next) {
+            formData.set('next', next);
+        }
         await signup(formData);
         setIsLoading(false);
     };
@@ -111,7 +115,7 @@ export function SignupForm() {
                     <div className="text-center pt-2">
                         <p className="text-sm opacity-60 font-sans">
                             Already have an account?{" "}
-                            <Link href="/login" className="text-accent hover:underline">
+                            <Link href={next ? `/login?next=${encodeURIComponent(next)}` : "/login"} className="text-accent hover:underline">
                                 Sign in
                             </Link>
                         </p>

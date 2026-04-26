@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 interface PlannerRequestPayload {
     goal?: string;
     pdfData?: { inlineData: { data: string; mimeType: string } } | null;
-    apiKey?: string;
     type: "initial" | "chat";
     history?: { role: "user" | "model"; content: string }[];
     message?: string;
@@ -17,26 +16,31 @@ type GeminiPart = { text: string } | { inlineData: { data: string; mimeType: str
 
 export async function POST(req: Request) {
     try {
-        const { goal, pdfData, apiKey, type, history, message, currentPlan } =
+        const { goal, pdfData, type, history, message, currentPlan } =
             (await req.json()) as PlannerRequestPayload;
 
-        const usedApiKey = apiKey || process.env.GEMINI_API_KEY;
+        const usedApiKey = process.env.GEMINI_API_KEY;
         if (!usedApiKey) {
-            return NextResponse.json({ error: "API Key not found. Please set it in .env.local or settings." }, { status: 500 });
+            return NextResponse.json({ error: "API Key not found. Please set GEMINI_API_KEY in .env.local." }, { status: 500 });
         }
         const genAI = new GoogleGenerativeAI(usedApiKey);
         const model = genAI.getGenerativeModel({
             model: "gemini-3-flash-preview",
-            generationConfig: { responseMimeType: type === "initial" ? "application/json" : "text/plain" }
+            generationConfig: { responseMimeType: "application/json" }
         });
 
         const SYSTEM_INSTRUCTION = `You are an expert productivity planner. Create a structured weekly schedule based on the user's goals and provided documents.
-Format your response as a JSON object containing a "plan" key which is an array of 7 days.
+
+You must ALWAYS format your response as a JSON object with exactly two keys:
+- "text": A brief, encouraging summary of the plan or the changes made.
+- "plan": An array of 7 days representing the full weekly schedule.
+
 Each day should have a "day" name and a "tasks" array.
 Each task should have a "name" and a "type" (one of: focus, rest, review, admin, creative).
 
 Example JSON structure:
 {
+  "text": "Here's your optimized weekly plan.",
   "plan": [
     {
       "day": "Monday",
@@ -48,8 +52,7 @@ Example JSON structure:
   ]
 }
 
-If the user asks for revisions, update the plan accordingly and return the FULL updated JSON plan in your response inside a code block marked with \`\`\`json.
-Always provide a brief, encouraging summary of the changes in the text part of your response.`;
+If the user asks for revisions, update the plan accordingly and return the FULL updated JSON plan.`;
 
         if (type === "initial") {
             const parts: GeminiPart[] = [{ text: `User Goal: ${goal}\n\n${SYSTEM_INSTRUCTION}` }];
@@ -65,7 +68,11 @@ Always provide a brief, encouraging summary of the changes in the text part of y
             const text = response.text();
             try {
                 const jsonResponse = JSON.parse(text);
-                return NextResponse.json({ text: "Plan synthesized based on your goals.", plan: jsonResponse.plan });
+                if (typeof jsonResponse.text !== 'string' || !Array.isArray(jsonResponse.plan)) {
+                    console.error("AI returned unexpected JSON shape:", jsonResponse);
+                    return NextResponse.json({ error: "AI returned unexpected response format. Please try again." }, { status: 500 });
+                }
+                return NextResponse.json({ text: jsonResponse.text, plan: jsonResponse.plan });
             } catch (error) {
                 console.error("JSON Parse Error:", text, error);
                 return NextResponse.json({ error: "AI returned invalid JSON. Please try again." }, { status: 500 });
@@ -92,7 +99,17 @@ Always provide a brief, encouraging summary of the changes in the text part of y
             const response = await result.response;
             const text = response.text();
 
-            return NextResponse.json({ text });
+            try {
+                const jsonResponse = JSON.parse(text);
+                if (typeof jsonResponse.text !== 'string' || !Array.isArray(jsonResponse.plan)) {
+                    console.error("AI returned unexpected JSON shape:", jsonResponse);
+                    return NextResponse.json({ error: "AI returned unexpected response format. Please try again." }, { status: 500 });
+                }
+                return NextResponse.json({ text: jsonResponse.text, plan: jsonResponse.plan });
+            } catch (error) {
+                console.error("JSON Parse Error:", text, error);
+                return NextResponse.json({ error: "AI returned invalid JSON. Please try again." }, { status: 500 });
+            }
         }
     } catch (error: unknown) {
         console.error("Gemini API Route Error:", error);

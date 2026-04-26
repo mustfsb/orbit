@@ -14,6 +14,7 @@ import { Navbar } from "@/components/navbar";
 import { PageWrapper } from "@/components/page-wrapper";
 import { useGoals } from "@/context/goals-context";
 import { useTasks } from "@/context/task-context";
+import { usePlanner } from "@/context/planner-context";
 import { formatMinutes } from "@/lib/focus-insights";
 import type { JournalEntry } from "@/lib/journal";
 import {
@@ -36,15 +37,18 @@ const plannerTypeLabel: Record<string, string> = {
 export default function LibraryPage() {
   const { activeGoals, focusInsights, loading: goalsLoading } = useGoals();
   const { tasks, loading: tasksLoading } = useTasks();
+  const { currentPlan, completions } = usePlanner();
   const [pins, setPins] = useState<LibraryPin[]>([]);
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
   const [pinDraft, setPinDraft] = useState("");
   const [loadingJournal, setLoadingJournal] = useState(true);
-  const [plannerSnippets, setPlannerSnippets] = useState(readUpcomingPlanSnippets(5));
+
+  const plannerSnippets = useMemo(() => {
+    return readUpcomingPlanSnippets(currentPlan, completions, 5);
+  }, [currentPlan, completions]);
 
   useEffect(() => {
     setPins(readLibraryPins());
-    setPlannerSnippets(readUpcomingPlanSnippets(5));
 
     const loadJournalEntries = async () => {
       const supabase = createClient();

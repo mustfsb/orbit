@@ -12,7 +12,6 @@ interface Settings {
   autoStartPomodoros: boolean
   autoStartBreaks: boolean
   longBreakInterval: number
-  geminiApiKey: string
   dailyFocusGoal: number
   ambientSound: "off" | "rain" | "white" | "brown"
 }
@@ -34,7 +33,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     autoStartPomodoros: false,
     autoStartBreaks: false,
     longBreakInterval: 4,
-    geminiApiKey: "",
     dailyFocusGoal: 120,
     ambientSound: "off",
   })
@@ -47,7 +45,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const saved = localStorage.getItem("orbit-settings")
     if (saved) {
       try {
-        setSettings((prev) => ({ ...prev, ...JSON.parse(saved) }))
+        const parsed = JSON.parse(saved)
+        if ("geminiApiKey" in parsed) {
+          delete parsed.geminiApiKey
+          localStorage.setItem("orbit-settings", JSON.stringify(parsed))
+        }
+        setSettings((prev) => ({ ...prev, ...parsed }))
       } catch (e) {
         console.error("Failed to parse settings", e)
       }
