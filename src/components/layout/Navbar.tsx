@@ -5,12 +5,12 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import styles from "@/styles/components.module.css";
 
-const navLinks: { href: string; label: string; badge?: string }[] = [
-  { href: "/about", label: "About" },
-  { href: "/news", label: "News" },
-  { href: "/policies-and-priorities", label: "Policies" },
-  { href: "/resources", label: "Resources" },
+const navLinks = [
+  { href: "/blog", label: "Blog" },
+  { href: "/updates", label: "Updates" },
   { href: "/pricing", label: "Pricing" },
+  { href: "/about", label: "About" },
+  { href: "/careers", label: "Careers", badge: "8" },
 ];
 
 function SunIcon() {

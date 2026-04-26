@@ -1,16 +1,6 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { MarketingPage } from "@/components/layout/MarketingPage";
-
-export const metadata: Metadata = {
-  title: "Resources | CIO Council",
-  description:
-    "Resources from the Federal CIO Council including the CISO Handbook and IT benchmarking data.",
-};
-
-export default function ResourcesPage() {
+export default function Page() {
   return (
-    <MarketingPage>
+    <>
       <section className="bg-background px-site pt-24 md:pt-32 pb-16 md:pb-24">
         <div className="flex flex-col gap-8 md:gap-16 max-w-site mx-auto">
           <div className="flex flex-col gap-6">
@@ -20,7 +10,6 @@ export default function ResourcesPage() {
           </div>
         </div>
       </section>
-
       <section className="px-site pb-section">
         <div className="max-w-site mx-auto">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
@@ -121,112 +110,269 @@ export default function ResourcesPage() {
                     </button>
                   </div>
                 </div>
-
-                <div className="border border-border rounded-2xl p-6 transition-colors hover:bg-muted">
-                  <h3 className="m-0">
-                    <button
-                      type="button"
-                      tabIndex={0}
-                      aria-expanded="false"
-                      className="group/accordion-trigger flex items-center justify-between w-full text-left cursor-pointer font-normal tracking-normal leading-normal text-inherit"
+                <div
+                  data-orientation="vertical"
+                  dir="ltr"
+                  role="region"
+                  className="border border-border rounded-2xl p-6 transition-colors hover:bg-muted"
+                >
+                  <div
+                    data-orientation="vertical"
+                    data-index="-1"
+                    data-closed=""
+                  >
+                    <h3
+                      data-orientation="vertical"
+                      data-index="-1"
+                      data-closed=""
+                      className="m-0"
                     >
-                      <span className="font-sans text-[15px] leading-[25.5px] text-muted-foreground select-none">
-                        Subject
-                      </span>
-                      <svg
-                        className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-500 ease-[cubic-bezier(0.22,1.8,0.36,1)] group-data-[panel-open]/accordion-trigger:rotate-45"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
+                      <button
+                        type="button"
+                        data-value=""
+                        data-orientation="vertical"
+                        data-index="-1"
+                        tabIndex={0}
+                        aria-disabled="false"
+                        aria-expanded="false"
+                        id="base-ui-«R6aq8qH2»"
+                        className="group/accordion-trigger flex items-center justify-between w-full text-left cursor-pointer font-normal tracking-normal leading-normal text-inherit"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.5"
-                          d="M12 4v16m8-8H4"
-                        ></path>
-                      </svg>
-                    </button>
-                  </h3>
-                  <div className="pt-4">
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        "Cybersecurity",
-                        "Cloud",
-                        "Data",
-                        "Governance",
-                        "IT Spending",
-                        "Modernization",
-                        "Acquisition",
-                        "Web & Digital",
-                        "Accessibility",
-                        "Customer Experience",
-                      ].map((subject) => (
-                        <button
-                          key={subject}
-                          type="button"
-                          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
-                          aria-pressed="false"
+                        <span className="font-sans text-[15px] leading-[25.5px] text-muted-foreground select-none">
+                          Subject
+                        </span>
+                        <svg
+                          className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-500 ease-[cubic-bezier(0.22,1.8,0.36,1)] group-data-[panel-open]/accordion-trigger:rotate-45"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
                         >
-                          {subject}
-                        </button>
-                      ))}
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M12 4v16m8-8H4"
+                          ></path>
+                        </svg>
+                      </button>
+                    </h3>
+                    <div
+                      data-orientation="vertical"
+                      data-index="-1"
+                      data-closed=""
+                      hidden
+                      id="base-ui-«R6aq8qH1»"
+                      aria-labelledby="base-ui-«R6aq8qH2»"
+                      role="region"
+                      style={
+                        {
+                          "--accordion-panel-height": "auto",
+                          "--accordion-panel-width": "auto",
+                        } as React.CSSProperties
+                      }
+                      className="group/accordion-panel grid overflow-hidden transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1.8,0.36,1)] data-[open]:grid-rows-[1fr] grid-rows-[0fr]"
+                    >
+                      <div className="min-h-0">
+                        <div className="transition-[clip-path,opacity] duration-500 ease-[cubic-bezier(0.22,1.8,0.36,1)] group-data-[open]/accordion-panel:[clip-path:inset(0_0_0_0)] group-data-[open]/accordion-panel:opacity-100 [clip-path:inset(0_0_100%_0)] opacity-0 pt-4">
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Cybersecurity
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Cloud
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Data
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Governance
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              IT Spending
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Modernization
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Acquisition
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Web & Digital
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Accessibility
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Customer Experience
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="border border-border rounded-2xl p-6 transition-colors hover:bg-muted">
-                  <h3 className="m-0">
-                    <button
-                      type="button"
-                      tabIndex={0}
-                      aria-expanded="false"
-                      className="group/accordion-trigger flex items-center justify-between w-full text-left cursor-pointer font-normal tracking-normal leading-normal text-inherit"
+                <div
+                  data-orientation="vertical"
+                  dir="ltr"
+                  role="region"
+                  className="border border-border rounded-2xl p-6 transition-colors hover:bg-muted"
+                >
+                  <div
+                    data-orientation="vertical"
+                    data-index="-1"
+                    data-closed=""
+                  >
+                    <h3
+                      data-orientation="vertical"
+                      data-index="-1"
+                      data-closed=""
+                      className="m-0"
                     >
-                      <span className="font-sans text-[15px] leading-[25.5px] text-muted-foreground select-none">
-                        Role
-                      </span>
-                      <svg
-                        className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-500 ease-[cubic-bezier(0.22,1.8,0.36,1)] group-data-[panel-open]/accordion-trigger:rotate-45"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
+                      <button
+                        type="button"
+                        data-value=""
+                        data-orientation="vertical"
+                        data-index="-1"
+                        tabIndex={0}
+                        aria-disabled="false"
+                        aria-expanded="false"
+                        id="base-ui-«R7aq8qH2»"
+                        className="group/accordion-trigger flex items-center justify-between w-full text-left cursor-pointer font-normal tracking-normal leading-normal text-inherit"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.5"
-                          d="M12 4v16m8-8H4"
-                        ></path>
-                      </svg>
-                    </button>
-                  </h3>
-                  <div className="pt-4">
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        "CIO",
-                        "CISO",
-                        "CFO",
-                        "Executive",
-                        "Architect",
-                        "Engineer",
-                        "Acquisition",
-                      ].map((role) => (
-                        <button
-                          key={role}
-                          type="button"
-                          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
-                          aria-pressed="false"
+                        <span className="font-sans text-[15px] leading-[25.5px] text-muted-foreground select-none">
+                          Role
+                        </span>
+                        <svg
+                          className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-500 ease-[cubic-bezier(0.22,1.8,0.36,1)] group-data-[panel-open]/accordion-trigger:rotate-45"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
                         >
-                          {role}
-                        </button>
-                      ))}
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M12 4v16m8-8H4"
+                          ></path>
+                        </svg>
+                      </button>
+                    </h3>
+                    <div
+                      data-orientation="vertical"
+                      data-index="-1"
+                      data-closed=""
+                      hidden
+                      id="base-ui-«R7aq8qH1»"
+                      aria-labelledby="base-ui-«R7aq8qH2»"
+                      role="region"
+                      style={
+                        {
+                          "--accordion-panel-height": "auto",
+                          "--accordion-panel-width": "auto",
+                        } as React.CSSProperties
+                      }
+                      className="group/accordion-panel grid overflow-hidden transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1.8,0.36,1)] data-[open]:grid-rows-[1fr] grid-rows-[0fr]"
+                    >
+                      <div className="min-h-0">
+                        <div className="transition-[clip-path,opacity] duration-500 ease-[cubic-bezier(0.22,1.8,0.36,1)] group-data-[open]/accordion-panel:[clip-path:inset(0_0_0_0)] group-data-[open]/accordion-panel:opacity-100 [clip-path:inset(0_0_100%_0)] opacity-0 pt-4">
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              CIO
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              CISO
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              CFO
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Executive
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Architect
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Engineer
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08] cursor-pointer"
+                              aria-pressed="false"
+                            >
+                              Acquisition
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-
                 <div className="flex justify-center transition-all duration-300 opacity-0 pointer-events-none">
                   <button
                     type="button"
@@ -254,10 +400,9 @@ export default function ResourcesPage() {
                 </div>
               </div>
             </aside>
-
             <div className="flex-1">
               <div className="grid sm:grid-cols-2 gap-4">
-                <Link
+                <a
                   href="/resources/sofit"
                   className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
                 >
@@ -282,35 +427,7 @@ export default function ResourcesPage() {
                       </span>
                     </div>
                   </div>
-                </Link>
-
-                <Link
-                  href="/resources/ciso-handbook"
-                  className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-                >
-                  <div className="flex flex-col h-full">
-                    <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                      CISO Handbook
-                    </h3>
-                    <p className="font-sans text-[15px] leading-[25.5px] mt-3 text-muted-foreground">
-                      Comprehensive guide for federal Chief Information Security
-                      Officers.
-                    </p>
-                    <div className="mt-auto pt-6 flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-report-foreground bg-background hover:bg-foreground/[0.08]">
-                        <span
-                          className="size-2 shrink-0 rounded-full bg-tag-report-foreground"
-                          aria-hidden="true"
-                        ></span>
-                        Report
-                      </span>
-                      <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                        March 2023
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-
+                </a>
                 <a
                   href="/assets/resources/Report-to-the-President-on-IT-Modernization-Final.pdf"
                   target="_blank"
@@ -355,7 +472,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
                 <a
                   href="/assets/files/Application-Rationalization-Playbook.pdf"
                   target="_blank"
@@ -400,7 +516,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
                 <a
                   href="/assets/resources/Cloud-Operations-Best-Practices-Guide.pdf"
                   target="_blank"
@@ -445,7 +560,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
                 <a
                   href="/assets/files/IT_Spending_Maturity_Model_Tool.xlsx"
                   target="_blank"
@@ -490,7 +604,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
                 <a
                   href="/assets/resources/MIPT-draft-5.0-Final-2020_08.pdf"
                   target="_blank"
@@ -535,7 +648,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
                 <a
                   href="/assets/files/IT-Spending-Transparency-Maturity-Model-Whitepaper.pdf"
                   target="_blank"
@@ -580,78 +692,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
-                <Link
-                  href="/news/federal-zero-trust-data-security-guide"
-                  className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-                >
-                  <div className="flex flex-col h-full">
-                    <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                      Federal Zero Trust Data Security Guide
-                    </h3>
-                    <p className="font-sans text-[15px] leading-[25.5px] mt-3 text-muted-foreground">
-                      Guide for implementing zero trust data security.
-                    </p>
-                    <div className="mt-auto pt-6 flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-guidance-foreground bg-background hover:bg-foreground/[0.08]">
-                        <span
-                          className="size-2 shrink-0 rounded-full bg-tag-guidance-foreground"
-                          aria-hidden="true"
-                        ></span>
-                        Guidance
-                      </span>
-                      <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                        April 2023
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-
-                <a
-                  href="/assets/files/resources/2012_IPv6_Roadmap_FINAL_20120712.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-                >
-                  <div className="flex flex-col h-full">
-                    <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                      IPv6 Planning Guide and Roadmap
-                    </h3>
-                    <p className="font-sans text-[15px] leading-[25.5px] mt-3 text-muted-foreground">
-                      Planning guide for IPv6 adoption.
-                    </p>
-                    <div className="mt-auto pt-6 flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-guidance-foreground bg-background hover:bg-foreground/[0.08]">
-                        <span
-                          className="size-2 shrink-0 rounded-full bg-tag-guidance-foreground"
-                          aria-hidden="true"
-                        ></span>
-                        Guidance
-                      </span>
-                      <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                        July 2012
-                      </span>
-                      <span className="ml-auto text-muted-foreground group-hover:text-foreground transition-colors">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M14 4H20V10M20 4L10 14M5 8V19H16"
-                            stroke="currentColor"
-                            strokeWidth="1.75"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></path>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </a>
-
                 <a
                   href="https://itdashboard.gov/"
                   target="_blank"
@@ -693,7 +733,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
                 <a
                   href="https://performance.gov/"
                   target="_blank"
@@ -735,49 +774,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
-                <a
-                  href="https://fedramp.gov/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-                >
-                  <div className="flex flex-col h-full">
-                    <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                      FedRAMP
-                    </h3>
-                    <p className="font-sans text-[15px] leading-[25.5px] mt-3 text-muted-foreground">
-                      Cloud security authorization program.
-                    </p>
-                    <div className="mt-auto pt-6 flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-website-foreground bg-background hover:bg-foreground/[0.08]">
-                        <span
-                          className="size-2 shrink-0 rounded-full bg-tag-website-foreground"
-                          aria-hidden="true"
-                        ></span>
-                        Website
-                      </span>
-                      <span className="ml-auto text-muted-foreground group-hover:text-foreground transition-colors">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M14 4H20V10M20 4L10 14M5 8V19H16"
-                            stroke="currentColor"
-                            strokeWidth="1.75"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></path>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </a>
-
                 <a
                   href="https://digital.gov/"
                   target="_blank"
@@ -819,7 +815,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
                 <a
                   href="https://idmanagement.gov/"
                   target="_blank"
@@ -861,7 +856,6 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
                 <a
                   href="https://itvmo.gsa.gov/"
                   target="_blank"
@@ -903,61 +897,7 @@ export default function ResourcesPage() {
                     </div>
                   </div>
                 </a>
-
-                <Link
-                  href="/policies-and-priorities/FITARA"
-                  className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-                >
-                  <div className="flex flex-col h-full">
-                    <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                      Federal Information Technology Acquisition Reform Act
-                      (FITARA)
-                    </h3>
-                    <p className="font-sans text-[15px] leading-[25.5px] mt-3 text-muted-foreground">
-                      Key legislation for federal IT management.
-                    </p>
-                    <div className="mt-auto pt-6 flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-policy-foreground bg-background hover:bg-foreground/[0.08]">
-                        <span
-                          className="size-2 shrink-0 rounded-full bg-tag-policy-foreground"
-                          aria-hidden="true"
-                        ></span>
-                        Policy
-                      </span>
-                      <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                        December 2014
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/policies-and-priorities/cybersecurity"
-                  className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-                >
-                  <div className="flex flex-col h-full">
-                    <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                      Cybersecurity
-                    </h3>
-                    <p className="font-sans text-[15px] leading-[25.5px] mt-3 text-muted-foreground">
-                      Federal cybersecurity priorities and policies.
-                    </p>
-                    <div className="mt-auto pt-6 flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-priority-foreground bg-background hover:bg-foreground/[0.08]">
-                        <span
-                          className="size-2 shrink-0 rounded-full bg-tag-priority-foreground"
-                          aria-hidden="true"
-                        ></span>
-                        Priority
-                      </span>
-                      <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                        January 2025
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-
-                <Link
+                <a
                   href="/policies-and-priorities/cloud-smart"
                   className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
                 >
@@ -981,79 +921,7 @@ export default function ResourcesPage() {
                       </span>
                     </div>
                   </div>
-                </Link>
-
-                <Link
-                  href="/handbook"
-                  className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-                >
-                  <div className="flex flex-col h-full">
-                    <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                      CIO Handbook
-                    </h3>
-                    <p className="font-sans text-[15px] leading-[25.5px] mt-3 text-muted-foreground">
-                      Comprehensive guide for federal CIOs.
-                    </p>
-                    <div className="mt-auto pt-6 flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-report-foreground bg-background hover:bg-foreground/[0.08]">
-                        <span
-                          className="size-2 shrink-0 rounded-full bg-tag-report-foreground"
-                          aria-hidden="true"
-                        ></span>
-                        Report
-                      </span>
-                      <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                        January 2024
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-
-                <a
-                  href="/assets/resources/small-agency-cio-handbook.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-                >
-                  <div className="flex flex-col h-full">
-                    <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                      Small Agency CIO Handbook
-                    </h3>
-                    <p className="font-sans text-[15px] leading-[25.5px] mt-3 text-muted-foreground">
-                      Guide for CIOs at small federal agencies.
-                    </p>
-                    <div className="mt-auto pt-6 flex items-center gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-guidance-foreground bg-background hover:bg-foreground/[0.08]">
-                        <span
-                          className="size-2 shrink-0 rounded-full bg-tag-guidance-foreground"
-                          aria-hidden="true"
-                        ></span>
-                        Guidance
-                      </span>
-                      <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                        October 2018
-                      </span>
-                      <span className="ml-auto text-muted-foreground group-hover:text-foreground transition-colors">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M14 4H20V10M20 4L10 14M5 8V19H16"
-                            stroke="currentColor"
-                            strokeWidth="1.75"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></path>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
                 </a>
-
                 <a
                   href="https://github.com/ombegov"
                   target="_blank"
@@ -1104,7 +972,6 @@ export default function ResourcesPage() {
           </div>
         </div>
       </section>
-
       <section className="px-site bg-muted py-section border-t border-border">
         <div className="max-w-site mx-auto">
           <div className="max-w-2xl">
@@ -1120,7 +987,8 @@ export default function ResourcesPage() {
               <button
                 type="button"
                 tabIndex={0}
-                className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary text-primary-foreground hover:bg-primary/80 h-11 gap-2 px-6 text-base"
+                data-slot="button"
+                className="cursor-pointer focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 border border-transparent bg-clip-padding font-medium focus-visible:ring-[3px] aria-invalid:ring-[3px] [&_svg:not([class*='size-'])]:size-4 inline-flex items-center justify-center whitespace-nowrap transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none group/button select-none rounded-full bg-primary text-primary-foreground hover:bg-primary/80 h-11 gap-2 px-6 text-base"
               >
                 Suggest a Resource
               </button>
@@ -1128,6 +996,6 @@ export default function ResourcesPage() {
           </div>
         </div>
       </section>
-    </MarketingPage>
+    </>
   );
 }

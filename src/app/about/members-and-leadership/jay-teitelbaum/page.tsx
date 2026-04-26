@@ -33,7 +33,7 @@ export default function Page() {
                 <li className="flex items-center gap-2">
                   <span className="text-muted-foreground/50">/</span>
                   <span className="text-primary truncate max-w-[30ch]">
-                    Gregory Barbaccia
+                    Jay Teitelbaum
                   </span>
                 </li>
               </ol>
@@ -45,17 +45,17 @@ export default function Page() {
         <div className="max-w-[650px] mx-auto">
           <div className="w-32 h-32 rounded-2xl overflow-hidden bg-muted mb-8 border-[0.5px] border-foreground/15">
             <Image
-              src="/images/members/gregory-barbaccia.jpg"
-              alt="Gregory Barbaccia"
+              src="/images/members/jay-teitelbaum.png"
+              alt="Jay Teitelbaum"
               width={128}
               height={128}
               className="w-full h-full object-cover"
             />
           </div>
-          <h2>Gregory Barbaccia</h2>
+          <h2>Jay Teitelbaum</h2>
           <div className="flex items-center gap-2 text-muted-foreground mt-4 mb-8">
             <span className="font-sans text-[15px] leading-[25.5px] text-muted-foreground">
-              Federal Chief Information Officer
+              Acting Deputy Federal Chief Information Officer
             </span>
             <span className="text-muted-foreground/40">·</span>
             <span className="font-sans text-[15px] leading-[25.5px] text-muted-foreground">
@@ -65,16 +65,29 @@ export default function Page() {
           <div className="prose prose-lg max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-foreground prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:leading-relaxed prose-li:text-muted-foreground prose-a:text-foreground prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-muted-foreground prose-strong:text-foreground">
             <div className="space-y-4 whitespace-normal *:first:mt-0 *:last:mb-0">
               <p>
-                Gregory Barbaccia serves as the United States Federal Chief
-                Information Officer, overseeing the implementation of secure,
-                reliable, and high-performing technology across the Federal
-                government. Prior to joining the White House, Gregory served in
-                multiple leadership positions in the commercial technology
-                sector where he executed robust information security strategies
-                and implemented advanced analytics and security solutions at
-                scale. Gregory is a Certified Information Systems Security
-                Professional (CISSP) and is a US Army Intelligence Veteran,
-                having served in Iraq and Afghanistan.
+                Jay Teitelbaum is the Acting Deputy Federal CIO within the
+                Office of Management and Budget. In this role, Jay provides
+                expert advice and guidance to OMB and Executive Branch
+                leadership on a wide range of highly complex technology policy
+                and implementation areas including, but not limited to
+                technology modernization, digital service, and cybersecurity.
+                Jay is also responsible for the establishment of management
+                processes and the creation of an environment conducive to the
+                effective utilization of personnel, information technology, and
+                financial resources necessary to support OFCIO staff.
+                Previously, Jay served as the Chief of Finance and Operations of
+                the U.S. Digital Service (USDS), a team of top technologists in
+                the Executive Office of the President, responsible for the daily
+                operation of USDS headquarters. Prior to USDS, Jay was a civil
+                servant at the Department of Homeland Security, where he was
+                responsible for securing new funding and budgetary management
+                for the Office of the Secretary and Executive Management. Jay is
+                passionate about building and leveraging relationships to
+                improve government processes and services to the public. Jay
+                holds a master&apos;s degree in Homeland Security and Defense
+                from the Naval Postgraduate School. Originally from New Jersey,
+                Jay now lives in Falls Church, VA, with his wife, Nisha, and
+                dog, Riley.
               </p>
             </div>
           </div>

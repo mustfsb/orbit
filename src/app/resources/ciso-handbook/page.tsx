@@ -1,17 +1,9 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { MarketingPage } from "@/components/layout/MarketingPage";
-
-export const metadata: Metadata = {
-  title: "CISO Handbook | CIO Council Resources",
-  description: "The Federal CISO Handbook from the CIO Council.",
-};
-
-export default function CISOHandbookPage() {
+export default function Page() {
   return (
-    <MarketingPage>
+    <>
       <div
-        className="sticky z-40 bg-background/90 backdrop-blur-xl transition-[top,box-shadow] duration-300 [[data-scrolled]_&]:shadow-[0_1px_8px_rgba(0,0,0,0.08)]"
+        data-breadcrumb="true"
+        className="sticky z-40 bg-background/90 backdrop-blur-xl transition-[top,box-shadow] duration-300 [[data-scrolled]_&]:shadow-[0_1px_8px_rgba(0,0,0,0.08)] "
         style={{ top: "var(--header-offset, 0px)" }}
       >
         <div className="border-y border-border px-site">
@@ -19,12 +11,12 @@ export default function CISOHandbookPage() {
             <nav aria-label="Breadcrumb">
               <ol className="flex items-center gap-2 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
-                  <Link
+                  <a
                     href="/resources"
                     className="hover:text-foreground transition-colors"
                   >
                     Resources
-                  </Link>
+                  </a>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-muted-foreground/50">/</span>
@@ -37,7 +29,6 @@ export default function CISOHandbookPage() {
           </div>
         </div>
       </div>
-
       <div className="text-center">
         <section className="bg-background px-site pt-24 md:pt-32 pb-16 md:pb-24">
           <div className="flex flex-col gap-8 md:gap-16 max-w-site mx-auto">
@@ -49,7 +40,6 @@ export default function CISOHandbookPage() {
           </div>
         </section>
       </div>
-
       <section className="px-site pb-12 lg:pb-16">
         <div className="max-w-[650px] mx-auto">
           <div className="mb-12">
@@ -82,7 +72,6 @@ export default function CISOHandbookPage() {
               </p>
             </div>
           </div>
-
           <div className="mb-12">
             <h2 className="font-sans text-[18px] leading-[23px] tracking-[-0.27px] lg:text-[20px] lg:leading-[26px] lg:tracking-[-0.3px] font-medium mb-6">
               Key Elements of the Handbook
@@ -131,7 +120,6 @@ export default function CISOHandbookPage() {
               </li>
             </ul>
           </div>
-
           <div className="mb-12 p-8 md:p-12 bg-muted rounded-2xl">
             <h3 className="font-sans text-[32px] leading-[37px] tracking-[-0.8px] lg:text-[40px] lg:leading-[46px] lg:tracking-[-1px] font-medium mb-4">
               Download the Complete Handbook
@@ -140,35 +128,7 @@ export default function CISOHandbookPage() {
               Download the complete CISO Handbook for comprehensive guidance on
               federal cybersecurity responsibilities and resources.
             </p>
-            <a
-              href="/assets/resources/CISO_Handbook.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <button
-                type="button"
-                tabIndex={0}
-                className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all bg-primary text-primary-foreground hover:bg-primary/80 px-8 py-6 text-base rounded-full"
-              >
-                Download PDF
-                <svg
-                  className="w-4 h-4 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                  ></path>
-                </svg>
-              </button>
-            </a>
           </div>
-
           <div className="mb-12">
             <h2 className="font-sans text-[18px] leading-[23px] tracking-[-0.27px] lg:text-[20px] lg:leading-[26px] lg:tracking-[-0.3px] font-medium mb-6">
               Annual Reporting Schedule
@@ -293,7 +253,6 @@ export default function CISOHandbookPage() {
               </table>
             </div>
           </div>
-
           <div className="mb-12">
             <h2 className="font-sans text-[18px] leading-[23px] tracking-[-0.27px] lg:text-[20px] lg:leading-[26px] lg:tracking-[-0.3px] font-medium mb-6">
               Related
@@ -330,54 +289,13 @@ export default function CISOHandbookPage() {
                   </div>
                 </div>
               </a>
-
-              <Link
-                href="/policies-and-priorities/cybersecurity"
-                className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-              >
-                <div className="flex flex-col h-full">
-                  <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                    Cybersecurity
-                  </h3>
-                  <div className="flex items-center gap-2 mt-auto pt-6">
-                    <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-priority-foreground bg-background hover:bg-foreground/[0.08]">
-                      <span
-                        className="size-2 shrink-0 rounded-full bg-tag-priority-foreground"
-                        aria-hidden="true"
-                      ></span>
-                      Priority
-                    </span>
-                  </div>
-                </div>
-              </Link>
-
-              <Link
-                href="/policies-and-priorities/FISMA"
-                className="group block p-8 lg:p-10 bg-muted rounded-2xl ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08]"
-              >
-                <div className="flex flex-col h-full">
-                  <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] font-medium text-foreground group-hover:text-muted-foreground transition-colors">
-                    Federal Information Security Modernization Act (FISMA)
-                  </h3>
-                  <div className="flex items-center gap-2 mt-auto pt-6">
-                    <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors text-tag-policy-foreground bg-background hover:bg-foreground/[0.08]">
-                      <span
-                        className="size-2 shrink-0 rounded-full bg-tag-policy-foreground"
-                        aria-hidden="true"
-                      ></span>
-                      Policy
-                    </span>
-                  </div>
-                </div>
-              </Link>
             </div>
           </div>
         </div>
       </section>
-
       <div className="border-t border-border px-site">
         <div className="max-w-site mx-auto flex items-center py-5">
-          <Link
+          <a
             href="/resources"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -396,93 +314,17 @@ export default function CISOHandbookPage() {
               ></path>
             </svg>
             Back to Resources
-          </Link>
+          </a>
         </div>
       </div>
-
       <section className="py-section px-site border-t border-border bg-muted">
         <div className="w-full max-w-site mx-auto">
           <h2 className="font-sans text-[32px] leading-[38px] tracking-[-0.96px] lg:text-[56px] lg:leading-[67px] lg:tracking-[-1.68px] mb-16 lg:mb-20 font-medium">
             Latest News
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <Link
-              href="/news/ai-transparency-listening-session"
-              className="group flex flex-col gap-5 p-8 lg:p-10 bg-background rounded-2xl transition-colors hover:bg-foreground/[0.08]"
-            >
-              <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                September 26, 2025
-              </span>
-              <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] text-foreground font-semibold group-hover:text-foreground/60 transition-colors">
-                AI Transparency Listening Session with the White House Office of
-                Management and Budget
-              </h3>
-              <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground line-clamp-3">
-                The White House Office of Management and Budget (OMB) is leading
-                a series of listening sessions to learn more from industry about
-                their approaches to AI transparency and auditable risk
-                management.
-              </p>
-              <div className="mt-auto">
-                <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08]">
-                  Artificial Intelligence
-                </span>
-              </div>
-            </Link>
-
-            <Link
-              href="/news/ai-in-action"
-              className="group flex flex-col gap-5 p-8 lg:p-10 bg-background rounded-2xl transition-colors hover:bg-foreground/[0.08]"
-            >
-              <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                January 15, 2025
-              </span>
-              <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] text-foreground font-semibold group-hover:text-foreground/60 transition-colors">
-                AI in Action: 5 Essential Findings from the 2024 Federal AI Use
-                Case Inventory
-              </h3>
-              <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground line-clamp-3">
-                This year, agencies publicly reported more than 1,700 ways they
-                are using Artificial Intelligence (AI) to advance their missions
-                and deliver better experiences to the public.
-              </p>
-              <div className="mt-auto">
-                <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08]">
-                  Artificial Intelligence
-                </span>
-              </div>
-            </Link>
-
-            <Link
-              href="/news/federal-zero-trust-data-security-guide"
-              className="group flex flex-col gap-5 p-8 lg:p-10 bg-background rounded-2xl transition-colors hover:bg-foreground/[0.08]"
-            >
-              <span className="font-sans text-[13px] leading-[22px] text-muted-foreground">
-                October 31, 2024
-              </span>
-              <h3 className="font-sans text-[22px] leading-[29px] tracking-[-0.44px] lg:text-[28px] lg:leading-[36px] lg:tracking-[-0.56px] text-foreground font-semibold group-hover:text-foreground/60 transition-colors">
-                CISO Council and CDO Council Release Joint Guide on Federal Zero
-                Trust Data Security
-              </h3>
-              <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground line-clamp-3">
-                Today, the CISO Council and CDO Council released the Federal
-                Zero Trust (ZT) Data Security Guide, a first-of-its-kind
-                document and key deliverable of OMB M-22-09, Moving the U.S.
-                Government Towards Zero Trust Cybersecurity Principles.
-                M-22-09 charged the Federal CDO Council and Federal CISO
-                Council to convene a cross-agency working group of data and
-                security experts to develop a data security guide for Federal
-                agencies.
-              </p>
-              <div className="mt-auto">
-                <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-colors bg-muted text-muted-foreground hover:bg-foreground/[0.08]">
-                  Cybersecurity
-                </span>
-              </div>
-            </Link>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
         </div>
       </section>
-    </MarketingPage>
+    </>
   );
 }
