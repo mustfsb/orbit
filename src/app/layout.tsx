@@ -65,7 +65,7 @@ export default function RootLayout({
           </a>
           <header className="px-site sticky top-0 z-50 transition-all duration-300 translate-y-0 bg-background/90 text-foreground backdrop-blur-xl">
             <div className="py-5 lg:py-[22px] max-w-site mx-auto">
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
                 <Link href="/" className="flex items-center">
                   <Image
                     src="/images/logo.svg"
@@ -76,8 +76,8 @@ export default function RootLayout({
                     className="h-6 w-auto dark:invert"
                   />
                 </Link>
-                <nav className="hidden lg:flex items-center gap-4">
-                  <ul className="flex flex-1 list-none items-center justify-center gap-1">
+                <nav className="hidden lg:flex justify-center items-center">
+                  <ul className="flex list-none items-center gap-1">
                     <li className="relative">
                       <Link
                         href="/about"

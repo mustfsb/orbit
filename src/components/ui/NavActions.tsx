@@ -70,7 +70,7 @@ export function NavActions() {
         aria-label={
           theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
         }
-        className="w-9 h-9 rounded-full bg-muted hover:bg-accent transition-colors flex items-center justify-center text-foreground/70 hover:text-foreground"
+        className="cursor-pointer w-9 h-9 rounded-full bg-background ring-1 ring-border shadow-sm hover:bg-muted transition-colors flex items-center justify-center text-foreground/60 hover:text-foreground"
       >
         {theme === "dark" ? <SunIcon /> : <MoonIcon />}
       </button>

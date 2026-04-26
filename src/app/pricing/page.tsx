@@ -115,16 +115,16 @@ export default function PricingPage() {
         <div className="w-full max-w-site mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Free */}
-            <div className="bg-primary rounded-2xl p-8 lg:p-10 flex flex-col gap-6">
+            <div className="bg-primary dark:bg-primary-foreground rounded-2xl p-8 lg:p-10 flex flex-col gap-6">
               <div>
-                <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60 mb-2">
+                <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60 dark:text-primary/60 mb-2">
                   Free
                 </p>
-                <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-primary-foreground">
+                <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-primary-foreground dark:text-primary">
                   $0
                 </p>
               </div>
-              <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80">
+              <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 dark:text-primary/80">
                 Tasks, focus timer, goals, and journal — always free, no card
                 required.
               </p>
@@ -132,9 +132,9 @@ export default function PricingPage() {
                 {plans[0].features.map((f) => (
                   <li
                     key={f}
-                    className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 flex items-center gap-2"
+                    className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 dark:text-primary/80 flex items-center gap-2"
                   >
-                    <span className="text-primary-foreground/40">✓</span>
+                    <span className="text-primary-foreground/40 dark:text-primary/40">✓</span>
                     {f}
                   </li>
                 ))}
@@ -142,7 +142,7 @@ export default function PricingPage() {
               <Link href="/dashboard">
                 <button
                   type="button"
-                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 h-11 px-6 text-base w-full"
+                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 h-11 px-6 text-base w-full"
                 >
                   Get started
                 </button>
@@ -150,26 +150,26 @@ export default function PricingPage() {
             </div>
 
             {/* Pro */}
-            <div className="bg-primary rounded-2xl ring-2 ring-primary-foreground/30 ring-offset-2 ring-offset-muted p-8 lg:p-10 flex flex-col gap-6">
+            <div className="bg-primary dark:bg-primary-foreground rounded-2xl ring-2 ring-primary-foreground/30 dark:ring-primary/30 ring-offset-2 ring-offset-muted p-8 lg:p-10 flex flex-col gap-6">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60">
+                  <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60 dark:text-primary/60">
                     Pro
                   </p>
-                  <span className="font-sans text-[11px] font-semibold bg-primary-foreground text-primary rounded-full px-2 py-0.5">
+                  <span className="font-sans text-[11px] font-semibold bg-primary-foreground text-primary dark:bg-primary dark:text-primary-foreground rounded-full px-2 py-0.5">
                     Popular
                   </span>
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-primary-foreground">
+                  <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-primary-foreground dark:text-primary">
                     $9
                   </p>
-                  <span className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60">
+                  <span className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60 dark:text-primary/60">
                     /month
                   </span>
                 </div>
               </div>
-              <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80">
+              <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 dark:text-primary/80">
                 Everything in Free, plus the AI planner and full cross-device
                 sync.
               </p>
@@ -177,9 +177,9 @@ export default function PricingPage() {
                 {plans[1].features.map((f) => (
                   <li
                     key={f}
-                    className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 flex items-center gap-2"
+                    className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 dark:text-primary/80 flex items-center gap-2"
                   >
-                    <span className="text-primary-foreground/40">✓</span>
+                    <span className="text-primary-foreground/40 dark:text-primary/40">✓</span>
                     {f}
                   </li>
                 ))}
@@ -187,7 +187,7 @@ export default function PricingPage() {
               <Link href="/waitlist">
                 <button
                   type="button"
-                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 h-11 px-6 text-base w-full"
+                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 h-11 px-6 text-base w-full"
                 >
                   Join waitlist
                 </button>
