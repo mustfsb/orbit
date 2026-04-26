@@ -1,32 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-
-const faqs = [
-  {
-    q: "Is the free plan really free?",
-    a: "Yes — no credit card, no trial period, no expiry. Tasks, focus timer, goals, and journal are core features that will never move behind a paywall.",
-  },
-  {
-    q: "When is Pro worth upgrading to?",
-    a: "When you want the AI weekly planner to structure your time around your actual tasks and goals, and when you need your plan to stay in sync across multiple devices.",
-  },
-  {
-    q: "What is the Teams plan?",
-    a: "A custom workspace for organizations — shared task views, team-level analytics, admin controls, and SSO. Pricing is based on seat count and setup needs.",
-  },
-  {
-    q: "Can I switch plans later?",
-    a: "Yes, at any time. Downgrading back to Free keeps all your data — tasks, journals, and goals are yours.",
-  },
-  {
-    q: "How does the AI planner work?",
-    a: "You describe what&apos;s on your plate for the week. Orbit reads your open tasks and goals, then proposes a structured day-by-day schedule. You can edit it in conversation.",
-  },
-  {
-    q: "Is my data private?",
-    a: "Your tasks, journal, and goals are private to your account. AI planner requests are processed by your chosen AI provider under their data policies.",
-  },
-];
+import { FaqSection } from "@/components/sections/faq/FaqSection";
 
 import {
   SiGooglecalendar,
@@ -188,16 +162,16 @@ export default function Page() {
             week.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="bg-primary dark:bg-primary-foreground rounded-2xl p-8 lg:p-10 flex flex-col gap-6">
+            <div className="bg-background rounded-2xl ring-1 ring-foreground/10 p-8 lg:p-10 flex flex-col gap-6">
               <div>
-                <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60 dark:text-primary/60 mb-2">
+                <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground mb-2">
                   Free
                 </p>
-                <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-primary-foreground dark:text-primary">
+                <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-foreground">
                   $0
                 </p>
               </div>
-              <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 dark:text-primary/80">
+              <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground">
                 Tasks, focus timer, goals, and journal — always free, no card
                 required.
               </p>
@@ -211,7 +185,7 @@ export default function Page() {
                 ].map((f) => (
                   <li
                     key={f}
-                    className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 dark:text-primary/80"
+                    className="font-sans text-[15px] leading-[25.5px] text-muted-foreground"
                   >
                     {f}
                   </li>
@@ -220,33 +194,33 @@ export default function Page() {
               <Link href="/dashboard">
                 <button
                   type="button"
-                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 h-11 px-6 text-base w-full"
+                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary text-primary-foreground hover:bg-primary/80 h-11 px-6 text-base w-full"
                 >
                   Get started
                 </button>
               </Link>
             </div>
 
-            <div className="bg-primary dark:bg-primary-foreground rounded-2xl ring-2 ring-primary-foreground/30 dark:ring-primary/30 ring-offset-2 ring-offset-muted p-8 lg:p-10 flex flex-col gap-6">
+            <div className="bg-background rounded-2xl ring-1 ring-foreground/10 p-8 lg:p-10 flex flex-col gap-6">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60 dark:text-primary/60">
+                  <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground">
                     Pro
                   </p>
-                  <span className="font-sans text-[11px] font-semibold bg-primary-foreground text-primary dark:bg-primary dark:text-primary-foreground rounded-full px-2 py-0.5">
+                  <span className="font-sans text-[11px] font-semibold bg-primary text-primary-foreground rounded-full px-2 py-0.5">
                     Popular
                   </span>
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-primary-foreground dark:text-primary">
+                  <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-foreground">
                     $9
                   </p>
-                  <span className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60 dark:text-primary/60">
+                  <span className="font-sans text-[15px] leading-[25.5px] text-muted-foreground">
                     /month
                   </span>
                 </div>
               </div>
-              <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 dark:text-primary/80">
+              <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground">
                 Everything in Free, plus the AI planner and full cross-device
                 sync.
               </p>
@@ -260,7 +234,7 @@ export default function Page() {
                 ].map((f) => (
                   <li
                     key={f}
-                    className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/80 dark:text-primary/80"
+                    className="font-sans text-[15px] leading-[25.5px] text-muted-foreground"
                   >
                     {f}
                   </li>
@@ -269,23 +243,23 @@ export default function Page() {
               <Link href="/pricing">
                 <button
                   type="button"
-                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 h-11 px-6 text-base w-full"
+                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary text-primary-foreground hover:bg-primary/80 h-11 px-6 text-base w-full"
                 >
                   Join waitlist
                 </button>
               </Link>
             </div>
 
-            <div className="bg-background rounded-2xl ring-1 ring-foreground/10 p-8 lg:p-10 flex flex-col gap-6">
+            <div className="bg-primary rounded-2xl p-8 lg:p-10 flex flex-col gap-6">
               <div>
-                <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground mb-2">
+                <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/60 mb-2">
                   Teams
                 </p>
-                <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-foreground">
+                <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-primary-foreground">
                   Custom
                 </p>
               </div>
-              <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground">
+              <p className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/70">
                 Shared workspaces, team analytics, and admin controls for
                 organizations.
               </p>
@@ -299,7 +273,7 @@ export default function Page() {
                 ].map((f) => (
                   <li
                     key={f}
-                    className="font-sans text-[15px] leading-[25.5px] text-muted-foreground"
+                    className="font-sans text-[15px] leading-[25.5px] text-primary-foreground/70"
                   >
                     {f}
                   </li>
@@ -308,7 +282,7 @@ export default function Page() {
               <Link href="/pricing">
                 <button
                   type="button"
-                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary text-primary-foreground hover:bg-primary/80 h-11 px-6 text-base w-full"
+                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 h-11 px-6 text-base w-full"
                 >
                   Contact us
                 </button>
@@ -327,26 +301,7 @@ export default function Page() {
       </section>
 
       {/* FAQ */}
-      <section className="py-section px-site border-t border-border">
-        <div className="w-full max-w-site mx-auto">
-          <h2 className="font-sans text-[32px] leading-[38px] tracking-[-0.96px] lg:text-[40px] lg:leading-[46px] lg:tracking-[-1px] font-medium mb-14">
-            Common questions.
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
-            {faqs.map((faq) => (
-              <div key={faq.q}>
-                <h3 className="font-sans text-[17px] leading-[25.5px] font-medium text-foreground mb-2">
-                  {faq.q}
-                </h3>
-                <p
-                  className="font-sans text-[15px] leading-[25.5px] text-muted-foreground"
-                  dangerouslySetInnerHTML={{ __html: faq.a }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FaqSection />
 
       <section className="py-section px-site bg-[var(--footer-bg)]">
         <div className="max-w-site mx-auto flex flex-col items-center text-center">

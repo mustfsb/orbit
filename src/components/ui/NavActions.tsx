@@ -44,12 +44,14 @@ function MoonIcon() {
 
 export function NavActions() {
   const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("orbit-theme") as "dark" | "light" | null;
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const initial = stored ?? (prefersDark ? "dark" : "light");
     setTheme(initial);
+    setMounted(true);
     document.documentElement.classList.remove("dark", "light");
     document.documentElement.classList.add(initial);
   }, []);
@@ -67,13 +69,15 @@ export function NavActions() {
       <button
         type="button"
         onClick={toggle}
-        aria-label={
-          theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
-        }
+        aria-label="Switch theme"
         className="cursor-pointer inline-flex items-center justify-center shrink-0 rounded-full bg-muted hover:bg-accent border border-foreground/10 transition-colors text-foreground/70 hover:text-foreground"
         style={{ height: "36px", width: "42px" }}
       >
-        {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+        {mounted ? (
+          theme === "dark" ? <SunIcon /> : <MoonIcon />
+        ) : (
+          <span className="w-4 h-4" aria-hidden="true" />
+        )}
       </button>
       <Link href="/signup">
         <button

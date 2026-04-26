@@ -2,13 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import localFont from "next/font/local";
-import dynamic from "next/dynamic";
+import { NavActions } from "@/components/ui/NavActions";
 import "./globals.css";
-
-const NavActions = dynamic(
-  () => import("@/components/ui/NavActions").then((m) => ({ default: m.NavActions })),
-  { ssr: false }
-);
 
 const inter = localFont({
   src: [
