@@ -2,57 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
-  Jet.framer.website visual tokens recorded for this hand-built clone.
-
-  Fonts:
-  --font-jet-sans: "Geist", ui-sans-serif, system-ui, sans-serif
-  --font-jet-mono: "Geist Mono", ui-monospace, monospace
-  Observed/available font families noted in prior local token notes:
-  Geist, Geist Variable, Geist Mono, Fragment Mono, Inter,
-  Raveo Variable Variable, Berzulis-PIZIUS.
-
-  Colors:
-  --jet-bg: #050505
-  --jet-bg-soft: #090909
-  --jet-surface: #0d0d0d
-  --jet-surface-raised: #121212
-  --jet-text: #ffffff
-  --jet-text-muted: rgba(255, 255, 255, 0.68)
-  --jet-text-soft: rgba(255, 255, 255, 0.48)
-  --jet-border: rgba(255, 255, 255, 0.1)
-  --jet-border-strong: rgba(255, 255, 255, 0.16)
-  --jet-accent: #00e6c5
-  --jet-accent-soft: rgba(0, 230, 197, 0.16)
-  --jet-purple: #d85ce0
-  --jet-blue: #29c2ff
-  --jet-black: #000000
-
-  Typography:
-  H1 88px/0.94 620, letter-spacing 0 desktop; 48px/0.98 mobile
-  H2 56px/1 560, letter-spacing 0 desktop; 36px/1.04 mobile
-  H3 24px/1.15 520
-  Body 16px/1.65 400
-  Small 13px/1.35 500
-
-  Radii:
-  6px, 10px, 11px, 15px, 20px, 24px, 28px, 32px, 50px, 999px
-
-  Shadows:
-  0px 0.6021873017743928px 1.5656869846134214px -1.5px rgba(0, 0, 0, 0.17)
-  0px 2.288533303243457px 5.950186588432988px -3px rgba(0, 0, 0, 0.14)
-  0px 10px 26px -4.5px rgba(0, 0, 0, 0.02)
-  0 20px 80px rgba(0, 0, 0, 0.42)
-  0 1px 0 rgba(255, 255, 255, 0.08) inset
-
-  Motion:
-  180ms ease, 220ms ease, 0.2s ease-in-out, 24s linear infinite,
-  28s linear infinite, cubic-bezier(0.16, 1, 0.3, 1)
-
-  Backdrop filters:
-  blur(4px), blur(5px), blur(18px), blur(24px)
-*/
-
 @font-face {
   font-family: "Geist";
   src: url("/fonts/GeistVF.woff") format("woff");
@@ -70,8 +19,10 @@
 }
 
 :root {
+  color-scheme: dark;
   --font-jet-sans: "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-jet-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
   --jet-bg: #050505;
   --jet-bg-soft: #090909;
   --jet-surface: #0d0d0d;
@@ -86,9 +37,34 @@
   --jet-purple: #d85ce0;
   --jet-blue: #29c2ff;
   --jet-black: #000000;
+
+  --jet-nav-bg: rgba(5, 5, 5, 0.78);
+  --jet-overlay-xs: rgba(255, 255, 255, 0.05);
+  --jet-overlay-sm: rgba(255, 255, 255, 0.08);
+
   --background: var(--jet-bg);
   --foreground: var(--jet-text);
-  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+
+  --jet-bg: #fafafa;
+  --jet-bg-soft: #f5f5f5;
+  --jet-surface: #ffffff;
+  --jet-surface-raised: #f0f0f0;
+  --jet-text: #0a0a0a;
+  --jet-text-muted: rgba(0, 0, 0, 0.68);
+  --jet-text-soft: rgba(0, 0, 0, 0.48);
+  --jet-border: rgba(0, 0, 0, 0.1);
+  --jet-border-strong: rgba(0, 0, 0, 0.16);
+
+  --jet-nav-bg: rgba(250, 250, 250, 0.78);
+  --jet-overlay-xs: rgba(0, 0, 0, 0.04);
+  --jet-overlay-sm: rgba(0, 0, 0, 0.08);
+
+  --background: var(--jet-bg);
+  --foreground: var(--jet-text);
 }
 
 * {
@@ -101,6 +77,10 @@ body {
   min-height: 100%;
 }
 
+html {
+  transition: background 250ms ease, color 250ms ease;
+}
+
 body {
   background: var(--jet-bg);
   color: var(--jet-text);
@@ -108,6 +88,7 @@ body {
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  transition: background 250ms ease, color 250ms ease;
 }
 
 a {
@@ -125,4 +106,68 @@ select {
 img,
 svg {
   display: block;
+}
+
+/* ── Site spacing tokens (used by custom Tailwind utilities) ── */
+:root {
+  --site-max-w: 1250px;
+  --site-px: 24px;
+  --section-py: 80px;
+  --section-py-tight: 64px;
+  --section-py-loose: 96px;
+}
+
+/* ── Orbit CIO theme variables (dark) ── */
+html.dark {
+  color-scheme: dark;
+  --background: #1a1a1a;
+  --foreground: #e8e4df;
+  --card: #2a2a2a;
+  --card-foreground: #e8e4df;
+  --popover: #2a2a2a;
+  --popover-foreground: #e8e4df;
+  --primary: #e8e4df;
+  --primary-foreground: #1a1a1a;
+  --secondary: #222;
+  --secondary-foreground: #e8e4df;
+  --muted: #222;
+  --muted-foreground: #9a9590;
+  --accent: #333;
+  --accent-foreground: #e8e4df;
+  --destructive: oklch(70.4% 0.191 22.216);
+  --border: #ffffff0f;
+  --input: #ffffff14;
+  --ring: #706b66;
+}
+
+/* ── Orbit CIO theme variables (light) ── */
+html.light {
+  color-scheme: light;
+  --background: #f5f3f0;
+  --foreground: #1a1816;
+  --card: #fff;
+  --card-foreground: #1a1816;
+  --popover: #fff;
+  --popover-foreground: #1a1816;
+  --primary: #1a1816;
+  --primary-foreground: #f5f3f0;
+  --secondary: #eceae7;
+  --secondary-foreground: #1a1816;
+  --muted: #eceae7;
+  --muted-foreground: #6b6560;
+  --accent: #eceae7;
+  --accent-foreground: #1a1816;
+  --destructive: oklch(58% 0.22 27);
+  --border: #00000012;
+  --input: #00000012;
+  --ring: #9a948f;
+}
+
+/* ── Custom Tailwind utilities (site layout) ── */
+@layer utilities {
+  .max-w-site        { max-width: var(--site-max-w); }
+  .px-site           { padding-inline: var(--site-px); }
+  .py-section        { padding-block: var(--section-py); }
+  .py-section-tight  { padding-block: var(--section-py-tight); }
+  .py-section-loose  { padding-block: var(--section-py-loose); }
 }
