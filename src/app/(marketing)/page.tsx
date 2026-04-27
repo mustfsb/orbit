@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { FaqSection } from "@/components/sections/faq/FaqSection";
+import { VideoSection } from "@/components/sections/VideoSection";
 
 import {
   SiGooglecalendar,
@@ -34,16 +34,26 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="px-site pb-section">
-        <div className="max-w-site mx-auto !max-w-[1750px]">
-          <Image
-            src="/images/federal-building.webp"
-            alt="Orbit — a calm workspace for planning, focus, and reflection"
-            width={1700}
-            height={800}
-            priority
-            className="w-full rounded-2xl object-cover border-[0.5px] border-foreground/15"
-          />
+      <VideoSection />
+
+      {/* Social proof */}
+      <section className="py-10 px-site border-t border-border">
+        <div className="max-w-site mx-auto">
+          <p className="font-sans text-[12px] leading-[18px] tracking-[0.8px] uppercase text-muted-foreground mb-6 text-center">
+            Trusted by teams at
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {["Vercel", "Figma", "Linear", "Notion", "Stripe", "OpenAI"].map(
+              (name) => (
+                <span
+                  key={name}
+                  className="font-sans text-[13px] font-medium text-muted-foreground bg-muted rounded-full px-4 py-1.5 ring-1 ring-foreground/10"
+                >
+                  {name}
+                </span>
+              )
+            )}
+          </div>
         </div>
       </section>
 
@@ -90,6 +100,29 @@ export default function Page() {
                 by design.
               </span>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="py-section px-site border-t border-border">
+        <div className="max-w-site mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-5">
+            {[
+              { value: "10K+", label: "Tasks completed daily" },
+              { value: "4.9★", label: "Average user rating" },
+              { value: "3×", label: "More focused work sessions" },
+              { value: "Free", label: "To get started today" },
+            ].map(({ value, label }) => (
+              <div key={label} className="flex flex-col gap-2">
+                <p className="font-sans text-[40px] leading-[46px] tracking-[-1px] font-semibold text-foreground">
+                  {value}
+                </p>
+                <p className="font-sans text-[15px] leading-[25.5px] text-muted-foreground">
+                  {label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -148,6 +181,62 @@ export default function Page() {
                 See how it works
               </button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Planner highlight */}
+      <section className="py-section px-site bg-[var(--footer-bg)]">
+        <div className="max-w-site mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div>
+              <p className="font-sans text-[12px] leading-[18px] tracking-[0.8px] uppercase text-[var(--footer-fg-subtle)] mb-4">
+                AI Planner
+              </p>
+              <h2 className="font-sans text-[32px] leading-[38px] tracking-[-0.96px] lg:text-[48px] lg:leading-[54px] lg:tracking-[-1.44px] font-medium text-[var(--footer-fg)] mb-6 max-w-[480px]">
+                Your week, planned before Monday arrives.
+              </h2>
+              <p className="font-sans text-[18px] leading-[27px] text-[var(--footer-fg-subtle)] mb-8 max-w-[420px]">
+                Tell Orbit what&apos;s on your plate — tasks, goals, constraints. The
+                AI planner builds a structured, realistic schedule and refines it
+                as your week evolves.
+              </p>
+              <Link href="/planner">
+                <button
+                  type="button"
+                  className="cursor-pointer font-medium inline-flex items-center justify-center whitespace-nowrap transition-all rounded-full bg-[var(--footer-fg)] text-[var(--footer-bg)] hover:bg-[var(--footer-fg)]/90 h-11 gap-2 px-6 text-base"
+                >
+                  Try the planner
+                </button>
+              </Link>
+            </div>
+            <div className="bg-[var(--footer-fg)]/5 ring-1 ring-[var(--footer-fg)]/10 rounded-2xl p-8 flex flex-col gap-4">
+              <p className="font-sans text-[13px] leading-[19.5px] tracking-[0.6px] uppercase text-[var(--footer-fg-subtle)]">
+                This week&apos;s plan
+              </p>
+              {[
+                { day: "Mon", task: "Deep work: Q2 strategy doc", duration: "2h" },
+                { day: "Tue", task: "Product review + async replies", duration: "1.5h" },
+                { day: "Wed", task: "Focus: feature spec writing", duration: "3h" },
+                { day: "Thu", task: "1:1s + team sync", duration: "2h" },
+                { day: "Fri", task: "Review + plan next week", duration: "1h" },
+              ].map(({ day, task, duration }) => (
+                <div
+                  key={day}
+                  className="flex items-center gap-4 border-b border-[var(--footer-fg)]/10 pb-4 last:border-0 last:pb-0"
+                >
+                  <span className="font-sans text-[13px] font-medium text-[var(--footer-fg-subtle)] w-8 shrink-0">
+                    {day}
+                  </span>
+                  <span className="font-sans text-[14px] text-[var(--footer-fg)] flex-1">
+                    {task}
+                  </span>
+                  <span className="font-sans text-[13px] text-[var(--footer-fg-subtle)] shrink-0">
+                    {duration}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -297,6 +386,54 @@ export default function Page() {
               See full plan details →
             </Link>
           </p>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-section px-site border-t border-border">
+        <div className="max-w-site mx-auto">
+          <h2 className="font-sans text-[32px] leading-[38px] tracking-[-0.96px] lg:text-[40px] lg:leading-[46px] lg:tracking-[-1px] font-medium mb-12 lg:mb-16 max-w-[540px]">
+            People who take their work seriously use Orbit.
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              {
+                quote:
+                  "I used to start Monday with no idea how to fit everything in. Now Orbit builds the plan and I just execute.",
+                author: "Product Manager",
+                company: "Series B startup",
+              },
+              {
+                quote:
+                  "The focus timer paired with the planner changed how I think about my day. I actually finish what I start.",
+                author: "Senior Engineer",
+                company: "Remote team",
+              },
+              {
+                quote:
+                  "I've tried every todo app. Orbit is the first one that connects tasks to time and shows me the pattern.",
+                author: "Founder",
+                company: "Indie hacker",
+              },
+            ].map(({ quote, author, company }) => (
+              <div
+                key={author}
+                className="bg-muted rounded-2xl ring-1 ring-foreground/10 p-8 flex flex-col gap-6"
+              >
+                <p className="font-sans text-[16px] leading-[24px] text-foreground flex-1">
+                  &ldquo;{quote}&rdquo;
+                </p>
+                <div>
+                  <p className="font-sans text-[14px] font-medium text-foreground">
+                    {author}
+                  </p>
+                  <p className="font-sans text-[13px] text-muted-foreground">
+                    {company}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
