@@ -73,8 +73,7 @@ export default function SignupPage() {
 
   return (
     <section
-      className="min-h-screen flex items-center justify-center px-site py-section"
-      style={{ backgroundColor: "var(--muted)" }}
+      className="min-h-screen flex items-center justify-center px-site py-section bg-muted"
     >
       <div className="w-full max-w-[440px]">
         <div className="bg-background rounded-2xl ring-1 ring-foreground/10 p-8 lg:p-10 flex flex-col gap-6">
