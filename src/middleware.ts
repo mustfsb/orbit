@@ -1,6 +1,17 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+function redirectWithCookies(
+  url: URL,
+  supabaseResponse: NextResponse
+): NextResponse {
+  const response = NextResponse.redirect(url);
+  supabaseResponse.cookies.getAll().forEach((cookie) => {
+    response.cookies.set(cookie.name, cookie.value, cookie);
+  });
+  return response;
+}
+
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -33,12 +44,12 @@ export async function middleware(request: NextRequest) {
 
   // Unauthenticated user trying to access /dashboard → send to /login
   if (!user && pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return redirectWithCookies(new URL("/login", request.url), supabaseResponse);
   }
 
   // Authenticated user visiting auth pages → send to /dashboard
   if (user && (pathname === "/login" || pathname === "/signup")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return redirectWithCookies(new URL("/dashboard", request.url), supabaseResponse);
   }
 
   return supabaseResponse;
