@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FaqSection } from "@/components/sections/faq/FaqSection";
 import { VideoSection } from "@/components/sections/VideoSection";
+import { AgentShowcase } from "@/components/sections/AgentShowcase";
 
 import {
   SiGooglecalendar,
@@ -103,6 +104,8 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <AgentShowcase />
 
       {/* Stats */}
       <section className="py-section px-site border-t border-border">
